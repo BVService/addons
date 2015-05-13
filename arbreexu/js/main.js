@@ -1,35 +1,35 @@
 Ext.namespace("GEOR.Addons");
 
-var numberOfInputs;
-var table = [];
-var tableOutputs = [];
-var table_L_input_param = [];
-var table_L_input_wms = [];
-var wmsTitle = [];
-var wmsAbstract = [];
-var table_L_input_scroll = [];
-var scrollTitle = [];
-var scroll_allowedValues = [];
-var table_L_input_coordxy = [];
-var coordxyTitle = [];
-var table_C_input_gml = [];
-var coordxyValue1, coordxyValue2, coordxyValue3, coordxyValue4, coordxyValue5;
-var gmlValue1, gmlValue2, gmlValue3, gmlValue4, gmlValue5;
-var execute_on_off = 0;
-//var layer_liste_WFS = [];
-var table_L_output_wms = [];
-var table_L_output_param = [];
-var table_L_input_checkbox = [];
-var champ_pour_input_checkbox = [];
-var checkboxTitle = [];
-var regionContent = "";
-var myPanel = "";
-var addComboxFieldItemsWFS = "";
-var liste = "";
-var table_input_param;
+var noglob_numberOfInputs;
+var noglob_table = [];
+var noglob_tableOutputs = [];
+var noglob_table_L_input_param = [];
+var noglob_table_L_input_wms = [];
+var noglob_wmsTitle = [];
+var noglob_noglob_wmsAbstract = [];
+var noglob_wmsAbstract = [];
+var noglob_scrollTitle = [];
+var noglob_scroll_allowedValues = [];
+var noglob_table_L_input_coordxy = [];
+var noglob_coordxyTitle = [];
+var noglob_table_C_input_gml = [];
+var noglob_coordxyValue1, noglob_coordxyValue2, noglob_coordxyValue3, noglob_coordxyValue4, noglob_coordxyValue5;
+var noglob_gmlValue1, noglob_gmlValue2, noglob_gmlValue3, noglob_gmlValue4, noglob_gmlValue5;
+var noglob_execute_on_off = 0;
+//var layer_noglob_liste_WFS = [];
+var noglob_table_L_output_wms = [];
+var noglob_table_L_output_param = [];
+var noglob_table_L_input_checkbox = [];
+var noglob_champ_pour_input_checkbox = [];
+var noglob_checkboxTitle = [];
+var noglob_regionContent = "";
+var noglob_myPanel = "";
+var noglob_addComboxFieldItemsWFS = "";
+var noglob_liste = "";
+var noglob_table_input_param;
 //var champ_pour_input_wms1 ;
 //var onglet2 = "";
-var tableList_input_forXml = [];
+var noglob_tableList_input_forXml = [];
 
 GEOR.Addons.arbreexu = function(map, options) {
     this.map = map;
@@ -97,78 +97,78 @@ GEOR.Addons.arbreexu.prototype = {
                 // ----------------------------------------------------------------------
                 // Course inputs
                 // ----------------------------------------------------------------------
-                //Recovery of identifiers (ie the names of inputs) extracted from python and stores in the table "table"
+                //Recovery of identifiers (ie the names of inputs) extracted from python and stores in the noglob_table "table"
                 for (i in wpsProcess.dataInputs) { // List every input from the describe process query
-                    table.push(wpsProcess.dataInputs[i].identifier); // Each input is added to the table
+                    noglob_table.push(wpsProcess.dataInputs[i].identifier); // Each input is added to the table
                 }
-                var index = table.indexOf(undefined);
+                var index = noglob_table.indexOf(undefined);
                 if (index > -1) {
-                    table.splice(index, 1);
+                    noglob_table.splice(index, 1);
                 } // Removing undefined values 
-                numberOfInputs = table.length;
-                for (i = 0; i < numberOfInputs; i++) {
+                noglob_numberOfInputs = noglob_table.length;
+                for (i = 0; i < noglob_numberOfInputs; i++) {
                     switch (true) {
-                        case (table[i].slice(0, 13) == "L_input_param"):
-                            table_L_input_param.push(table[i]);
-                            //console.log(table[i] + " est ajouté a table_L_input_param");
+                        case (noglob_table[i].slice(0, 13) == "L_input_param"):
+                            noglob_table_L_input_param.push(noglob_table[i]);
+                            //console.log(noglob_table[i] + " est ajouté a noglob_table_L_input_param");
                             break;
-                        case (table[i].slice(0, 11) == "L_input_wms"):
-                            table_L_input_wms.push(table[i]);
-                            //console.log(table[i] + " est ajouté a table_L_input_wms");
+                        case (noglob_table[i].slice(0, 11) == "L_input_wms"):
+                            noglob_table_L_input_wms.push(noglob_table[i]);
+                            //console.log(noglob_table[i] + " est ajouté a noglob_table_L_input_wms");
                             break;
-                        case (table[i].slice(0, 14) == "L_input_scroll"):
-                            table_L_input_scroll.push(table[i]);
-                            //console.log(table[i] + " est ajouté a table_L_input_scroll");
+                        case (noglob_table[i].slice(0, 14) == "L_input_scroll"):
+                            noglob_wmsAbstract.push(noglob_table[i]);
+                            //console.log(noglob_table[i] + " est ajouté a noglob_wmsAbstract");
                             break;
-                        case (table[i].slice(0, 15) == "L_input_coordxy"):
-                            table_L_input_coordxy.push(table[i]);
-                            //console.log(table[i] + " est ajouté a table_L_input_coordxy");
+                        case (noglob_table[i].slice(0, 15) == "L_input_coordxy"):
+                            noglob_table_L_input_coordxy.push(noglob_table[i]);
+                            //console.log(noglob_table[i] + " est ajouté a noglob_table_L_input_coordxy");
                             break;
-                        case (table[i].slice(0, 11) == "C_input_gml"):
-                            table_C_input_gml.push(table[i]);
-                            //console.log(table[i] + " est ajouté a table_L_input_scroll");
+                        case (noglob_table[i].slice(0, 11) == "C_input_gml"):
+                            noglob_table_C_input_gml.push(noglob_table[i]);
+                            //console.log(noglob_table[i] + " est ajouté a noglob_wmsAbstract");
                             break;
-                        case (table[i].slice(0, 16) == "L_input_checkbox"):
-                            table_L_input_checkbox.push(table[i]);
-                            //console.log(table[i] + " est ajouté a table_L_input_scroll");
+                        case (noglob_table[i].slice(0, 16) == "L_input_checkbox"):
+                            noglob_table_L_input_checkbox.push(noglob_table[i]);
+                            //console.log(noglob_table[i] + " est ajouté a noglob_wmsAbstract");
                             break;						
                     }
                 }
-                console.log("Le WPS utilise " + numberOfInputs + " input(s) : " + table);
-                console.log("    - " + table_L_input_param.length + " input(s) de paramètre : " + table_L_input_param);
-                console.log("    - " + table_L_input_wms.length + " input(s) de WMS : " + table_L_input_wms);
-                console.log("    - " + table_L_input_scroll.length + " input(s) de scroll : " + table_L_input_scroll);
-                console.log("    - " + table_L_input_coordxy.length + " input(s) de coordonnées xy : " + table_L_input_coordxy);
-                console.log("    - " + table_C_input_gml.length + " input(s) de gml : " + table_C_input_gml);
-				console.log("    - " + table_L_input_checkbox.length + " input(s) de checkbox : " + table_L_input_checkbox);
+                console.log("Le WPS utilise " + noglob_numberOfInputs + " input(s) : " + noglob_table);
+                console.log("    - " + noglob_table_L_input_param.length + " input(s) de paramètre : " + noglob_table_L_input_param);
+                console.log("    - " + noglob_table_L_input_wms.length + " input(s) de WMS : " + noglob_table_L_input_wms);
+                console.log("    - " + noglob_wmsAbstract.length + " input(s) de scroll : " + noglob_wmsAbstract);
+                console.log("    - " + noglob_table_L_input_coordxy.length + " input(s) de coordonnées xy : " + noglob_table_L_input_coordxy);
+                console.log("    - " + noglob_table_C_input_gml.length + " input(s) de gml : " + noglob_table_C_input_gml);
+				console.log("    - " + noglob_table_L_input_checkbox.length + " input(s) de checkbox : " + noglob_table_L_input_checkbox);
 				
-				numberOfInputswithoutwms = numberOfInputs - table_L_input_wms.length; //console.log(numberOfInputswithoutwms);
+				noglob_numberOfInputswithoutwms = noglob_numberOfInputs - noglob_table_L_input_wms.length; //console.log(noglob_numberOfInputswithoutwms);
                 // ----------------------------------------------------------------------
                 // Course outputs
                 // ----------------------------------------------------------------------
-                // List the outputs included in the DescribeProcess query and store them in the table "tableOutputs"
+                // List the outputs included in the DescribeProcess query and store them in the noglob_table "noglob_tableOutputs"
                 for (i in wpsProcess.processOutputs) {
-                    tableOutputs.push(wpsProcess.processOutputs[i].identifier);
+                    noglob_tableOutputs.push(wpsProcess.processOutputs[i].identifier);
                 }
-                var indexoutputs = tableOutputs.indexOf(undefined);
+                var indexoutputs = noglob_tableOutputs.indexOf(undefined);
                 if (indexoutputs > -1) {
-                    tableOutputs.splice(indexoutputs, 1);
+                    noglob_tableOutputs.splice(indexoutputs, 1);
                 }
-                //console.log(tableOutputs);
-                numberOfOutputs = tableOutputs.length;
+                //console.log(noglob_tableOutputs);
+                numberOfOutputs = noglob_tableOutputs.length;
                 //console.log(numberOfOutputs);
                 for (i = 0; i < numberOfOutputs; i++) {
-                    if (tableOutputs[i].slice(0, 12) == "L_output_wms") {
-                        table_L_output_wms.push(tableOutputs[i]);
-                        //console.log(tableOutputs[i]+" est ajouté a table_L_input_param");
-                    } else if (tableOutputs[i].slice(0, 14) == "L_output_param") {
-                        table_L_output_param.push(tableOutputs[i]);
-                        //console.log(tableOutputs[i]+" est ajouté a table_L_input_param");
+                    if (noglob_tableOutputs[i].slice(0, 12) == "L_output_wms") {
+                        noglob_table_L_output_wms.push(noglob_tableOutputs[i]);
+                        //console.log(noglob_tableOutputs[i]+" est ajouté a noglob_table_L_input_param");
+                    } else if (noglob_tableOutputs[i].slice(0, 14) == "L_output_param") {
+                        noglob_table_L_output_param.push(noglob_tableOutputs[i]);
+                        //console.log(noglob_tableOutputs[i]+" est ajouté a noglob_table_L_input_param");
                     }
                 }
-                console.log("Le WPS retourne " + numberOfOutputs + " output(s) : " + tableOutputs);
-                console.log("    - " + table_L_output_param.length + " output(s) de paramètre : " + table_L_output_param);
-                console.log("    - " + table_L_output_wms.length + " output(s) de wms : " + table_L_output_wms);
+                console.log("Le WPS retourne " + numberOfOutputs + " output(s) : " + noglob_tableOutputs);
+                console.log("    - " + noglob_table_L_output_param.length + " output(s) de paramètre : " + noglob_table_L_output_param);
+                console.log("    - " + noglob_table_L_output_wms.length + " output(s) de wms : " + noglob_table_L_output_wms);
 
                 onDescribeP(wpsProcess);
             },
@@ -200,8 +200,8 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs param 		
         // ----------------------------------------------------------------------
-        // If input_param exist (i.e. if table_L_input_param.length> 0) then activates a variable for each input		
-        if (table_L_input_param.length >= 1) {
+        // If input_param exist (i.e. if noglob_table_L_input_param.length> 0) then activates a variable for each input		
+        if (noglob_table_L_input_param.length >= 1) {
             var input_param1_fromPython = findDataInputsByIdentifier(process.dataInputs, "L_input_param1");
             wps_Config_param1 = {
                 input_param1_fromPython: {
@@ -210,7 +210,7 @@ GEOR.Addons.arbreexu.prototype = {
                 }
             };
         }
-        if (table_L_input_param.length >= 2) {
+        if (noglob_table_L_input_param.length >= 2) {
             var input_param2_fromPython = findDataInputsByIdentifier(process.dataInputs, "L_input_param2");
             wps_Config_param2 = {
                 input_param2_fromPython: {
@@ -219,7 +219,7 @@ GEOR.Addons.arbreexu.prototype = {
                 }
             };
         }
-        if (table_L_input_param.length >= 3) {
+        if (noglob_table_L_input_param.length >= 3) {
             var input_param3_fromPython = findDataInputsByIdentifier(process.dataInputs, "L_input_param3");
             wps_Config_param3 = {
                 input_param3_fromPython: {
@@ -228,7 +228,7 @@ GEOR.Addons.arbreexu.prototype = {
                 }
             };
         }
-        if (table_L_input_param.length >= 4) {
+        if (noglob_table_L_input_param.length >= 4) {
             var input_param4_fromPython = findDataInputsByIdentifier(process.dataInputs, "L_input_param4");
             wps_Config_param4 = {
                 input_param4_fromPython: {
@@ -237,7 +237,7 @@ GEOR.Addons.arbreexu.prototype = {
                 }
             };
         }
-        if (table_L_input_param.length >= 5) {
+        if (noglob_table_L_input_param.length >= 5) {
             var input_param5_fromPython = findDataInputsByIdentifier(process.dataInputs, "L_input_param5");
             wps_Config_param5 = {
                 input_param5_fromPython: {
@@ -251,39 +251,39 @@ GEOR.Addons.arbreexu.prototype = {
         // Data input WMS 	
         // ----------------------------------------------------------------------	
         // Add the title of each WMS input WMS
-        if (table_L_input_wms.length >= 1) {
+        if (noglob_table_L_input_wms.length >= 1) {
             var L_input_wms1_name = findDataInputsByIdentifier(process.dataInputs, "L_input_wms1");
-            wmsTitle.push(L_input_wms1_name.title);
-            wmsAbstract.push(L_input_wms1_name.abstract);
+            noglob_wmsTitle.push(L_input_wms1_name.title);
+            noglob_noglob_wmsAbstract.push(L_input_wms1_name.abstract);
         }
-        if (table_L_input_wms.length >= 2) {
+        if (noglob_table_L_input_wms.length >= 2) {
             var L_input_wms2_name = findDataInputsByIdentifier(process.dataInputs, "L_input_wms2");
-            wmsTitle.push(L_input_wms2_name.title);
-            wmsAbstract.push(L_input_wms2_name.abstract);
+            noglob_wmsTitle.push(L_input_wms2_name.title);
+            noglob_noglob_wmsAbstract.push(L_input_wms2_name.abstract);
         }
-        if (table_L_input_wms.length >= 3) {
+        if (noglob_table_L_input_wms.length >= 3) {
             var L_input_wms3_name = findDataInputsByIdentifier(process.dataInputs, "L_input_wms3");
-            wmsTitle.push(L_input_wms3_name.title);
-            wmsAbstract.push(L_input_wms3_name.abstract);
+            noglob_wmsTitle.push(L_input_wms3_name.title);
+            noglob_noglob_wmsAbstract.push(L_input_wms3_name.abstract);
         }
-        if (table_L_input_wms.length >= 4) {
+        if (noglob_table_L_input_wms.length >= 4) {
             var L_input_wms4_name = findDataInputsByIdentifier(process.dataInputs, "L_input_wms4");
-            wmsTitle.push(L_input_wms4_name.title);
-            wmsAbstract.push(L_input_wms4_name.abstract);
+            noglob_wmsTitle.push(L_input_wms4_name.title);
+            noglob_noglob_wmsAbstract.push(L_input_wms4_name.abstract);
         }
-        if (table_L_input_wms.length >= 5) {
+        if (noglob_table_L_input_wms.length >= 5) {
             var L_input_wms5_name = findDataInputsByIdentifier(process.dataInputs, "L_input_wms5");
-            wmsTitle.push(L_input_wms5_name.title);
-            wmsAbstract.push(L_input_wms5_name.abstract);
+            noglob_wmsTitle.push(L_input_wms5_name.title);
+            noglob_noglob_wmsAbstract.push(L_input_wms5_name.abstract);
         }
 
         // ----------------------------------------------------------------------
         // Data inputs Combobox
         // ----------------------------------------------------------------------		
-        if (table_L_input_scroll.length >= 1) {
+        if (noglob_wmsAbstract.length >= 1) {
             var L_input_scroll1_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll1");
 			console.log(L_input_scroll1_name)
-            scrollTitle.push(L_input_scroll1_name.title);
+            noglob_scrollTitle.push(L_input_scroll1_name.title);
             scroll1_allowedValues = [];
             for (var k in L_input_scroll1_name.literalData.allowedValues) {
                 scroll1tmp_allowedValues = [];
@@ -291,12 +291,12 @@ GEOR.Addons.arbreexu.prototype = {
                 scroll1tmp_allowedValues.push(k);
                 scroll1_allowedValues.push(scroll1tmp_allowedValues);
             }
-            scroll_allowedValues.push(scroll1_allowedValues); //scroll_allowedValues.push(scroll1_allowedValues[0][0]);
-			console.log(scroll_allowedValues);
+            noglob_scroll_allowedValues.push(scroll1_allowedValues); //noglob_scroll_allowedValues.push(scroll1_allowedValues[0][0]);
+			console.log(noglob_scroll_allowedValues);
         }
-        if (table_L_input_scroll.length >= 2) {
+        if (noglob_wmsAbstract.length >= 2) {
             var L_input_scroll2_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll2");
-            scrollTitle.push(L_input_scroll2_name.title);
+            noglob_scrollTitle.push(L_input_scroll2_name.title);
             scroll2_allowedValues = [];
             for (var k in L_input_scroll2_name.literalData.allowedValues) {
                 scroll2tmp_allowedValues = [];
@@ -304,11 +304,11 @@ GEOR.Addons.arbreexu.prototype = {
                 scroll2tmp_allowedValues.push(k);
                 scroll2_allowedValues.push(scroll2tmp_allowedValues);
             }
-            scroll_allowedValues.push(scroll2_allowedValues);
+            noglob_scroll_allowedValues.push(scroll2_allowedValues);
         }
-        if (table_L_input_scroll.length >= 3) {
+        if (noglob_wmsAbstract.length >= 3) {
             var L_input_scroll3_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll3");
-            scrollTitle.push(L_input_scroll3_name.title);
+            noglob_scrollTitle.push(L_input_scroll3_name.title);
             scroll3_allowedValues = [];
             for (var k in L_input_scroll3_name.literalData.allowedValues) {
                 scroll3tmp_allowedValues = [];
@@ -316,11 +316,11 @@ GEOR.Addons.arbreexu.prototype = {
                 scroll3tmp_allowedValues.push(k);
                 scroll3_allowedValues.push(scroll3tmp_allowedValues);
             }
-            scroll_allowedValues.push(scroll3_allowedValues);
+            noglob_scroll_allowedValues.push(scroll3_allowedValues);
         }
-        if (table_L_input_scroll.length >= 4) {
+        if (noglob_wmsAbstract.length >= 4) {
             var L_input_scroll4_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll4");
-            scrollTitle.push(L_input_scroll4_name.title);
+            noglob_scrollTitle.push(L_input_scroll4_name.title);
             scroll4_allowedValues = [];
             for (var k in L_input_scroll4_name.literalData.allowedValues) {
                 scroll4tmp_allowedValues = [];
@@ -328,11 +328,11 @@ GEOR.Addons.arbreexu.prototype = {
                 scroll4tmp_allowedValues.push(k);
                 scroll4_allowedValues.push(scroll4tmp_allowedValues);
             }
-            scroll_allowedValues.push(scroll4_allowedValues);
+            noglob_scroll_allowedValues.push(scroll4_allowedValues);
         }
-        if (table_L_input_scroll.length >= 5) {
+        if (noglob_wmsAbstract.length >= 5) {
             var L_input_scroll5_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll5");
-            scrollTitle.push(L_input_scroll5_name.title);
+            noglob_scrollTitle.push(L_input_scroll5_name.title);
             scroll5_allowedValues = [];
             for (var k in L_input_scroll5_name.literalData.allowedValues) {
                 scroll5tmp_allowedValues = [];
@@ -340,46 +340,46 @@ GEOR.Addons.arbreexu.prototype = {
                 scroll5tmp_allowedValues.push(k);
                 scroll5_allowedValues.push(scroll5tmp_allowedValues);
             }
-            scroll_allowedValues.push(scroll5_allowedValues);
+            noglob_scroll_allowedValues.push(scroll5_allowedValues);
         }
-		//console.log(scroll_allowedValues)
+		//console.log(noglob_scroll_allowedValues)
 
         // ----------------------------------------------------------------------
         // Data inputs Coordinates
         // ----------------------------------------------------------------------
-        if (table_L_input_coordxy.length >= 1) {
+        if (noglob_table_L_input_coordxy.length >= 1) {
             var L_input_coordxy1_name = findDataInputsByIdentifier(process.dataInputs, "L_input_coordxy1");
-            coordxyTitle.push(L_input_coordxy1_name.title);
-            //wmsAbstract.push(L_input_wms1_name.abstract);
+            noglob_coordxyTitle.push(L_input_coordxy1_name.title);
+            //noglob_noglob_wmsAbstract.push(L_input_wms1_name.abstract);
         }
-        if (table_L_input_coordxy.length >= 2) {
+        if (noglob_table_L_input_coordxy.length >= 2) {
             var L_input_coordxy2_name = findDataInputsByIdentifier(process.dataInputs, "L_input_coordxy2");
-            coordxyTitle.push(L_input_coordxy2_name.title);
-            //wmsAbstract.push(L_input_wms1_name.abstract);
+            noglob_coordxyTitle.push(L_input_coordxy2_name.title);
+            //noglob_noglob_wmsAbstract.push(L_input_wms1_name.abstract);
         }
-        if (table_L_input_coordxy.length >= 3) {
+        if (noglob_table_L_input_coordxy.length >= 3) {
             var L_input_coordxy3_name = findDataInputsByIdentifier(process.dataInputs, "L_input_coordxy3");
-            coordxyTitle.push(L_input_coordxy3_name.title);
-            //wmsAbstract.push(L_input_wms1_name.abstract);
+            noglob_coordxyTitle.push(L_input_coordxy3_name.title);
+            //noglob_noglob_wmsAbstract.push(L_input_wms1_name.abstract);
         }
-        if (table_L_input_coordxy.length >= 4) {
+        if (noglob_table_L_input_coordxy.length >= 4) {
             var L_input_coordxy4_name = findDataInputsByIdentifier(process.dataInputs, "L_input_coordxy4");
-            coordxyTitle.push(L_input_coordxy4_name.title);
-            //wmsAbstract.push(L_input_wms1_name.abstract);
+            noglob_coordxyTitle.push(L_input_coordxy4_name.title);
+            //noglob_noglob_wmsAbstract.push(L_input_wms1_name.abstract);
         }
-        if (table_L_input_coordxy.length >= 5) {
+        if (noglob_table_L_input_coordxy.length >= 5) {
             var L_input_coordxy5_name = findDataInputsByIdentifier(process.dataInputs, "L_input_coordxy5");
-            coordxyTitle.push(L_input_coordxy5_name.title);
-            //wmsAbstract.push(L_input_wms1_name.abstract);
+            noglob_coordxyTitle.push(L_input_coordxy5_name.title);
+            //noglob_noglob_wmsAbstract.push(L_input_wms1_name.abstract);
         }
 		
         // ----------------------------------------------------------------------
         // Data inputs Checkbox (title)
         // ----------------------------------------------------------------------		
-		//if (table_L_input_checkbox.length >= 1) {
-	    for (i = 1; i <= table_L_input_checkbox.length; i++) {	
+		//if (noglob_table_L_input_checkbox.length >= 1) {
+	    for (i = 1; i <= noglob_table_L_input_checkbox.length; i++) {	
     		var L_input_checkbox_name = findDataInputsByIdentifier(process.dataInputs, "L_input_checkbox"+i); //console.log (L_input_checkbox_name);
-			checkboxTitle.push(L_input_checkbox_name.title); //console.log (checkboxTitle);
+			noglob_checkboxTitle.push(L_input_checkbox_name.title); //console.log (noglob_checkboxTitle);
 		}
 		
 		
@@ -392,10 +392,10 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // Parameter inputs
         // ----------------------------------------------------------------------
-        table_input_param = [];
-		var table_input_param_splitPanel1 = [];
-		var table_input_param_splitPanel2 = [];
-        if (table_L_input_param.length >= 1) {
+        noglob_table_input_param = [];
+		var noglob_table_input_param_splitPanel1 = [];
+		var noglob_table_input_param_splitPanel2 = [];
+        if (noglob_table_L_input_param.length >= 1) {
             this.champ_pour_input_param1 = new Ext.form.TextField({
                 fieldLabel: wps_Config_param1.input_param1_fromPython.title,
                 name: "uselessname1",
@@ -408,9 +408,9 @@ GEOR.Addons.arbreexu.prototype = {
                 allowDecimals: true/*,
                 decimalPrecision: 2*/
             });
-            table_input_param.push(this.champ_pour_input_param1);
+            noglob_table_input_param.push(this.champ_pour_input_param1);
         }
-        if (table_L_input_param.length >= 2) {
+        if (noglob_table_L_input_param.length >= 2) {
             this.champ_pour_input_param2 = new Ext.form.TextField({
                 fieldLabel: wps_Config_param2.input_param2_fromPython.title,
                 name: "uselessname2",
@@ -423,9 +423,9 @@ GEOR.Addons.arbreexu.prototype = {
                 allowDecimals: true/*,
                 decimalPrecision: 2*/
             });
-            table_input_param.push(this.champ_pour_input_param2);
+            noglob_table_input_param.push(this.champ_pour_input_param2);
         }
-        if (table_L_input_param.length >= 3) {
+        if (noglob_table_L_input_param.length >= 3) {
             this.champ_pour_input_param3 = new Ext.form.TextField({
                 fieldLabel: wps_Config_param3.input_param3_fromPython.title,
                 name: "uselessname3",
@@ -438,9 +438,9 @@ GEOR.Addons.arbreexu.prototype = {
                 allowDecimals: true/*,
                 decimalPrecision: 2*/
             });
-            table_input_param.push(this.champ_pour_input_param3);
+            noglob_table_input_param.push(this.champ_pour_input_param3);
         }
-        if (table_L_input_param.length >= 4) {
+        if (noglob_table_L_input_param.length >= 4) {
             this.champ_pour_input_param4 = new Ext.form.TextField({
                 fieldLabel: wps_Config_param4.input_param4_fromPython.title,
                 name: "uselessname4",
@@ -453,9 +453,9 @@ GEOR.Addons.arbreexu.prototype = {
                 allowDecimals: true/*,
                 decimalPrecision: 2*/
             });
-            table_input_param.push(this.champ_pour_input_param4);
+            noglob_table_input_param.push(this.champ_pour_input_param4);
         }
-        if (table_L_input_param.length >= 5) {
+        if (noglob_table_L_input_param.length >= 5) {
             this.champ_pour_input_param5 = new Ext.form.TextField({
                 fieldLabel: wps_Config_param5.input_param5_fromPython.title,
                 name: "uselessname5",
@@ -468,14 +468,14 @@ GEOR.Addons.arbreexu.prototype = {
                 allowDecimals: true/*,
                 decimalPrecision: 2*/
             });
-            table_input_param.push(this.champ_pour_input_param5);
+            noglob_table_input_param.push(this.champ_pour_input_param5);
         }
         // ----------------------------------------------------------------------
         // WMS inputs
         // ----------------------------------------------------------------------		       
         // PART 1
-		layer_liste_WFS = [];
-        addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_liste_WFS
+		layer_noglob_liste_WFS = [];
+        noglob_addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_noglob_liste_WFS
             //var empty = true;
             layerStore.each(function(record) {
 				console.log(record);
@@ -491,24 +491,24 @@ GEOR.Addons.arbreexu.prototype = {
                         value: record
                     })
 
-                    liste = [rec.data.text, rec.data.value];
-					//console.log(liste);	console.log(layer_liste_WFS);
-					//layer_liste_WFS = [];
-					//console.log(layer_liste_WFS);
-                    layer_liste_WFS.push(liste);
+                    noglob_liste = [rec.data.text, rec.data.value];
+					//console.log(noglob_liste);	console.log(layer_noglob_liste_WFS);
+					//layer_noglob_liste_WFS = [];
+					//console.log(layer_noglob_liste_WFS);
+                    layer_noglob_liste_WFS.push(noglob_liste);
 					console.log('ADDWMSITEMS');
                 }
             });
-			return layer_liste_WFS;
+			return layer_noglob_liste_WFS;
         };
-        addComboxFieldItemsWFS();
+        noglob_addComboxFieldItemsWFS();
         warningMsg_wms = {
             border: false,
             html: '<img src="http://91.121.171.75/grey_warn.png"> Seuls les WMS déjà chargés avant la première ouverture de l\'addon seront utilisables.'
         };
 
         // PART 2
-        if (table_L_input_wms.length >= 1) {
+        if (noglob_table_L_input_wms.length >= 1) {
             var FIELD_WIDTH = 60, 
                 base = {
                     forceSelection: true,
@@ -525,31 +525,31 @@ GEOR.Addons.arbreexu.prototype = {
 
             var gugu = new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: addComboxFieldItemsWFS()
+                    data: noglob_addComboxFieldItemsWFS()
                 });
 				
 				
             champ_pour_input_wms1 = new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
-                fieldLabel: OpenLayers.i18n(wmsTitle[0]),
-                emptyText: OpenLayers.i18n(wmsAbstract[0]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[0]),
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[0]),
                 width: FIELD_WIDTH,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
 					//,storeId: 'myStore'
                 }),
-				listeners: {
+				noglob_listeners: {
 					'beforequery': function() { // beforequery : Quand clic sur combobox
 							   console.log('beforequery');
 							   	//FAILNOTAFUNCTION gugu.refresh();//FAIL gugu.clear();//FAITRIEN gugu.removeAll();//FAITRIEN gugu.loadData([],false);
-								//addComboxFieldItemsWFS();
+								//noglob_addComboxFieldItemsWFS();
 							   //FAITRIEN queryEvent.combo.onLoad();return false; 
 							   //FAITRIEN gugu.lastQuery = null;
 							   //FAILNOTAFUNCTION this.removeAll();
 							   //FAITRIEN gugu.removeAll();
 							   
-							   ////addComboxFieldItemsWFS();
+							   ////noglob_addComboxFieldItemsWFS();
 							   
 							   //FAILTHISPROXYUNDEFINED gugu.reload();
 							   
@@ -570,14 +570,14 @@ GEOR.Addons.arbreexu.prototype = {
 				}				
 				//FAILfaitrien select: function(){champ_pour_input_wms1.lastQuery = null;console.log('select');},
             }, base));
-            table_input_param.push(champ_pour_input_wms1);
+            noglob_table_input_param.push(champ_pour_input_wms1);
 			console.log('ajout wms 1');
-            if (table_L_input_wms.length == 1) {
-                //table_input_param.push(warningMsg_wms);
+            if (noglob_table_L_input_wms.length == 1) {
+                //noglob_table_input_param.push(warningMsg_wms);
             }
         }
 
-        if (table_L_input_wms.length >= 2) {
+        if (noglob_table_L_input_wms.length >= 2) {
             var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
@@ -592,21 +592,21 @@ GEOR.Addons.arbreexu.prototype = {
                 };
             champ_pour_input_wms2 = new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
-                fieldLabel: OpenLayers.i18n(wmsTitle[1]),
-                emptyText: OpenLayers.i18n(wmsAbstract[1]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[1]),
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[1]),
                 width: FIELD_WIDTH,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
             }, base));
-            table_input_param.push(champ_pour_input_wms2);
-            if (table_L_input_wms.length == 2) {
-                //table_input_param.push(warningMsg_wms);
+            noglob_table_input_param.push(champ_pour_input_wms2);
+            if (noglob_table_L_input_wms.length == 2) {
+                //noglob_table_input_param.push(warningMsg_wms);
             }
         }
 
-        if (table_L_input_wms.length >= 3) {
+        if (noglob_table_L_input_wms.length >= 3) {
             var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
@@ -621,20 +621,20 @@ GEOR.Addons.arbreexu.prototype = {
                 };
             champ_pour_input_wms3 = new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
-                fieldLabel: OpenLayers.i18n(wmsTitle[2]),
-                emptyText: OpenLayers.i18n(wmsAbstract[2]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[2]),
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[2]),
                 width: FIELD_WIDTH,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
             }, base));
-            table_input_param.push(champ_pour_input_wms3);
-            if (table_L_input_wms.length == 3) {
-                //table_input_param.push(warningMsg_wms);
+            noglob_table_input_param.push(champ_pour_input_wms3);
+            if (noglob_table_L_input_wms.length == 3) {
+                //noglob_table_input_param.push(warningMsg_wms);
             }
         }
-        if (table_L_input_wms.length >= 4) {
+        if (noglob_table_L_input_wms.length >= 4) {
             var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
@@ -649,20 +649,20 @@ GEOR.Addons.arbreexu.prototype = {
                 };
             champ_pour_input_wms4 = new Ext.form.ComboBox(Ext.apply({
                 name: "Image_ref",
-                fieldLabel: OpenLayers.i18n(wmsTitle[3]),
-                emptyText: OpenLayers.i18n(wmsAbstract[3]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[3]),
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[3]),
                 width: FIELD_WIDTH,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
             }, base));
-            table_input_param.push(champ_pour_input_wms4);
-            if (table_L_input_wms.length == 4) {
-                //table_input_param.push(warningMsg_wms);
+            noglob_table_input_param.push(champ_pour_input_wms4);
+            if (noglob_table_L_input_wms.length == 4) {
+                //noglob_table_input_param.push(warningMsg_wms);
             }
         }
-        if (table_L_input_wms.length >= 5) {
+        if (noglob_table_L_input_wms.length >= 5) {
             var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
@@ -677,34 +677,34 @@ GEOR.Addons.arbreexu.prototype = {
                 };
             champ_pour_input_wms5 = new Ext.form.ComboBox(Ext.apply({
                 name: "Image_ref",
-                fieldLabel: OpenLayers.i18n(wmsTitle[4]),
-                emptyText: OpenLayers.i18n(wmsAbstract[4]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[4]),
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[4]),
                 width: FIELD_WIDTH,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
             }, base));
-            table_input_param.push(champ_pour_input_wms5);
-            if (table_L_input_wms.length == 5) {
-                //table_input_param.push(warningMsg_wms);
+            noglob_table_input_param.push(champ_pour_input_wms5);
+            if (noglob_table_L_input_wms.length == 5) {
+                //noglob_table_input_param.push(warningMsg_wms);
             }
         }
 
         // ----------------------------------------------------------------------
         // Combobox inputs
         // ----------------------------------------------------------------------			 
-        if (table_L_input_scroll.length >= 1) {
+        if (noglob_wmsAbstract.length >= 1) {
 			// OR
 			
 			champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
 			//xtype:'combo',
 				width: 200, // line 1203
-			   fieldLabel:OpenLayers.i18n(scrollTitle[0]),
+			   fieldLabel:OpenLayers.i18n(noglob_scrollTitle[0]),
 			   name:'division',
 			   //valueField: 'division',
 			   //queryMode:'local',
-			   store:[scroll_allowedValues[0][0],scroll_allowedValues[0][1]], // ['A','B']
+			   store:[noglob_scroll_allowedValues[0][0],noglob_scroll_allowedValues[0][1]], // ['A','B']
 			   editable: false,
 			   //displayField:'division',
 			   triggerAction:'all',
@@ -718,90 +718,90 @@ GEOR.Addons.arbreexu.prototype = {
 			/*
             champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
-                fieldLabel: OpenLayers.i18n(scrollTitle[0]),
+                fieldLabel: OpenLayers.i18n(noglob_scrollTitle[0]),
                 value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
-                    data: scroll_allowedValues[0]
+                    data: noglob_scroll_allowedValues[0]
                 })
             }, base));
 			*/
 			//
-            table_input_param.push(champ_pour_input_scroll1);
+            noglob_table_input_param.push(champ_pour_input_scroll1);
         }
-        if (table_L_input_scroll.length >= 2) {
+        if (noglob_wmsAbstract.length >= 2) {
             champ_pour_input_scroll2 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
-                fieldLabel: OpenLayers.i18n(scrollTitle[1]),
+                fieldLabel: OpenLayers.i18n(noglob_scrollTitle[1]),
                 value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
-                    data: scroll_allowedValues[1]
+                    data: noglob_scroll_allowedValues[1]
                 })
             }, base));
-            table_input_param.push(champ_pour_input_scroll2);
+            noglob_table_input_param.push(champ_pour_input_scroll2);
         }
-        if (table_L_input_scroll.length >= 3) {
+        if (noglob_wmsAbstract.length >= 3) {
             champ_pour_input_scroll3 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
-                fieldLabel: OpenLayers.i18n(scrollTitle[2]),
+                fieldLabel: OpenLayers.i18n(noglob_scrollTitle[2]),
                 value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
-                    data: scroll_allowedValues[2]
+                    data: noglob_scroll_allowedValues[2]
                 })
             }, base));
-            table_input_param.push(champ_pour_input_scroll3);
+            noglob_table_input_param.push(champ_pour_input_scroll3);
         }
-        if (table_L_input_scroll.length >= 4) {
+        if (noglob_wmsAbstract.length >= 4) {
             champ_pour_input_scroll4 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
-                fieldLabel: OpenLayers.i18n(scrollTitle[3]),
+                fieldLabel: OpenLayers.i18n(noglob_scrollTitle[3]),
                 value: "",
                 width: 40,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
-                    data: scroll_allowedValues[3]
+                    data: noglob_scroll_allowedValues[3]
                 })
             }, base));
-            table_input_param.push(champ_pour_input_scroll4);
+            noglob_table_input_param.push(champ_pour_input_scroll4);
         }
-        if (table_L_input_scroll.length >= 5) {
+        if (noglob_wmsAbstract.length >= 5) {
             champ_pour_input_scroll5 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
-                fieldLabel: OpenLayers.i18n(scrollTitle[4]),
+                fieldLabel: OpenLayers.i18n(noglob_scrollTitle[4]),
                 value: "",
                 width: 40,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
-                    data: scroll_allowedValues[4]
+                    data: noglob_scroll_allowedValues[4]
                 })
             }, base));
-            table_input_param.push(champ_pour_input_scroll5);
+            noglob_table_input_param.push(champ_pour_input_scroll5);
         }
 
         // ----------------------------------------------------------------------
         // GML inputs
         // ----------------------------------------------------------------------
         // PART 1
-        tmp_table_C_input_gml = [];
-        if (table_C_input_gml.length >= 1) {
+        tmp_noglob_table_C_input_gml = [];
+        if (noglob_table_C_input_gml.length >= 1) {
             var fifoo1 = {
                 xtype: 'fileuploadfield',
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
                 buttonText: '',
-                listeners: {
+                noglob_listeners: {
                     'fileselected': function(fb, v) {
                         file = fb.fileInput.dom.files[0];
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            gmlValue1 = e.target.result;
+                            noglob_gmlValue1 = e.target.result;
                             if (myfilename.search('.gml') != -1) {} else {
                                 GEOR.util.errorDialog({
                                     title: "Erreur de format",
@@ -813,23 +813,23 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             };
-            tmp_table_C_input_gml.push(fifoo1);
+            tmp_noglob_table_C_input_gml.push(fifoo1);
         }
 
-        if (table_C_input_gml.length >= 2) {
+        if (noglob_table_C_input_gml.length >= 2) {
             var fifoo2 = {
                 xtype: 'fileuploadfield',
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
                 buttonText: '',
-                listeners: {
+                noglob_listeners: {
                     'fileselected': function(fb, v) {
                         file = fb.fileInput.dom.files[0];
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            gmlValue2 = e.target.result;
+                            noglob_gmlValue2 = e.target.result;
                             if (myfilename.search('.gml') != -1) {
                                 //
                             } else {
@@ -843,23 +843,23 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             };
-            tmp_table_C_input_gml.push(fifoo2);
+            tmp_noglob_table_C_input_gml.push(fifoo2);
         }
 
-        if (table_C_input_gml.length >= 3) {
+        if (noglob_table_C_input_gml.length >= 3) {
             var fifoo3 = {
                 xtype: 'fileuploadfield',
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
                 buttonText: '',
-                listeners: {
+                noglob_listeners: {
                     'fileselected': function(fb, v) {
                         file = fb.fileInput.dom.files[0];
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            gmlValue3 = e.target.result;
+                            noglob_gmlValue3 = e.target.result;
                             if (myfilename.search('.gml') != -1) {} else {
                                 GEOR.util.errorDialog({
                                     title: "Erreur de format",
@@ -871,22 +871,22 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             };
-            tmp_table_C_input_gml.push(fifoo3);
+            tmp_noglob_table_C_input_gml.push(fifoo3);
         }
-        if (table_C_input_gml.length >= 4) {
+        if (noglob_table_C_input_gml.length >= 4) {
             var fifoo4 = {
                 xtype: 'fileuploadfield',
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
                 buttonText: '',
-                listeners: {
+                noglob_listeners: {
                     'fileselected': function(fb, v) {
                         file = fb.fileInput.dom.files[0];
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            gmlValue4 = e.target.result;
+                            noglob_gmlValue4 = e.target.result;
                             if (myfilename.search('.gml') != -1) {} else {
                                 GEOR.util.errorDialog({
                                     title: "Erreur de format",
@@ -898,22 +898,22 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             };
-            tmp_table_C_input_gml.push(fifoo4);
+            tmp_noglob_table_C_input_gml.push(fifoo4);
         }
-        if (table_C_input_gml.length >= 5) {
+        if (noglob_table_C_input_gml.length >= 5) {
             var fifoo5 = {
                 xtype: 'fileuploadfield',
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
                 buttonText: '',
-                listeners: {
+                noglob_listeners: {
                     'fileselected': function(fb, v) {
                         file = fb.fileInput.dom.files[0];
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            gmlValue5 = e.target.result;
+                            noglob_gmlValue5 = e.target.result;
                             if (myfilename.search('.gml') != -1) {} else {
                                 GEOR.util.errorDialog({
                                     title: "Erreur de format",
@@ -925,7 +925,7 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             };
-            tmp_table_C_input_gml.push(fifoo5);
+            tmp_noglob_table_C_input_gml.push(fifoo5);
         }
 
         // PART 2 GML Window
@@ -936,7 +936,7 @@ GEOR.Addons.arbreexu.prototype = {
             autoWidth: true,
             bodyStyle: 'padding: 9px 10px 0 0px;',
             items: [
-                tmp_table_C_input_gml,
+                tmp_noglob_table_C_input_gml,
             ]
         });
 
@@ -975,27 +975,27 @@ GEOR.Addons.arbreexu.prototype = {
                     var lonlat = map.getLonLatFromPixel(e.xy);
                     clickbv.deactivate();
                     if (log_coord == 1) {
-                        coordxyValue1 = lonlat.lat;
+                        noglob_coordxyValue1 = lonlat.lat;
                         alert("Input 1 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
                         log_coord = 0;
                     }
                     if (log_coord == 2) {
-                        coordxyValue2 = lonlat.lat;
+                        noglob_coordxyValue2 = lonlat.lat;
                         alert("Input 2 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
                         log_coord = 0;
                     }
                     if (log_coord == 3) {
-                        coordxyValue3 = lonlat.lat;
+                        noglob_coordxyValue3 = lonlat.lat;
                         alert("Input 3 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
                         log_coord = 0;
                     }
                     if (log_coord == 4) {
-                        coordxyValue4 = lonlat.lat;
+                        noglob_coordxyValue4 = lonlat.lat;
                         alert("Input 4 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
                         log_coord = 0;
                     }
                     if (log_coord == 5) {
-                        coordxyValue5 = lonlat.lat;
+                        noglob_coordxyValue5 = lonlat.lat;
                         alert("Input 5 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
                         log_coord = 0;
                     }
@@ -1009,10 +1009,10 @@ GEOR.Addons.arbreexu.prototype = {
         clickbv = new OpenLayers.Control.Click();
         map.addControl(clickbv);
 
-        if (table_L_input_coordxy.length >= 1) {
+        if (noglob_table_L_input_coordxy.length >= 1) {
             champ_pour_input_coordxy1 = new Ext.Button({
                 iconCls: 'add_icon',
-                text: OpenLayers.i18n(coordxyTitle[0]),
+                text: OpenLayers.i18n(noglob_coordxyTitle[0]),
                 style: 'padding-top:5px',
                 handler: function() {
                     clickbv.activate();
@@ -1020,12 +1020,12 @@ GEOR.Addons.arbreexu.prototype = {
                 },
                 scope: this
             });
-            table_input_param.push(champ_pour_input_coordxy1);
+            noglob_table_input_param.push(champ_pour_input_coordxy1);
         }
-        if (table_L_input_coordxy.length >= 2) {
+        if (noglob_table_L_input_coordxy.length >= 2) {
             champ_pour_input_coordxy2 = new Ext.Button({
                 iconCls: 'add_icon',
-                text: OpenLayers.i18n(coordxyTitle[1]),
+                text: OpenLayers.i18n(noglob_coordxyTitle[1]),
                 style: 'padding-top:5px',
                 handler: function() {
                     clickbv.activate();
@@ -1033,12 +1033,12 @@ GEOR.Addons.arbreexu.prototype = {
                 },
                 scope: this
             });
-            table_input_param.push(champ_pour_input_coordxy2);
+            noglob_table_input_param.push(champ_pour_input_coordxy2);
         }
-        if (table_L_input_coordxy.length >= 3) {
+        if (noglob_table_L_input_coordxy.length >= 3) {
             champ_pour_input_coordxy3 = new Ext.Button({
                 iconCls: 'add_icon',
-                text: OpenLayers.i18n(coordxyTitle[2]),
+                text: OpenLayers.i18n(noglob_coordxyTitle[2]),
                 style: 'padding-top:5px',
                 handler: function() {
                     clickbv.activate();
@@ -1046,12 +1046,12 @@ GEOR.Addons.arbreexu.prototype = {
                 },
                 scope: this
             });
-            table_input_param.push(champ_pour_input_coordxy3);
+            noglob_table_input_param.push(champ_pour_input_coordxy3);
         }
-        if (table_L_input_coordxy.length >= 4) {
+        if (noglob_table_L_input_coordxy.length >= 4) {
             champ_pour_input_coordxy4 = new Ext.Button({
                 iconCls: 'add_icon',
-                text: OpenLayers.i18n(coordxyTitle[3]),
+                text: OpenLayers.i18n(noglob_coordxyTitle[3]),
                 style: 'padding-top:5px',
                 handler: function() {
                     clickbv.activate();
@@ -1059,12 +1059,12 @@ GEOR.Addons.arbreexu.prototype = {
                 },
                 scope: this
             });
-            table_input_param.push(champ_pour_input_coordxy4);
+            noglob_table_input_param.push(champ_pour_input_coordxy4);
         }
-        if (table_L_input_coordxy.length >= 5) {
+        if (noglob_table_L_input_coordxy.length >= 5) {
             champ_pour_input_coordxy5 = new Ext.Button({
                 iconCls: 'add_icon',
-                text: OpenLayers.i18n(coordxyTitle[4]),
+                text: OpenLayers.i18n(noglob_coordxyTitle[4]),
                 style: 'padding-top:5px',
                 handler: function() {
                     clickbv.activate();
@@ -1072,41 +1072,41 @@ GEOR.Addons.arbreexu.prototype = {
                 },
                 scope: this
             });
-            table_input_param.push(champ_pour_input_coordxy5);
+            noglob_table_input_param.push(champ_pour_input_coordxy5);
         }
         // ----------------------------------------------------------------------
         // Checkbox inputs
         // ----------------------------------------------------------------------
-		//wmsTitle.push(L_input_wms1_name.title);
-		//console.log(table_L_input_checkbox);
-		for (i = 1; i <= table_L_input_checkbox.length; i++) {
-		//if (table_L_input_checkbox.length >= 1) {   
-			champ_pour_input_checkbox[i] = new Ext.form.Checkbox({
-					boxLabel: checkboxTitle[i-1],
+		//noglob_wmsTitle.push(L_input_wms1_name.title);
+		//console.log(noglob_table_L_input_checkbox);
+		for (i = 1; i <= noglob_table_L_input_checkbox.length; i++) {
+		//if (noglob_table_L_input_checkbox.length >= 1) {   
+			noglob_champ_pour_input_checkbox[i] = new Ext.form.Checkbox({
+					boxLabel: noglob_checkboxTitle[i-1],
 					id: 'checkbox'+i,
 					width: 300,
 					xtype: 'checkbox',
-					fieldLabel: checkboxTitle[i-1]//fieldLabel: "Input"+i+"  (checkbox)"
+					fieldLabel: noglob_checkboxTitle[i-1]//fieldLabel: "Input"+i+"  (checkbox)"
 					,checked: true
             });
-            //table_input_param.push(champ_pour_input_checkbox[i]);
+            //noglob_table_input_param.push(noglob_champ_pour_input_checkbox[i]);
 			if (i <= 6) {
-			table_input_param_splitPanel1.push(champ_pour_input_checkbox[i]);
+			noglob_table_input_param_splitPanel1.push(noglob_champ_pour_input_checkbox[i]);
 			}
 			else {
-			table_input_param_splitPanel2.push(champ_pour_input_checkbox[i]);
+			noglob_table_input_param_splitPanel2.push(noglob_champ_pour_input_checkbox[i]);
 			}
 		}
-		//console.log(table_input_param);
-		/*if (table_L_input_checkbox.length >= 2) {   	
-            this.champ_pour_input_checkbox2 = new Ext.form.Checkbox({
+		//console.log(noglob_table_input_param);
+		/*if (noglob_table_L_input_checkbox.length >= 2) {   	
+            this.noglob_champ_pour_input_checkbox2 = new Ext.form.Checkbox({
 					id: 'checkbox2',
 					width: 200,
 					xtype: 'checkbox',
 					fieldLabel: "Input 2 (checkbox)"
 					,checked: true
             });
-            table_input_param.push(this.champ_pour_input_checkbox2);
+            noglob_table_input_param.push(this.noglob_champ_pour_input_checkbox2);
 		}*/
         // ----------------------------------------------------------------------
         // Tab (in progress)
@@ -1129,7 +1129,7 @@ GEOR.Addons.arbreexu.prototype = {
 				layout:'column',
 				//FAIL columns: 2,
 				//FAIL vertical: true,
-                items: [table_input_param_splitPanel1//, champ_pour_input_wms1
+                items: [noglob_table_input_param_splitPanel1//, champ_pour_input_wms1
                     /*champ_pour_input_scroll1,
                     champ_pour_input_scroll2*/
                 ]
@@ -1151,11 +1151,11 @@ GEOR.Addons.arbreexu.prototype = {
                 padding: 10,
                 bodyStyle: "padding:10px;",
 				layout:'column', 
-                items: [table_input_param_splitPanel2]
+                items: [noglob_table_input_param_splitPanel2]
             }]
         };
 		
-    regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
+    noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
             title: OpenLayers.i18n(""),
             //frame: true, // TEST
 			//closable: false,
@@ -1182,11 +1182,11 @@ GEOR.Addons.arbreexu.prototype = {
         // Window : fields and buttons
         // ----------------------------------------------------------------------	 
         
-		myPanel = new Ext.Window({
+		noglob_myPanel = new Ext.Window({
             // Config globale
             title: OpenLayers.i18n("addon_wpsmaker_title"),
             closable: true,
-            closeAction: 'hide', //FAIL myPanel.hide,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
             width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
 			height:Ext.getBody().getViewSize().height - 62,
 			y: '31px', 
@@ -1203,7 +1203,7 @@ GEOR.Addons.arbreexu.prototype = {
                 labelWidth: 150,
                 bodyStyle: "padding:10px;",
                 items: [
-                    table_input_param,
+                    noglob_table_input_param,
 					fileLoadForm
 					//,champ_pour_input_wms1
                 ],		
@@ -1216,18 +1216,18 @@ GEOR.Addons.arbreexu.prototype = {
 					//Refresh wmsLayers
 					//----------------------------------------------------------------------
 						function() {
-							console.log(table_input_param);
-							layer_liste_WFS = [];
-							addComboxFieldItemsWFS();
+							console.log(noglob_table_input_param);
+							layer_noglob_liste_WFS = [];
+							noglob_addComboxFieldItemsWFS();
 							// Champ 1 
 							champ_pour_input_wms1 = new Ext.form.ComboBox({
 								name: "wms",
-								fieldLabel: OpenLayers.i18n(wmsTitle[0]), // marche pas ?
-								emptyText: OpenLayers.i18n(wmsAbstract[0]),
+								fieldLabel: OpenLayers.i18n(noglob_wmsTitle[0]), // marche pas ?
+								emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[0]),
 								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
-									data: layer_liste_WFS
+									data: layer_noglob_liste_WFS
 								}),
 								forceSelection: true,
 								editable: true,
@@ -1238,16 +1238,16 @@ GEOR.Addons.arbreexu.prototype = {
 								displayField: 'text',
 								labelWidth: 10				
 							});
-							table_input_param.push(champ_pour_input_wms1);
+							noglob_table_input_param.push(champ_pour_input_wms1);
 							// Champ 2 
 							champ_pour_input_wms2 = new Ext.form.ComboBox({
 								name: "wms",
-								fieldLabel: OpenLayers.i18n(wmsTitle[1]), 
-								emptyText: OpenLayers.i18n(wmsAbstract[1]),
+								fieldLabel: OpenLayers.i18n(noglob_wmsTitle[1]), 
+								emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[1]),
 								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
-									data: layer_liste_WFS
+									data: layer_noglob_liste_WFS
 								}),
 								forceSelection: true,
 								editable: true,
@@ -1258,16 +1258,16 @@ GEOR.Addons.arbreexu.prototype = {
 								displayField: 'text',
 								labelWidth: 10				
 							});
-							table_input_param.push(champ_pour_input_wms2);
+							noglob_table_input_param.push(champ_pour_input_wms2);
 							// Champ 3
 							champ_pour_input_wms3 = new Ext.form.ComboBox({
 								name: "wms",
-								fieldLabel: OpenLayers.i18n(wmsTitle[2]), // marche pas ?
-								emptyText: OpenLayers.i18n(wmsAbstract[2]),
+								fieldLabel: OpenLayers.i18n(noglob_wmsTitle[2]), // marche pas ?
+								emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[2]),
 								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
-									data: layer_liste_WFS
+									data: layer_noglob_liste_WFS
 								}),
 								forceSelection: true,
 								editable: true,
@@ -1278,7 +1278,7 @@ GEOR.Addons.arbreexu.prototype = {
 								displayField: 'text',
 								labelWidth: 10				
 							});
-							table_input_param.push(champ_pour_input_wms3);
+							noglob_table_input_param.push(champ_pour_input_wms3);
 							// remove les 3 anciens champs
 							var firstItem = Ext.getCmp('reportGraphArea').items.first();
 							 Ext.getCmp('reportGraphArea').remove(firstItem,true);
@@ -1293,17 +1293,17 @@ GEOR.Addons.arbreexu.prototype = {
 							Ext.getCmp('reportGraphArea').add(champ_pour_input_wms2);
 							Ext.getCmp('reportGraphArea').add(champ_pour_input_wms3);					
 						//console.log('refreshtbar');
-						console.log(table_input_param);
+						console.log(noglob_table_input_param);
 						// Retire les wms inputs 
-						for(var i = table_input_param.length - 1; i >= 0; i--) { if ( (table_input_param[i].name === 'wms')) { 
+						for(var i = noglob_table_input_param.length - 1; i >= 0; i--) { if ( (noglob_table_input_param[i].name === 'wms')) { 
 							   console.log('HEAAAAAAAAAAAAAAAAAAAA4');
-							   table_input_param.splice(i, 1);
+							   noglob_table_input_param.splice(i, 1);
 							}}
-						console.log(table_input_param);
+						console.log(noglob_table_input_param);
 						
 						// Recharge la page (sans la recreer)
-						myPanel.hide();  
-						myPanel.show();						
+						noglob_myPanel.hide();  
+						noglob_myPanel.show();						
 					}
 					//----------------------------------------------------------------------
 				}],
@@ -1341,7 +1341,7 @@ GEOR.Addons.arbreexu.prototype = {
 */
 //			
 			onglet2,onglet3,
-			regionContent,
+			noglob_regionContent,
 			],
             // Creation/Ajout des boutons
             fbar: ['->', {
@@ -1369,17 +1369,17 @@ GEOR.Addons.arbreexu.prototype = {
                 handler: this.ExecuteWpsTimer,
                 scope: this
             }],
-		   listeners:{
+		   noglob_listeners:{
 				hide:this.destroylol,
 				scope:this
 			},			
         });
-		// Fonctionne, car ajoute avant le return mypanel
+		// Fonctionne, car ajoute avant le return noglob_myPanel
 		
 		// Permet de faire l'update 
-		//passursiutile regionContent.doLayout();		
+		//passursiutile noglob_regionContent.doLayout();		
 		//		
-		return myPanel;
+		return noglob_myPanel;
 		
     },
     /** -----------------------------------------------------------------------------
@@ -1388,15 +1388,15 @@ GEOR.Addons.arbreexu.prototype = {
     // Send the input fields in the window
     ExecuteWpsTimer: function() {
         mask_loader.show();
-		// Test // Fail myPanel is not defined 
-		//myPanel.body.update('Changed on load!');
-		//myPanel.update('Changed on load!');
+		// Test // Fail noglob_myPanel is not defined 
+		//noglob_myPanel.body.update('Changed on load!');
+		//noglob_myPanel.update('Changed on load!');
 		//
         // ----------------------------------------------------------------------
         // Inputs Param
         // ----------------------------------------------------------------------
-		tableList_input_forXml = [];
-        if (table_L_input_param.length >= 1) { // est important pour le message d'erreur si champs vide
+		noglob_tableList_input_forXml = [];
+        if (noglob_table_L_input_param.length >= 1) { // est important pour le message d'erreur si champs vide
             var input_param1_fromPythonValue = this.champ_pour_input_param1.getValue();
             var L_input_param1_forXml = {
                 identifier: "L_input_param1",
@@ -1406,9 +1406,9 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_param1_forXml);
+            noglob_tableList_input_forXml.push(L_input_param1_forXml);
         }
-        if (table_L_input_param.length >= 2) {
+        if (noglob_table_L_input_param.length >= 2) {
             var input_param2_fromPythonValue = this.champ_pour_input_param2.getValue();
             var L_input_param2_forXml = {
                 identifier: "L_input_param2",
@@ -1418,9 +1418,9 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_param2_forXml);
+            noglob_tableList_input_forXml.push(L_input_param2_forXml);
         }
-        if (table_L_input_param.length >= 3) {
+        if (noglob_table_L_input_param.length >= 3) {
             var input_param3_fromPythonValue = this.champ_pour_input_param3.getValue();
             var L_input_param3_forXml = {
                 identifier: "L_input_param3",
@@ -1430,9 +1430,9 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_param3_forXml);
+            noglob_tableList_input_forXml.push(L_input_param3_forXml);
         }
-        if (table_L_input_param.length >= 4) {
+        if (noglob_table_L_input_param.length >= 4) {
             var input_param4_fromPythonValue = this.champ_pour_input_param4.getValue();
             var L_input_param4_forXml = {
                 identifier: "L_input_param4",
@@ -1442,9 +1442,9 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_param4_forXml);
+            noglob_tableList_input_forXml.push(L_input_param4_forXml);
         }
-        if (table_L_input_param.length >= 5) {
+        if (noglob_table_L_input_param.length >= 5) {
             var input_param5_fromPythonValue = this.champ_pour_input_param5.getValue();
             var L_input_param5_forXml = {
                 identifier: "L_input_param5",
@@ -1454,13 +1454,13 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_param5_forXml);
+            noglob_tableList_input_forXml.push(L_input_param5_forXml);
         }
 
         // ----------------------------------------------------------------------
         // Inputs WMS
         // ----------------------------------------------------------------------
-        if (table_L_input_wms.length >= 1 ){ //&& champ_pour_input_wms1.getValue() !== "") {
+        if (noglob_table_L_input_wms.length >= 1 ){ //&& champ_pour_input_wms1.getValue() !== "") {
 			if (champ_pour_input_wms1.getValue() !== "") {
 				var L_input_wms1_getValue = champ_pour_input_wms1.getValue(); 
 				var L_input_wms1_WMS_URL = L_input_wms1_getValue.data.WFS_URL;
@@ -1474,7 +1474,7 @@ GEOR.Addons.arbreexu.prototype = {
 						}
 					}
 				}
-				tableList_input_forXml.push(L_input_WMS1_forXml);
+				noglob_tableList_input_forXml.push(L_input_WMS1_forXml);
 			}
 			if (champ_pour_input_wms1.getValue() == "") {
 				var L_input_WMS1_forXml = {
@@ -1485,11 +1485,11 @@ GEOR.Addons.arbreexu.prototype = {
 						}
 					}
 				}
-				tableList_input_forXml.push(L_input_WMS1_forXml);
+				noglob_tableList_input_forXml.push(L_input_WMS1_forXml);
 				console.log("emptywms1")
 			}
 		}
-        if (table_L_input_wms.length >= 2 ){ //&& champ_pour_input_wms1.getValue() !== "") {
+        if (noglob_table_L_input_wms.length >= 2 ){ //&& champ_pour_input_wms1.getValue() !== "") {
 			if (champ_pour_input_wms2.getValue() !== "") {
 				var L_input_wms2_getValue = champ_pour_input_wms2.getValue(); 
 				var L_input_wms2_WMS_URL = L_input_wms2_getValue.data.WFS_URL;
@@ -1503,7 +1503,7 @@ GEOR.Addons.arbreexu.prototype = {
 						}
 					}
 				}
-				tableList_input_forXml.push(L_input_WMS2_forXml);
+				noglob_tableList_input_forXml.push(L_input_WMS2_forXml);
 			}
 			if (champ_pour_input_wms2.getValue() == "") {
 				var L_input_WMS2_forXml = {
@@ -1514,11 +1514,11 @@ GEOR.Addons.arbreexu.prototype = {
 						}
 					}
 				}
-				tableList_input_forXml.push(L_input_WMS2_forXml);
+				noglob_tableList_input_forXml.push(L_input_WMS2_forXml);
 				console.log("emptywms2")
 			}
 		}
-        if (table_L_input_wms.length >= 3 ){ //&& champ_pour_input_wms1.getValue() !== "") {
+        if (noglob_table_L_input_wms.length >= 3 ){ //&& champ_pour_input_wms1.getValue() !== "") {
 			if (champ_pour_input_wms3.getValue() !== "") {
 				var L_input_wms3_getValue = champ_pour_input_wms3.getValue(); 
 				var L_input_wms3_WMS_URL = L_input_wms3_getValue.data.WFS_URL;
@@ -1532,7 +1532,7 @@ GEOR.Addons.arbreexu.prototype = {
 						}
 					}
 				}
-				tableList_input_forXml.push(L_input_WMS3_forXml);
+				noglob_tableList_input_forXml.push(L_input_WMS3_forXml);
 			}
 			if (champ_pour_input_wms3.getValue() == "") {
 				var L_input_WMS3_forXml = {
@@ -1543,11 +1543,11 @@ GEOR.Addons.arbreexu.prototype = {
 						}
 					}
 				}
-				tableList_input_forXml.push(L_input_WMS3_forXml);
+				noglob_tableList_input_forXml.push(L_input_WMS3_forXml);
 				console.log("emptywms3")
 			}
 		}
-        if (table_L_input_wms.length >= 4 && champ_pour_input_wms4.getValue() !== "") {
+        if (noglob_table_L_input_wms.length >= 4 && champ_pour_input_wms4.getValue() !== "") {
             var L_input_wms4_getValue = champ_pour_input_wms4.getValue();
             var L_input_wms4_WMS_URL = L_input_wms4_getValue.data.WFS_URL;
             var L_input_wms4_WMS_typeName = L_input_wms4_getValue.data.WFS_typeName;
@@ -1559,9 +1559,9 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_WMS4_forXml);
+            noglob_tableList_input_forXml.push(L_input_WMS4_forXml);
         }
-        if (table_L_input_wms.length >= 5 && champ_pour_input_wms5.getValue() !== "") {
+        if (noglob_table_L_input_wms.length >= 5 && champ_pour_input_wms5.getValue() !== "") {
             var L_input_wms5_getValue = champ_pour_input_wms5.getValue();
             var L_input_wms5_WMS_URL = L_input_wms5_getValue.data.WFS_URL;
             var L_input_wms5_WMS_typeName = L_input_wms5_getValue.data.WFS_typeName;
@@ -1573,14 +1573,14 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_WMS5_forXml);
+            noglob_tableList_input_forXml.push(L_input_WMS5_forXml);
         }
 
         // ----------------------------------------------------------------------
         // Inputs Combobox
         // ----------------------------------------------------------------------
-        if (table_L_input_scroll.length >= 0) {
-            if (table_L_input_scroll.length >= 1 && champ_pour_input_scroll1.getValue() !== "") {
+        if (noglob_wmsAbstract.length >= 0) {
+            if (noglob_wmsAbstract.length >= 1 && champ_pour_input_scroll1.getValue() !== "") {
                 var L_input_scroll1_getValue = champ_pour_input_scroll1.getValue();
                 var L_input_scroll1_forXml = {
                     identifier: "L_input_scroll1",
@@ -1590,9 +1590,9 @@ GEOR.Addons.arbreexu.prototype = {
                         }
                     }
                 }
-                tableList_input_forXml.push(L_input_scroll1_forXml);
+                noglob_tableList_input_forXml.push(L_input_scroll1_forXml);
             }
-            if (table_L_input_scroll.length >= 2 && champ_pour_input_scroll2.getValue() !== "") {
+            if (noglob_wmsAbstract.length >= 2 && champ_pour_input_scroll2.getValue() !== "") {
                 var L_input_scroll2_getValue = champ_pour_input_scroll2.getValue();
                 var L_input_scroll2_forXml = {
                     identifier: "L_input_scroll2",
@@ -1602,9 +1602,9 @@ GEOR.Addons.arbreexu.prototype = {
                         }
                     }
                 }
-                tableList_input_forXml.push(L_input_scroll2_forXml);
+                noglob_tableList_input_forXml.push(L_input_scroll2_forXml);
             }
-            if (table_L_input_scroll.length >= 3 && champ_pour_input_scroll3.getValue() !== "") {
+            if (noglob_wmsAbstract.length >= 3 && champ_pour_input_scroll3.getValue() !== "") {
                 var L_input_scroll3_getValue = champ_pour_input_scroll3.getValue();
                 var L_input_scroll3_forXml = {
                     identifier: "L_input_scroll3",
@@ -1614,9 +1614,9 @@ GEOR.Addons.arbreexu.prototype = {
                         }
                     }
                 }
-                tableList_input_forXml.push(L_input_scroll3_forXml);
+                noglob_tableList_input_forXml.push(L_input_scroll3_forXml);
             }
-            if (table_L_input_scroll.length >= 4 && champ_pour_input_scroll4.getValue() !== "") {
+            if (noglob_wmsAbstract.length >= 4 && champ_pour_input_scroll4.getValue() !== "") {
                 var L_input_scroll4_getValue = champ_pour_input_scroll4.getValue();
                 var L_input_scroll4_forXml = {
                     identifier: "L_input_scroll4",
@@ -1626,9 +1626,9 @@ GEOR.Addons.arbreexu.prototype = {
                         }
                     }
                 }
-                tableList_input_forXml.push(L_input_scroll4_forXml);
+                noglob_tableList_input_forXml.push(L_input_scroll4_forXml);
             }
-            if (table_L_input_scroll.length >= 5 && champ_pour_input_scroll5.getValue() !== "") {
+            if (noglob_wmsAbstract.length >= 5 && champ_pour_input_scroll5.getValue() !== "") {
                 var L_input_scroll5_getValue = champ_pour_input_scroll5.getValue();
                 var L_input_scroll5_forXml = {
                     identifier: "L_input_scroll5",
@@ -1638,134 +1638,134 @@ GEOR.Addons.arbreexu.prototype = {
                         }
                     }
                 }
-                tableList_input_forXml.push(L_input_scroll5_forXml);
+                noglob_tableList_input_forXml.push(L_input_scroll5_forXml);
             }
         }
         // ----------------------------------------------------------------------
         // Inputs Coordinates
         // ----------------------------------------------------------------------
-        if (table_L_input_coordxy.length >= 1 && typeof(coordxyValue1) != "undefined") {
+        if (noglob_table_L_input_coordxy.length >= 1 && typeof(noglob_coordxyValue1) != "undefined") {
             var L_input_coordxy1_forXml = {
                 identifier: "L_input_coordxy1",
                 data: {
                     literalData: {
-                        value: coordxyValue1
+                        value: noglob_coordxyValue1
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_coordxy1_forXml);
+            noglob_tableList_input_forXml.push(L_input_coordxy1_forXml);
         }
-        if (table_L_input_coordxy.length >= 2 && typeof(coordxyValue2) != "undefined") {
+        if (noglob_table_L_input_coordxy.length >= 2 && typeof(noglob_coordxyValue2) != "undefined") {
             var L_input_coordxy2_forXml = {
                 identifier: "L_input_coordxy2",
                 data: {
                     literalData: {
-                        value: coordxyValue2
+                        value: noglob_coordxyValue2
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_coordxy2_forXml);
+            noglob_tableList_input_forXml.push(L_input_coordxy2_forXml);
         }
-        if (table_L_input_coordxy.length >= 3 && typeof(coordxyValue3) != "undefined") {
+        if (noglob_table_L_input_coordxy.length >= 3 && typeof(noglob_coordxyValue3) != "undefined") {
             var L_input_coordxy3_forXml = {
                 identifier: "L_input_coordxy3",
                 data: {
                     literalData: {
-                        value: coordxyValue3
+                        value: noglob_coordxyValue3
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_coordxy3_forXml);
+            noglob_tableList_input_forXml.push(L_input_coordxy3_forXml);
         }
-        if (table_L_input_coordxy.length >= 4 && typeof(coordxyValue4) != "undefined") {
+        if (noglob_table_L_input_coordxy.length >= 4 && typeof(noglob_coordxyValue4) != "undefined") {
             var L_input_coordxy4_forXml = {
                 identifier: "L_input_coordxy4",
                 data: {
                     literalData: {
-                        value: coordxyValue4
+                        value: noglob_coordxyValue4
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_coordxy4_forXml);
+            noglob_tableList_input_forXml.push(L_input_coordxy4_forXml);
         }
-        if (table_L_input_coordxy.length >= 5 && typeof(coordxyValue5) != "undefined") {
+        if (noglob_table_L_input_coordxy.length >= 5 && typeof(noglob_coordxyValue5) != "undefined") {
             var L_input_coordxy5_forXml = {
                 identifier: "L_input_coordxy5",
                 data: {
                     literalData: {
-                        value: coordxyValue5
+                        value: noglob_coordxyValue5
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_coordxy5_forXml);
+            noglob_tableList_input_forXml.push(L_input_coordxy5_forXml);
         }
 
         // ----------------------------------------------------------------------
         // Inputs GML
         // ----------------------------------------------------------------------
-        if (table_C_input_gml.length >= 1 && typeof(gmlValue1) != "undefined") {
-            //console.log(gmlValue1);
+        if (noglob_table_C_input_gml.length >= 1 && typeof(noglob_gmlValue1) != "undefined") {
+            //console.log(noglob_gmlValue1);
             var L_input_gml1_forXml = {
                 identifier: "C_input_gml1",
                 data: {
                     complexData: {
-                        value: gmlValue1
+                        value: noglob_gmlValue1
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_gml1_forXml);
+            noglob_tableList_input_forXml.push(L_input_gml1_forXml);
         }
-        if (table_C_input_gml.length >= 2 && typeof(gmlValue2) != "undefined") {
+        if (noglob_table_C_input_gml.length >= 2 && typeof(noglob_gmlValue2) != "undefined") {
             var L_input_gml2_forXml = {
                 identifier: "C_input_gml2",
                 data: {
                     complexData: {
-                        value: gmlValue2
+                        value: noglob_gmlValue2
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_gml2_forXml);
+            noglob_tableList_input_forXml.push(L_input_gml2_forXml);
         }
-        if (table_C_input_gml.length >= 3 && typeof(gmlValue3) != "undefined") {
+        if (noglob_table_C_input_gml.length >= 3 && typeof(noglob_gmlValue3) != "undefined") {
             var L_input_gml3_forXml = {
                 identifier: "C_input_gml3",
                 data: {
                     complexData: {
-                        value: gmlValue3
+                        value: noglob_gmlValue3
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_gml3_forXml);
+            noglob_tableList_input_forXml.push(L_input_gml3_forXml);
         }
-        if (table_C_input_gml.length >= 4 && typeof(gmlValue4) != "undefined") {
+        if (noglob_table_C_input_gml.length >= 4 && typeof(noglob_gmlValue4) != "undefined") {
             var L_input_gml4_forXml = {
                 identifier: "C_input_gml4",
                 data: {
                     complexData: {
-                        value: gmlValue4
+                        value: noglob_gmlValue4
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_gml4_forXml);
+            noglob_tableList_input_forXml.push(L_input_gml4_forXml);
         }
-        if (table_C_input_gml.length >= 5 && typeof(gmlValue5) != "undefined") {
+        if (noglob_table_C_input_gml.length >= 5 && typeof(noglob_gmlValue5) != "undefined") {
             var L_input_gml5_forXml = {
                 identifier: "C_input_gml5",
                 data: {
                     complexData: {
-                        value: gmlValue5
+                        value: noglob_gmlValue5
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_gml5_forXml);
+            noglob_tableList_input_forXml.push(L_input_gml5_forXml);
         }
 
         // ----------------------------------------------------------------------
         // Inputs Checkbox
         // ----------------------------------------------------------------------
-        for (i = 1; i <= table_L_input_checkbox.length; i++) {
-		//if (table_L_input_checkbox.length >= 1) { // est important pour le message d'erreur si champs vide
-            var input_checkbox1_fromPythonValue = champ_pour_input_checkbox[i].getValue();
+        for (i = 1; i <= noglob_table_L_input_checkbox.length; i++) {
+		//if (noglob_table_L_input_checkbox.length >= 1) { // est important pour le message d'erreur si champs vide
+            var input_checkbox1_fromPythonValue = noglob_champ_pour_input_checkbox[i].getValue();
             var L_input_checkbox1_forXml = {
                 identifier: "L_input_checkbox"+i,
                 data: {
@@ -1774,33 +1774,33 @@ GEOR.Addons.arbreexu.prototype = {
                     }
                 }
             }
-            tableList_input_forXml.push(L_input_checkbox1_forXml);
+            noglob_tableList_input_forXml.push(L_input_checkbox1_forXml);
         }
 
 		
         // Test if all fields are filled (except those by default)
-        var champs_restant = numberOfInputs - tableList_input_forXml.length;
-        if (numberOfInputs == tableList_input_forXml.length) { //numberOfInputswithoutwms
+        var champs_restant = noglob_numberOfInputs - noglob_tableList_input_forXml.length;
+        if (noglob_numberOfInputs == noglob_tableList_input_forXml.length) { //noglob_numberOfInputswithoutwms
 
             // ----------------------------------------------------------------------
             // Outputs WMS
             // ----------------------------------------------------------------------
             tableList_output_forXml = [];
-            if (table_L_output_wms.length >= 1) {
+            if (noglob_table_L_output_wms.length >= 1) {
                 L_output_wms1_forXml = {
                     asReference: false,
                     identifier: "L_output_wms1"
                 }; //console.log("testOwms1");
                 tableList_output_forXml.push(L_output_wms1_forXml); //console.log(tableList_output_forXml[0]);
             }
-            if (table_L_output_wms.length >= 2) {
+            if (noglob_table_L_output_wms.length >= 2) {
                 L_output_wms2_forXml = {
                     asReference: false,
                     identifier: "L_output_wms2"
                 }; //console.log("testOwms2");
                 tableList_output_forXml.push(L_output_wms2_forXml); //console.log(tableList_output_forXml[0]);
             }
-            if (table_L_output_wms.length >= 3) {
+            if (noglob_table_L_output_wms.length >= 3) {
                 L_output_wms3_forXml = {
                     asReference: false,
                     identifier: "L_output_wms3"
@@ -1811,23 +1811,23 @@ GEOR.Addons.arbreexu.prototype = {
             // ----------------------------------------------------------------------
             // Outputs Param
             // ----------------------------------------------------------------------
-            //console.log(table_L_output_param.length);
-            if (table_L_output_param.length >= 1) {
-                console.log('test table_L_output_param ok');
+            //console.log(noglob_table_L_output_param.length);
+            if (noglob_table_L_output_param.length >= 1) {
+                console.log('test noglob_table_L_output_param ok');
                 L_output_param1_forXml = {
                     asReference: false,
                     identifier: "L_output_param1"
                 }; //console.log("testOwms1");
                 tableList_output_forXml.push(L_output_param1_forXml); //console.log(tableList_output_forXml[0]);
             }
-            if (table_L_output_param.length >= 2) {
+            if (noglob_table_L_output_param.length >= 2) {
                 L_output_param2_forXml = {
                     asReference: false,
                     identifier: "L_output_param2"
                 }; //console.log("testOwms2");
                 tableList_output_forXml.push(L_output_param2_forXml); //console.log(tableList_output_forXml[0]);
             }
-            if (table_L_output_param.length >= 3) {
+            if (noglob_table_L_output_param.length >= 3) {
                 L_output_param3_forXml = {
                     asReference: false,
                     identifier: "L_output_param3"
@@ -1844,7 +1844,7 @@ GEOR.Addons.arbreexu.prototype = {
             // Creation de la requete XML
             var xmlString = wpsFormat.write({
                 identifier: WPS_identifier,
-                dataInputs: tableList_input_forXml,
+                dataInputs: noglob_tableList_input_forXml,
                 responseForm: {
                     responseDocument: {
                         storeExecuteResponse: true,
@@ -1857,8 +1857,8 @@ GEOR.Addons.arbreexu.prototype = {
             });
             console.log(xmlString);
 
-            if (execute_on_off == 0) {
-                execute_on_off = 1;
+            if (noglob_execute_on_off == 0) {
+                noglob_execute_on_off = 1;
                 OpenLayers.Request.POST({
                     url: WPS_URL, // var contenant l'adresse recuperee auparavant dans le manifest.json
                     data: xmlString,
@@ -1926,7 +1926,7 @@ GEOR.Addons.arbreexu.prototype = {
                     client_L_output_param1 = literalData[0].firstChild.nodeValue;
                     console.log(client_L_output_param1);
                 }
-                execute_on_off = 0; // Limite le nombre de process wps a la fois
+                noglob_execute_on_off = 0; // Limite le nombre de process wps a la fois
             }
         }
 		console.log(map);
@@ -1935,7 +1935,7 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // PART 1 : Load wms layer from recovered data	
         GEOR.waiter.show(); // Barre bleu de chargement
-        if (table_L_output_wms.length >= 1) { // et si non vide
+        if (noglob_table_L_output_wms.length >= 1) { // et si non vide
 			//console.log("wms ok")		
             // client_L_output_wms1 contient un string a parser composer de l'url + le nom de la couche :  http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
             var layerNameparse = client_L_output_wms1.substring(client_L_output_wms1.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
@@ -1999,7 +1999,7 @@ GEOR.Addons.arbreexu.prototype = {
 			
         }
 
-        if (table_L_output_wms.length >= 2) {
+        if (noglob_table_L_output_wms.length >= 2) {
 			//console.log("wms ok")		
             // client_L_output_wms2 contient un string a parser composer de l'url + le nom de la couche :  http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
             var layerNameparse2 = client_L_output_wms2.substring(client_L_output_wms2.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
@@ -2063,7 +2063,7 @@ GEOR.Addons.arbreexu.prototype = {
 			//console.log(ls);
         }
 		/*
-        if (table_L_output_wms.length >= 2) {
+        if (noglob_table_L_output_wms.length >= 2) {
             var layerNameparse2 = client_L_output_wms2.substring(client_L_output_wms2.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
             var layerUrlparse2 = client_L_output_wms2.substr(0, client_L_output_wms2.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
             console.log("Une couche WMS a été ajoutée :");
@@ -2102,7 +2102,7 @@ GEOR.Addons.arbreexu.prototype = {
             });
 
         }
-        if (table_L_output_wms.length >= 3) {
+        if (noglob_table_L_output_wms.length >= 3) {
             var layerNameparse3 = client_L_output_wms3.substring(client_L_output_wms3.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
             var layerUrlparse3 = client_L_output_wms3.substr(0, client_L_output_wms3.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
             console.log("Une couche WMS a été ajoutée :");
@@ -2148,18 +2148,18 @@ GEOR.Addons.arbreexu.prototype = {
         // Display output settings on the client side
         // ----------------------------------------------------------------------		
         //GEOR.util.infoDialog({msg: "TAPOUE"});
-		////	myPanel.hide();//FAIL this.win.hide();this.win.show();
+		////	noglob_myPanel.hide();//FAIL this.win.hide();this.win.show();
         // ----------------------------------------------------------------------
         // Update panel 
         // ----------------------------------------------------------------------
 			someText = client_L_output_param1.replace(/(\r\n|\n|\r)/gm,"<br>");
-			regionContent.update(someText);//works: regionContent.update('poulout');
+			noglob_regionContent.update(someText);//works: noglob_regionContent.update('poulout');
 	
-			//FAIL regionContent.update(pageUne);
-			//regionContent.doLayout();
+			//FAIL noglob_regionContent.update(pageUne);
+			//noglob_regionContent.doLayout();
 			console.log(client_L_output_param1);
 			console.log(someText);
-			myPanel.show();
+			noglob_myPanel.show();
 			GEOR.waiter.hide();
         // ----------------------------------------------------------------------
         // WMC
@@ -2242,26 +2242,26 @@ GEOR.Addons.arbreexu.prototype = {
         ----------------------------------------------------------------------------- */
     destroylol: function() {
 		console.log('hide');
-		//layer_liste_WFS = [];
-		//console.log(layer_liste_WFS);
-		//Failconsole.log(layer_liste_WFS.forms[0]);//Failconsole.log(layer_liste_WFS.firstChild);
+		//layer_noglob_liste_WFS = [];
+		//console.log(layer_noglob_liste_WFS);
+		//Failconsole.log(layer_noglob_liste_WFS.forms[0]);//Failconsole.log(layer_noglob_liste_WFS.firstChild);
 		
-		//addComboxFieldItemsWFS();
+		//noglob_addComboxFieldItemsWFS();
 		
-		//myPanel.hide();
+		//noglob_myPanel.hide();
 		
 		
 		////
 		/*
             champ_pour_input_wmsx1 = new Ext.form.ComboBox({
                 name: "Image_reflol",
-                fieldLabel: OpenLayers.i18n(wmsTitle[0]), // marche pas ?
-                emptyText: OpenLayers.i18n(wmsAbstract[0]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[0]), // marche pas ?
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[0]),
                 width: 60,
 				//plain: true,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
                     forceSelection: true,
                     editable: true,
@@ -2278,13 +2278,13 @@ GEOR.Addons.arbreexu.prototype = {
 
             champ_pour_input_wmsx2 = new Ext.form.ComboBox({
                 name: "Image_reflol",
-                fieldLabel: OpenLayers.i18n(wmsTitle[1]), // marche pas ?
-                emptyText: OpenLayers.i18n(wmsAbstract[1]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[1]), // marche pas ?
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[1]),
                 width: 60,
 				//plain: true,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
                     forceSelection: true,
                     editable: true,
@@ -2301,13 +2301,13 @@ GEOR.Addons.arbreexu.prototype = {
 
             champ_pour_input_wmsx3 = new Ext.form.ComboBox({
                 name: "Image_reflol",
-                fieldLabel: OpenLayers.i18n(wmsTitle[2]), // marche pas ?
-                emptyText: OpenLayers.i18n(wmsAbstract[2]),
+                fieldLabel: OpenLayers.i18n(noglob_wmsTitle[2]), // marche pas ?
+                emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[2]),
                 width: 60,
 				//plain: true,
                 store: new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
-                    data: layer_liste_WFS
+                    data: layer_noglob_liste_WFS
                 }),
                     forceSelection: true,
                     editable: true,
@@ -2322,7 +2322,7 @@ GEOR.Addons.arbreexu.prototype = {
 				//FAILfaitrien select: function(){champ_pour_input_wms1.lastQuery = null;console.log('select');},
             });
 			
-		//regionContent.add(champ_pour_input_wmsx);		
+		//noglob_regionContent.add(champ_pour_input_wmsx);		
 		//GREAT http://uniapple.net/blog/?p=705		
 		// Ca vient de linitialisation ?
 		
@@ -2343,15 +2343,15 @@ GEOR.Addons.arbreexu.prototype = {
 		Ext.getCmp('reportGraphArea').add(champ_pour_input_wmsx2);
 		Ext.getCmp('reportGraphArea').add(champ_pour_input_wmsx3);
 		
-		console.log(tableList_input_forXml);
+		console.log(noglob_tableList_input_forXml);
 		*/
 		////
 		
 		//this.win = this.createWindow();
-		//myPanel.show();
+		//noglob_myPanel.show();
 		
 		/*
-		myPanel.add({
+		noglob_myPanel.add({
                     title       : 'Child number ',
 					activate: true,
 					region: 'south',
@@ -2362,13 +2362,13 @@ GEOR.Addons.arbreexu.prototype = {
                 });
 		*/		
 				
-		//myPanel.add(champ_pour_input_wmsx);
-		//myPanel.doLayout();
+		//noglob_myPanel.add(champ_pour_input_wmsx);
+		//noglob_myPanel.doLayout();
 		
 		//onglet2.add(champ_pour_input_wmsx);
 		
-		//myPanel.show();
-		//NEFAITRIEN champ_pour_input_wms1.bindStore(layer_liste_WFS);
+		//noglob_myPanel.show();
+		//NEFAITRIEN champ_pour_input_wms1.bindStore(layer_noglob_liste_WFS);
 		//console.log('hide');
 		
 		//NEFAITRIEN
