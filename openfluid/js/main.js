@@ -178,7 +178,6 @@ GEOR.Addons.openfluid.prototype = {
                 });
             }
         });
-		//FAIL this.showWindow; // Ne fait rien
     },
 
     /** -----------------------------------------------------------------------------
@@ -540,18 +539,7 @@ GEOR.Addons.openfluid.prototype = {
                 }),
 				listeners: {
 					'beforequery': function() { // beforequery : Quand clic sur combobox
-							   console.log('beforequery');
-							   	//FAILNOTAFUNCTION gugu.refresh();//FAIL gugu.clear();//FAITRIEN gugu.removeAll();//FAITRIEN gugu.loadData([],false);
-								//addComboxFieldItemsWFS();
-							   //FAITRIEN queryEvent.combo.onLoad();return false; 
-							   //FAITRIEN gugu.lastQuery = null;
-							   //FAILNOTAFUNCTION this.removeAll();
-							   //FAITRIEN gugu.removeAll();
-							   
-							   ////addComboxFieldItemsWFS();
-							   
-							   //FAILTHISPROXYUNDEFINED gugu.reload();
-							   
+							   console.log('beforequery');							   
 						 },
 					
 					'beforerender': function() { // beforerender est juste au moment d ouvrir la fenetre avant qu elle saffiche
@@ -567,7 +555,6 @@ GEOR.Addons.openfluid.prototype = {
 					//NOTOK'beforeselect': 
 					//USELESS 'beforeshow': function() {console.log('beforeshow');},
 				}				
-				//FAILfaitrien select: function(){champ_pour_input_wms1.lastQuery = null;console.log('select');},
             }, base));
             table_input_param.push(champ_pour_input_wms1);
 			console.log('ajout wms 1');
@@ -694,6 +681,24 @@ GEOR.Addons.openfluid.prototype = {
         // Combobox inputs
         // ----------------------------------------------------------------------			 
         if (table_L_input_scroll.length >= 1) {
+			// OR
+			/*
+			champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
+			//xtype:'combo',
+				width: 95,
+			   fieldLabel:'Choisir',
+			   name:'division',
+			   //valueField: 'division',
+			   //queryMode:'local',
+			   store:['A','B','C'],
+			   editable: false,
+			   //displayField:'division',
+			   triggerAction:'all',
+			   //autoSelect:true,
+			   //forceSelection:true
+						}, base));	
+			*/
+			//
             champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[0]),
@@ -704,6 +709,7 @@ GEOR.Addons.openfluid.prototype = {
                     data: scroll_allowedValues[0]
                 })
             }, base));
+			//
             table_input_param.push(champ_pour_input_scroll1);
         }
         if (table_L_input_scroll.length >= 2) {
@@ -1346,7 +1352,7 @@ GEOR.Addons.openfluid.prototype = {
                 scope: this
             }],
 		   listeners:{
-				hide:this.destroylol,
+				hide:this.destroytst,
 				scope:this
 			},			
         });
@@ -1911,6 +1917,7 @@ GEOR.Addons.openfluid.prototype = {
         // ----------------------------------------------------------------------
         // PART 1 : Load wms layer from recovered data	
         GEOR.waiter.show(); // Barre bleu de chargement
+		console.log(client_L_output_wms1);
         if (table_L_output_wms.length >= 1) { // et si non vide
 			//console.log("wms ok")		
             // client_L_output_wms1 contient un string a parser composer de l'url + le nom de la couche :  http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
@@ -2021,16 +2028,6 @@ GEOR.Addons.openfluid.prototype = {
                 },
                 scope: this
             });
-			//console.log(layerStore);
-			//FAIL IS NOT A FUNCTION var huhu = GEOR.wmc.writeWmcContext(layerStore);
-			/*
-			var huhu = GEOR.wmc; //  ok
-			console.log(huhu);
-			var huhu2 = GEOR.wmc.write; //  ok
-			console.log(huhu2);
-			var huhu3 = GEOR.wmc.write(layerStore); //  ok
-			console.log(huhu3);
-			*/
 			var huhu5 = GEOR.wmc.write(layerStore); //  ok
 			console.log(huhu5);
 			// ls not defined console.log(ls);
@@ -2156,35 +2153,20 @@ GEOR.Addons.openfluid.prototype = {
             });
 			console.log(parserWMC);
 			// Ajout des couches 
-			//map.addLayer(wmsdyn);
-			console.log(layerStore);
-			//FAIL NEFAITRIEN map2 = map;map2.addLayer(wmsdyn);
-			//map.addLayer(wmsdyn2);
+			//console.log(layerStore);
 			// Creation du wmc a partir des couches ajoutees
 			var writeWMC = parserWMC.write(this.map);
 			//console.log(writeWMC);
 			// Correction d'un bug mineur pour que les wms sonient correctement declares en queryable
 			var writeWMCbis = writeWMC.replace('</Extension></Layer><Layer queryable="0"', '</Extension></Layer><Layer queryable="1"');
-			//console.log(writeWMCbis);
-			// Remplacement de la bounding box 3857 par du 2154
-			//var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";alphabet = alphabet.replace(/H.*S/, 'HS');
-			//alphabet2 = '<BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title/>';
-			var writeWMCbisbis = writeWMCbis.replace(/General.*General/, 'General><Window width="1293" height="765" /><BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title /><Extension>  <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="-357823.236499999999" miny="5037008.69390000030" maxx="1313632.36280000000" maxy="7230727.37710000016" /></Extension></General');
-			//var writeWMCbisbis = writeWMCbis.replace ("<BoundingBox","/><Title/>").replace('<BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title/>');
-			console.log(writeWMCbisbis);
+			//var writeWMCbisbis = writeWMCbis.replace(/General.*General/, 'General><Window width="1293" height="765" /><BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title /><Extension>  <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="-357823.236499999999" miny="5037008.69390000030" maxx="1313632.36280000000" maxy="7230727.37710000016" /></Extension></General');
+			//console.log(writeWMCbisbis);
 			
 			layerStore2 = Ext.getCmp("mappanel").layers;	
 			console.log(layerStore2);
 			var huhu6 = GEOR.wmc.write(layerStore2); //  ok
 			console.log(huhu6);
 			},20250);
-			//}
-			console.log('sdsdsdsddssddgo');
-// *-*-*
-	console.log(map);
-	console.log(this.map);
-// *-*-*			
-		//
     },
 
     /** -----------------------------------------------------------------------------
@@ -2205,7 +2187,7 @@ GEOR.Addons.openfluid.prototype = {
     showWindow: function() {
         if (!this.win) {
             // N'affiche que le dernier
-			//GEOR.util.infoDialog({msg: "Bienvenue sur OpenFLUID. <br> Un <b>tutoriel</b> est disponible, cliquez sur ce <A HREF='https://www.google.fr/' target='_blank'>lien</a> ou sur le bouton \"Aide\" situé en bas à gauche de votre écran."});
+			//GEOR.util.infoDialog({msg: "Bienvenue sur openfluid. <br> Un <b>tutoriel</b> est disponible, cliquez sur ce <A HREF='https://www.google.fr/' target='_blank'>lien</a> ou sur le bouton \"Aide\" situé en bas à gauche de votre écran."});
 			this.win = this.createWindow();
 			//this.win = this.createWindow2();
 			
@@ -2216,152 +2198,9 @@ GEOR.Addons.openfluid.prototype = {
     /** -----------------------------------------------------------------------------
         destroy
         ----------------------------------------------------------------------------- */
-    destroylol: function() {
+    destroytst: function() {
 		console.log('hide');
-		//layer_liste_WFS = [];
-		//console.log(layer_liste_WFS);
-		//Failconsole.log(layer_liste_WFS.forms[0]);//Failconsole.log(layer_liste_WFS.firstChild);
-		
-		//addComboxFieldItemsWFS();
-		
-		//myPanel.hide();
-		
-		
-		////
-		/*
-            champ_pour_input_wmsx1 = new Ext.form.ComboBox({
-                name: "Image_reflol",
-                fieldLabel: OpenLayers.i18n(wmsTitle[0]), // marche pas ?
-                emptyText: OpenLayers.i18n(wmsAbstract[0]),
-                width: 60,
-				//plain: true,
-                store: new Ext.data.SimpleStore({
-                    fields: ['text', 'value'],
-                    data: layer_liste_WFS
-                }),
-                    forceSelection: true,
-                    editable: true,
-                    allowBlank: true,
-                    triggerAction: 'all',
-					//value: 'Defaut', // afficher par defaut la premiere valeur
-                    mode: 'local',
-                    //labelSeparator: OpenLayers.i18n("labelSeparator"),
-                    valueField: 'value',
-                    displayField: 'text',
-                    labelWidth: 10				
-				//FAILfaitrien select: function(){champ_pour_input_wms1.lastQuery = null;console.log('select');},
-            });
-
-            champ_pour_input_wmsx2 = new Ext.form.ComboBox({
-                name: "Image_reflol",
-                fieldLabel: OpenLayers.i18n(wmsTitle[1]), // marche pas ?
-                emptyText: OpenLayers.i18n(wmsAbstract[1]),
-                width: 60,
-				//plain: true,
-                store: new Ext.data.SimpleStore({
-                    fields: ['text', 'value'],
-                    data: layer_liste_WFS
-                }),
-                    forceSelection: true,
-                    editable: true,
-                    allowBlank: true,
-                    triggerAction: 'all',
-					//FAILFAITRIEN lastQuery: '',
-                    mode: 'local',
-                    //labelSeparator: OpenLayers.i18n("labelSeparator"),
-                    valueField: 'value',
-                    displayField: 'text',
-                    labelWidth: 10				
-				//FAILfaitrien select: function(){champ_pour_input_wms1.lastQuery = null;console.log('select');},
-            });
-
-            champ_pour_input_wmsx3 = new Ext.form.ComboBox({
-                name: "Image_reflol",
-                fieldLabel: OpenLayers.i18n(wmsTitle[2]), // marche pas ?
-                emptyText: OpenLayers.i18n(wmsAbstract[2]),
-                width: 60,
-				//plain: true,
-                store: new Ext.data.SimpleStore({
-                    fields: ['text', 'value'],
-                    data: layer_liste_WFS
-                }),
-                    forceSelection: true,
-                    editable: true,
-                    allowBlank: true,
-                    triggerAction: 'all',
-					//FAILFAITRIEN lastQuery: '',
-                    mode: 'local',
-                    //labelSeparator: OpenLayers.i18n("labelSeparator"),
-                    valueField: 'value',
-                    displayField: 'text',
-                    labelWidth: 10				
-				//FAILfaitrien select: function(){champ_pour_input_wms1.lastQuery = null;console.log('select');},
-            });
-			
-		//regionContent.add(champ_pour_input_wmsx);		
-		//GREAT http://uniapple.net/blog/?p=705		
-		// Ca vient de linitialisation ?
-		
-		// remove ONE item
-		var firstItem = Ext.getCmp('reportGraphArea').items.first();
-		 Ext.getCmp('reportGraphArea').remove(firstItem,true);
-		var firstItem2 = Ext.getCmp('reportGraphArea').items.first();
-		 Ext.getCmp('reportGraphArea').remove(firstItem2,true);		 
-		var firstItem3 = Ext.getCmp('reportGraphArea').items.first();
-		 Ext.getCmp('reportGraphArea').remove(firstItem3,true);	
-		var firstItem4 = Ext.getCmp('reportGraphArea').items.first();
-		Ext.getCmp('reportGraphArea').remove(firstItem4,true);			 
-		// remove ALL items
-		//FAILacompletervar numItems = Ext.getCmp('reportGraphArea').items.getCount();
-		//Ext.getCmp('reportGraphArea').remove(numItems,true);
-		
-		Ext.getCmp('reportGraphArea').add(champ_pour_input_wmsx1);
-		Ext.getCmp('reportGraphArea').add(champ_pour_input_wmsx2);
-		Ext.getCmp('reportGraphArea').add(champ_pour_input_wmsx3);
-		
-		console.log(tableList_input_forXml);
-		*/
-		////
-		
-		//this.win = this.createWindow();
-		//myPanel.show();
-		
-		/*
-		myPanel.add({
-                    title       : 'Child number ',
-					activate: true,
-					region: 'south',
-					collapsible: true,
-					collapsed: false,
-					split: true,
-				   item : [champ_pour_input_wmsx]
-                });
-		*/		
-				
-		//myPanel.add(champ_pour_input_wmsx);
-		//myPanel.doLayout();
-		
-		//onglet2.add(champ_pour_input_wmsx);
-		
-		//myPanel.show();
-		//NEFAITRIEN champ_pour_input_wms1.bindStore(layer_liste_WFS);
-		//console.log('hide');
-		
-		//NEFAITRIEN
-		// this.store undefined : // champ_pour_input_wms1.bindStore("Image_ref");
-		//champ_pour_input_wms1.store.removeAll();
-		//champ_pour_input_wms1.lastQuery = null;
-		//champ_pour_input_wms1.totalLength = 0;
-		
-		//champ_pour_input_wms1.bindStore(champ_pour_input_wms1);
-		
-		//http://www.sencha.com/forum/showthread.php?158528-ComboBox-reload-store
-		
-    },
-
-//FAIL this.createWindow(), // this.createWindow(); // : SyntaxError: missing : after property id
-//FAIL this.showWindow(); // this.showWindow(), // : SyntaxError: missing : after property id 
-//FAIL showWindow();  // Fail showWindow(), // : SyntaxError: expected expression, got ','
+	},
 };
 
 console.log(GEOR.Addons.openfluid.prototype);
