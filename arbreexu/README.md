@@ -1,4 +1,4 @@
-arbreexu ADDON
+wpsmaker ADDON
 ================
 
 This addon allows users to use a WPS.
@@ -7,8 +7,8 @@ author: @Vanhouteghem
 Typical configuration to include in your GEOR_custom.js file:
 
 {
-        "id": "arbreexu",
-        "name": "arbreexu",
+        "id": "wpsmaker",
+        "name": "wpsmaker",
         "preloaded": false,
         "title": {
             "en": "WPS Maker",
