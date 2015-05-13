@@ -282,7 +282,7 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------		
         if (table_L_input_scroll.length >= 1) {
             var L_input_scroll1_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll1");
-			console.log(L_input_scroll1_name)
+			//console.log(L_input_scroll1_name)
             scrollTitle.push(L_input_scroll1_name.title);
             scroll1_allowedValues = [];
             for (var k in L_input_scroll1_name.literalData.allowedValues) {
@@ -291,8 +291,7 @@ GEOR.Addons.arbreexu.prototype = {
                 scroll1tmp_allowedValues.push(k);
                 scroll1_allowedValues.push(scroll1tmp_allowedValues);
             }
-            scroll_allowedValues.push(scroll1_allowedValues); //scroll_allowedValues.push(scroll1_allowedValues[0][0]);
-			console.log(scroll_allowedValues);
+            scroll_allowedValues.push(scroll1_allowedValues);
         }
         if (table_L_input_scroll.length >= 2) {
             var L_input_scroll2_name = findDataInputsByIdentifier(process.dataInputs, "L_input_scroll2");
@@ -695,27 +694,6 @@ GEOR.Addons.arbreexu.prototype = {
         // Combobox inputs
         // ----------------------------------------------------------------------			 
         if (table_L_input_scroll.length >= 1) {
-			// OR
-			
-			champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
-			//xtype:'combo',
-				width: 200, // line 1203
-			   fieldLabel:OpenLayers.i18n(scrollTitle[0]),
-			   name:'division',
-			   //valueField: 'division',
-			   //queryMode:'local',
-			   store:[scroll_allowedValues[0][0],scroll_allowedValues[0][1]], // ['A','B']
-			   editable: false,
-			   //displayField:'division',
-			   triggerAction:'all',
-			   //FAILlabelWidth: 10,
-			   //listWidth: 150,
-			   //autoSelect:true,
-			   //forceSelection:true
-						}, base));	
-			
-			//
-			/*
             champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[0]),
@@ -726,8 +704,6 @@ GEOR.Addons.arbreexu.prototype = {
                     data: scroll_allowedValues[0]
                 })
             }, base));
-			*/
-			//
             table_input_param.push(champ_pour_input_scroll1);
         }
         if (table_L_input_scroll.length >= 2) {
@@ -1200,7 +1176,7 @@ GEOR.Addons.arbreexu.prototype = {
 			{
                 xtype: 'form',
 				id : 'reportGraphArea',
-                labelWidth: 150,
+                labelWidth: 250,
                 bodyStyle: "padding:10px;",
                 items: [
                     table_input_param,
