@@ -475,11 +475,41 @@ GEOR.Addons.openfluid.prototype = {
 		layer_liste_WFS = [];
         addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_liste_WFS
             //var empty = true;
+			console.log(layerStore);
+			console.log(layerStore.data);
+			console.log(layerStore.data.length);
+			console.log(layerStore.data.items);
+			console.log(layerStore.data.items[0]);
+
+			//
+                var layer = layerStore.data.items[1].get('layer');
+                var queryable = layerStore.data.items[1].get('queryable');
+                var hasEquivalentWFS = layerStore.data.items[1].hasEquivalentWFS();
+				
+                if (queryable && hasEquivalentWFS) {
+                    //empty = false;
+
+                    var ObjectRecordType = Ext.data.layerStore.data.items[1].create(['text', 'value']);
+                    var rec = new ObjectRecordType({
+                        text: layer.name,
+                        value: layerStore.data.items[1]
+                    })
+
+                    liste = [rec.data.text, rec.data.value];
+
+					console.log(layer_liste_WFS); 
+					layer_liste_WFS.push(liste);
+					console.log('ADDWMSITEMS');
+                }
+			//
+			/*
             layerStore.each(function(record) {
 				console.log(record);
+				console.log('EACH');
                 var layer = record.get('layer');
                 var queryable = record.get('queryable');
                 var hasEquivalentWFS = record.hasEquivalentWFS();
+				
                 if (queryable && hasEquivalentWFS) {
                     //empty = false;
 
@@ -490,13 +520,17 @@ GEOR.Addons.openfluid.prototype = {
                     })
 
                     liste = [rec.data.text, rec.data.value];
-					//console.log(liste);	console.log(layer_liste_WFS);
-					//layer_liste_WFS = [];
-					//console.log(layer_liste_WFS);
-                    layer_liste_WFS.push(liste);
+
+					console.log(layer_liste_WFS); 
+					layer_liste_WFS.push(liste);
 					console.log('ADDWMSITEMS');
                 }
             });
+			*/
+			//
+			console.log('BWAAAA');
+			console.log(layer_liste_WFS);
+			
 			return layer_liste_WFS;
         };
         addComboxFieldItemsWFS();
@@ -507,7 +541,7 @@ GEOR.Addons.openfluid.prototype = {
 
         // PART 2
         if (table_L_input_wms.length >= 1) {
-            var FIELD_WIDTH = 60, 
+            var FIELD_WIDTH = 100,//60, 
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -564,7 +598,7 @@ GEOR.Addons.openfluid.prototype = {
         }
 
         if (table_L_input_wms.length >= 2) {
-            var FIELD_WIDTH = 60,
+            var FIELD_WIDTH = 100,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -593,7 +627,7 @@ GEOR.Addons.openfluid.prototype = {
         }
 
         if (table_L_input_wms.length >= 3) {
-            var FIELD_WIDTH = 60,
+            var FIELD_WIDTH = 100,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -621,7 +655,7 @@ GEOR.Addons.openfluid.prototype = {
             }
         }
         if (table_L_input_wms.length >= 4) {
-            var FIELD_WIDTH = 60,
+            var FIELD_WIDTH = 100,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -649,7 +683,7 @@ GEOR.Addons.openfluid.prototype = {
             }
         }
         if (table_L_input_wms.length >= 5) {
-            var FIELD_WIDTH = 60,
+            var FIELD_WIDTH = 100,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -1170,8 +1204,8 @@ GEOR.Addons.openfluid.prototype = {
             closable: true,
             closeAction: 'hide', //FAIL myPanel.hide,
             width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
-			height:Ext.getBody().getViewSize().height - 62,
-			y: '31px', 
+			height:Ext.getBody().getViewSize().height -123,//- 62,
+			y: '90px',//'31px', 
 			x: '0%',
             iconCls: 'windo_icon',
             plain: true,
@@ -1198,6 +1232,7 @@ GEOR.Addons.openfluid.prototype = {
 					//Refresh wmsLayers
 					//----------------------------------------------------------------------
 						function() {
+						    //if(table_L_output_param.length >= 1) {	
 							console.log(table_input_param);
 							layer_liste_WFS = [];
 							addComboxFieldItemsWFS();
@@ -1206,7 +1241,7 @@ GEOR.Addons.openfluid.prototype = {
 								name: "wms",
 								fieldLabel: OpenLayers.i18n(wmsTitle[0]), // marche pas ?
 								emptyText: OpenLayers.i18n(wmsAbstract[0]),
-								width: 60,
+								width: 100,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
 									data: layer_liste_WFS
@@ -1226,7 +1261,7 @@ GEOR.Addons.openfluid.prototype = {
 								name: "wms",
 								fieldLabel: OpenLayers.i18n(wmsTitle[1]), 
 								emptyText: OpenLayers.i18n(wmsAbstract[1]),
-								width: 60,
+								width: 100,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
 									data: layer_liste_WFS
@@ -1246,7 +1281,7 @@ GEOR.Addons.openfluid.prototype = {
 								name: "wms",
 								fieldLabel: OpenLayers.i18n(wmsTitle[2]), // marche pas ?
 								emptyText: OpenLayers.i18n(wmsAbstract[2]),
-								width: 60,
+								width: 100,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
 									data: layer_liste_WFS
@@ -1285,7 +1320,8 @@ GEOR.Addons.openfluid.prototype = {
 						
 						// Recharge la page (sans la recreer)
 						myPanel.hide();  
-						myPanel.show();						
+						myPanel.show();
+					    //}						
 					}
 					//----------------------------------------------------------------------
 				}],
@@ -1352,7 +1388,7 @@ GEOR.Addons.openfluid.prototype = {
                 scope: this
             }],
 		   listeners:{
-				hide:this.destroytst,
+				hide:this.destroy,
 				scope:this
 			},			
         });
@@ -2198,8 +2234,9 @@ GEOR.Addons.openfluid.prototype = {
     /** -----------------------------------------------------------------------------
         destroy
         ----------------------------------------------------------------------------- */
-    destroytst: function() {
-		console.log('hide');
+    destroy: function() {
+        this.win.hide();
+        this.map = null;
 	},
 };
 

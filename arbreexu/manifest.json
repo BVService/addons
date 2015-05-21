@@ -15,8 +15,8 @@
     "default_options": {
         "WPS_URL": "http://geowww.agrocampus-ouest.fr/cgi-bin/mntsurf.cgi",
         "WPS_identifier": "arbreexu",
-		"Help_URL": "http://www.openfluid-project.org/",
-		"Metadata_URL": "http://www.openfluid-project.org/",	
+		"Help_URL": "http://geowww.agrocampus-ouest.fr/web/?p=1216",
+		"Metadata_URL": "http://geowww.agrocampus-ouest.fr/geonetwork/srv/fr/main.home?uuid=2904d91f-4957-4921-a8c8-1ab6c19c6ec2",	
 		"globalWidth": "315"
     },
     "i18n": {

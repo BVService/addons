@@ -699,7 +699,7 @@ GEOR.Addons.arbreexu.prototype = {
 			
 			champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
 			//xtype:'combo',
-				width: 200, // line 1203
+				width: 125, // line 1203
 			   fieldLabel:OpenLayers.i18n(noglob_scrollTitle[0]),
 			   name:'division',
 			   //valueField: 'division',
@@ -731,7 +731,24 @@ GEOR.Addons.arbreexu.prototype = {
             noglob_table_input_param.push(champ_pour_input_scroll1);
         }
         if (noglob_wmsAbstract.length >= 2) {
-            champ_pour_input_scroll2 = new Ext.form.ComboBox(Ext.apply({
+
+	                        champ_pour_input_scroll2 = new Ext.form.ComboBox(Ext.apply({
+                        //xtype:'combo',
+                                width: 125, // line 1203
+                           fieldLabel:OpenLayers.i18n(noglob_scrollTitle[1]),
+                           name:'division',
+                           //valueField: 'division',
+                           //queryMode:'local',
+                           store:[noglob_scroll_allowedValues[1][0],noglob_scroll_allowedValues[1][1],noglob_scroll_allowedValues[1][2]], // ['A','B']
+                           editable: false,
+                           //displayField:'division',
+                           triggerAction:'all',
+                           //FAILlabelWidth: 10,
+                           //listWidth: 150,
+                           //autoSelect:true,
+                           //forceSelection:true
+                                                }, base));
+            /*champ_pour_input_scroll2 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(noglob_scrollTitle[1]),
                 value: "Par defaut",
@@ -741,7 +758,9 @@ GEOR.Addons.arbreexu.prototype = {
                     data: noglob_scroll_allowedValues[1]
                 })
             }, base));
+		*/
             noglob_table_input_param.push(champ_pour_input_scroll2);
+	    //noglob_table_input_param_splitPanel1.push(champ_pour_input_scroll2);
         }
         if (noglob_wmsAbstract.length >= 3) {
             champ_pour_input_scroll3 = new Ext.form.ComboBox(Ext.apply({
@@ -1082,16 +1101,17 @@ GEOR.Addons.arbreexu.prototype = {
 		for (i = 1; i <= noglob_table_L_input_checkbox.length; i++) {
 		//if (noglob_table_L_input_checkbox.length >= 1) {   
 			noglob_champ_pour_input_checkbox[i] = new Ext.form.Checkbox({
-					boxLabel: noglob_checkboxTitle[i-1],
+					//boxLabel: noglob_checkboxTitle[i-1],
 					id: 'checkbox'+i,
-					width: 300,
+					width: 150,
 					xtype: 'checkbox',
-					fieldLabel: noglob_checkboxTitle[i-1]//fieldLabel: "Input"+i+"  (checkbox)"
-					,checked: true
+					fieldLabel: noglob_checkboxTitle[i-1],//"Deconnexions par les haies",
+					checked: true
             });
             //noglob_table_input_param.push(noglob_champ_pour_input_checkbox[i]);
 			if (i <= 6) {
-			noglob_table_input_param_splitPanel1.push(noglob_champ_pour_input_checkbox[i]);
+			//noglob_table_input_param_splitPanel1.push(noglob_champ_pour_input_checkbox[i]);
+			noglob_table_input_param.push(noglob_champ_pour_input_checkbox[i]);
 			}
 			else {
 			noglob_table_input_param_splitPanel2.push(noglob_champ_pour_input_checkbox[i]);
@@ -1112,7 +1132,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Tab (in progress)
         // ----------------------------------------------------------------------		
         var onglet2 = {
-            title: OpenLayers.i18n("Selectionner les indicateurs a calculer sur les parcelles "),
+            title: OpenLayers.i18n("Options de deconnexion "),
             closable: false,
             activate: true,
             region: 'south',
@@ -1188,8 +1208,8 @@ GEOR.Addons.arbreexu.prototype = {
             closable: true,
             closeAction: 'hide', //FAIL noglob_myPanel.hide,
             width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
-			height:Ext.getBody().getViewSize().height - 62,
-			y: '31px', 
+			height:Ext.getBody().getViewSize().height - 123,//62,
+			y: '90px',//'31px', 
 			x: '0%',
             iconCls: 'windo_icon',
             plain: true,
@@ -1200,14 +1220,14 @@ GEOR.Addons.arbreexu.prototype = {
 			{
                 xtype: 'form',
 				id : 'reportGraphArea',
-                labelWidth: 150,
+                labelWidth: 200,
                 bodyStyle: "padding:10px;",
                 items: [
                     noglob_table_input_param,
 					fileLoadForm
 					//,champ_pour_input_wms1
                 ],		
-				tbar:[{ // Pour aligner a droite: tbar:['->', {
+				/*tbar:[{ // Pour aligner a droite: tbar:['->', {
 					text : 'Rafraichir',
 					tooltip:'Rafraichir les couches chargees',
 					iconCls: 'arrow_refresh',//'add',
@@ -1306,7 +1326,7 @@ GEOR.Addons.arbreexu.prototype = {
 						noglob_myPanel.show();						
 					}
 					//----------------------------------------------------------------------
-				}],
+				}],*/
 							
             },
 // Exemple de combobox directe
@@ -1340,7 +1360,7 @@ GEOR.Addons.arbreexu.prototype = {
 },
 */
 //			
-			onglet2,onglet3,
+			//onglet2,//onglet3,
 			noglob_regionContent,
 			],
             // Creation/Ajout des boutons
@@ -1370,7 +1390,7 @@ GEOR.Addons.arbreexu.prototype = {
                 scope: this
             }],
 		   noglob_listeners:{
-				hide:this.destroylol,
+				hide:this.destroy,
 				scope:this
 			},			
         });
@@ -2240,7 +2260,9 @@ GEOR.Addons.arbreexu.prototype = {
     /** -----------------------------------------------------------------------------
         destroy
         ----------------------------------------------------------------------------- */
-    destroylol: function() {
+    destroy: function() {
+        this.win.hide();
+        this.map = null;
 		console.log('hide');
 		//layer_noglob_liste_WFS = [];
 		//console.log(layer_noglob_liste_WFS);
