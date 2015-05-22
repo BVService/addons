@@ -475,41 +475,11 @@ GEOR.Addons.openfluid.prototype = {
 		layer_liste_WFS = [];
         addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_liste_WFS
             //var empty = true;
-			console.log(layerStore);
-			console.log(layerStore.data);
-			console.log(layerStore.data.length);
-			console.log(layerStore.data.items);
-			console.log(layerStore.data.items[0]);
-
-			//
-                var layer = layerStore.data.items[1].get('layer');
-                var queryable = layerStore.data.items[1].get('queryable');
-                var hasEquivalentWFS = layerStore.data.items[1].hasEquivalentWFS();
-				
-                if (queryable && hasEquivalentWFS) {
-                    //empty = false;
-
-                    var ObjectRecordType = Ext.data.layerStore.data.items[1].create(['text', 'value']);
-                    var rec = new ObjectRecordType({
-                        text: layer.name,
-                        value: layerStore.data.items[1]
-                    })
-
-                    liste = [rec.data.text, rec.data.value];
-
-					console.log(layer_liste_WFS); 
-					layer_liste_WFS.push(liste);
-					console.log('ADDWMSITEMS');
-                }
-			//
-			/*
             layerStore.each(function(record) {
 				console.log(record);
-				console.log('EACH');
                 var layer = record.get('layer');
                 var queryable = record.get('queryable');
                 var hasEquivalentWFS = record.hasEquivalentWFS();
-				
                 if (queryable && hasEquivalentWFS) {
                     //empty = false;
 
@@ -520,17 +490,13 @@ GEOR.Addons.openfluid.prototype = {
                     })
 
                     liste = [rec.data.text, rec.data.value];
-
-					console.log(layer_liste_WFS); 
-					layer_liste_WFS.push(liste);
+					//console.log(liste);	console.log(layer_liste_WFS);
+					//layer_liste_WFS = [];
+					//console.log(layer_liste_WFS);
+                    layer_liste_WFS.push(liste);
 					console.log('ADDWMSITEMS');
                 }
             });
-			*/
-			//
-			console.log('BWAAAA');
-			console.log(layer_liste_WFS);
-			
 			return layer_liste_WFS;
         };
         addComboxFieldItemsWFS();
@@ -541,7 +507,7 @@ GEOR.Addons.openfluid.prototype = {
 
         // PART 2
         if (table_L_input_wms.length >= 1) {
-            var FIELD_WIDTH = 100,//60, 
+            var FIELD_WIDTH = 60, 
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -598,7 +564,7 @@ GEOR.Addons.openfluid.prototype = {
         }
 
         if (table_L_input_wms.length >= 2) {
-            var FIELD_WIDTH = 100,
+            var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -627,7 +593,7 @@ GEOR.Addons.openfluid.prototype = {
         }
 
         if (table_L_input_wms.length >= 3) {
-            var FIELD_WIDTH = 100,
+            var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -655,7 +621,7 @@ GEOR.Addons.openfluid.prototype = {
             }
         }
         if (table_L_input_wms.length >= 4) {
-            var FIELD_WIDTH = 100,
+            var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -683,7 +649,7 @@ GEOR.Addons.openfluid.prototype = {
             }
         }
         if (table_L_input_wms.length >= 5) {
-            var FIELD_WIDTH = 100,
+            var FIELD_WIDTH = 60,
                 base = {
                     forceSelection: true,
                     editable: true,
@@ -736,7 +702,7 @@ GEOR.Addons.openfluid.prototype = {
             champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[0]),
-                value: "MNT Bourdic",
+                value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
@@ -750,7 +716,7 @@ GEOR.Addons.openfluid.prototype = {
             champ_pour_input_scroll2 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[1]),
-                value: "Parcellaire",
+                value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
@@ -763,7 +729,7 @@ GEOR.Addons.openfluid.prototype = {
             champ_pour_input_scroll3 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[2]),
-                value: "Fosses",
+                value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
@@ -1241,7 +1207,7 @@ GEOR.Addons.openfluid.prototype = {
 								name: "wms",
 								fieldLabel: OpenLayers.i18n(wmsTitle[0]), // marche pas ?
 								emptyText: OpenLayers.i18n(wmsAbstract[0]),
-								width: 100,
+								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
 									data: layer_liste_WFS
@@ -1261,7 +1227,7 @@ GEOR.Addons.openfluid.prototype = {
 								name: "wms",
 								fieldLabel: OpenLayers.i18n(wmsTitle[1]), 
 								emptyText: OpenLayers.i18n(wmsAbstract[1]),
-								width: 100,
+								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
 									data: layer_liste_WFS
@@ -1281,7 +1247,7 @@ GEOR.Addons.openfluid.prototype = {
 								name: "wms",
 								fieldLabel: OpenLayers.i18n(wmsTitle[2]), // marche pas ?
 								emptyText: OpenLayers.i18n(wmsAbstract[2]),
-								width: 100,
+								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
 									data: layer_liste_WFS
@@ -1388,7 +1354,7 @@ GEOR.Addons.openfluid.prototype = {
                 scope: this
             }],
 		   listeners:{
-				hide:this.destroy,
+				hide:this.destroytst,
 				scope:this
 			},			
         });
@@ -2234,9 +2200,8 @@ GEOR.Addons.openfluid.prototype = {
     /** -----------------------------------------------------------------------------
         destroy
         ----------------------------------------------------------------------------- */
-    destroy: function() {
-        this.win.hide();
-        this.map = null;
+    destroytst: function() {
+		console.log('hide');
 	},
 };
 

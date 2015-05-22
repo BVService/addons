@@ -702,6 +702,7 @@ GEOR.Addons.arbreexu.prototype = {
 				width: 125, // line 1203
 			   fieldLabel:OpenLayers.i18n(noglob_scrollTitle[0]),
 			   name:'division',
+                           value: "Le Moulinet",
 			   //valueField: 'division',
 			   //queryMode:'local',
 			   store:[noglob_scroll_allowedValues[0][0],noglob_scroll_allowedValues[0][1]], // ['A','B']
@@ -737,6 +738,7 @@ GEOR.Addons.arbreexu.prototype = {
                                 width: 125, // line 1203
                            fieldLabel:OpenLayers.i18n(noglob_scrollTitle[1]),
                            name:'division',
+                           value: "inactif",
                            //valueField: 'division',
                            //queryMode:'local',
                            store:[noglob_scroll_allowedValues[1][0],noglob_scroll_allowedValues[1][1],noglob_scroll_allowedValues[1][2]], // ['A','B']

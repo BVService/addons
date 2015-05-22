@@ -736,7 +736,7 @@ GEOR.Addons.openfluid.prototype = {
             champ_pour_input_scroll1 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[0]),
-                value: "MNT Bourdic",
+                value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
@@ -750,7 +750,7 @@ GEOR.Addons.openfluid.prototype = {
             champ_pour_input_scroll2 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[1]),
-                value: "Parcellaire",
+                value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
@@ -763,7 +763,7 @@ GEOR.Addons.openfluid.prototype = {
             champ_pour_input_scroll3 = new Ext.form.ComboBox(Ext.apply({
                 name: "Nscroll",
                 fieldLabel: OpenLayers.i18n(scrollTitle[2]),
-                value: "Fosses",
+                value: "Par defaut",
                 width: 95,
                 store: new Ext.data.SimpleStore({
                     fields: ['value', 'text'],
@@ -1388,7 +1388,7 @@ GEOR.Addons.openfluid.prototype = {
                 scope: this
             }],
 		   listeners:{
-				hide:this.destroy,
+				hide:this.destroytst,
 				scope:this
 			},			
         });
@@ -2234,9 +2234,8 @@ GEOR.Addons.openfluid.prototype = {
     /** -----------------------------------------------------------------------------
         destroy
         ----------------------------------------------------------------------------- */
-    destroy: function() {
-        this.win.hide();
-        this.map = null;
+    destroytst: function() {
+		console.log('hide');
 	},
 };
 
