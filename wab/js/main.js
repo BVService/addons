@@ -70,38 +70,14 @@ var wab = {
 	}
 }
 
-//var wab.inputs.list.length;
-//var noglob_table = [];
-//var noglob_tableOutputs = [];
-//var noglob_table_L_input_param = [];
-//var noglob_table_L_input_wms = [];
-//var noglob_wmsTitle = [];
-//var noglob_noglob_wmsAbstract = [];
-//var noglob_wmsAbstract = [];
-//var noglob_scrollTitle = [];
-//var noglob_scroll_allowedValues = [];
-//var noglob_table_L_input_coordxy = [];
-//var noglob_coordxyTitle = [];
-//var noglob_table_C_input_gml = [];
-//var noglob_coordxyValue1, noglob_coordxyValue2, noglob_coordxyValue3, noglob_coordxyValue4, noglob_coordxyValue5;
-//var table_C_input_gml = [];
-//var coordxyValue1, coordxyValue2, coordxyValue3, coordxyValue4, coordxyValue5;
-//var gmlValue1, gmlValue2, gmlValue3, gmlValue4, gmlValue5;
 var noglob_execute_on_off = 0;
-//var layer_noglob_liste_WFS = [];
 var noglob_table_L_output_wms = [];
 var noglob_table_L_output_param = [];
-//var noglob_table_L_input_checkbox = [];
-//var noglob_champ_pour_input_checkbox = [];
-//var noglob_checkboxTitle = [];
 var noglob_regionContent = "";
 var noglob_myPanel = "";
 var noglob_addComboxFieldItemsWFS = "";
 var noglob_liste = "";
 var noglob_table_input_param;
-//var champ_pour_input_wms1 ;
-//var onglet2 = "";
-//var noglob_tableList_input_forXml = [];
 
 GEOR.Addons.wab = function(map, options) {
     this.map = map;
