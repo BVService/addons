@@ -58,26 +58,24 @@ var wab = {
 	},
 	outputs : {
 		list : [],
+		forXmlResponse : [],
 		scroll : {
+			list : []
+		},
+		param : {
 			list : [],
-			addScroll : function(addScrollID,addName, addDefaultValue, addTitle) {
-				wab.outputs.scroll["scroll"+addScrollID] = {name : null, defaultValue : null, title : null} 
-				wab.outputs.scroll["scroll"+addScrollID].name = addName;
-				wab.outputs.scroll["scroll"+addScrollID].defaultValue = addDefaultValue;
-				wab.outputs.scroll["scroll"+addScrollID].title = addTitle;
-			}
 		}
 	}
 }
 
 var noglob_execute_on_off = 0;
 var noglob_table_L_output_wms = [];
-var noglob_table_L_output_param = [];
+//var noglob_table_L_output_param = [];
 var noglob_regionContent = "";
 var noglob_myPanel = "";
 var noglob_addComboxFieldItemsWFS = "";
 var noglob_liste = "";
-var noglob_table_input_param;
+//var noglob_table_input_param;
 
 GEOR.Addons.wab = function(map, options) {
     this.map = map;
@@ -197,11 +195,12 @@ GEOR.Addons.wab.prototype = {
                         noglob_table_L_output_wms.push(wab.outputs.list[i]);
                     } 
 					else if (wab.outputs.list[i].slice(0, 14) == "L_output_param") {
-                        noglob_table_L_output_param.push(wab.outputs.list[i]);
+                        //noglob_table_L_output_param.push(wab.outputs.list[i]);
+						wab.outputs.param.list.push(wab.outputs.list[i]);
                     }
                 }
                 console.log("Le WPS retourne " + wab.outputs.list.length + " output(s) : " + wab.outputs.list);
-                console.log("    - " + noglob_table_L_output_param.length + " output(s) de paramètre : " + noglob_table_L_output_param);
+                console.log("    - " + wab.outputs.param.list.length + " output(s) de paramètre : " + wab.outputs.param.list);
                 console.log("    - " + noglob_table_L_output_wms.length + " output(s) de wms : " + noglob_table_L_output_wms);
 
                 onDescribeP(wpsProcess);
@@ -236,6 +235,7 @@ GEOR.Addons.wab.prototype = {
 	    for (i = 1; i <= wab.inputs.param.list.length; i++) {	 
 			wab.inputs.param.addParam(i,findDataInputsByIdentifier(process.dataInputs, "L_input_param"+i));
 		}
+		
         // ----------------------------------------------------------------------
         // Data input WMS 	
         // ----------------------------------------------------------------------	
@@ -243,7 +243,6 @@ GEOR.Addons.wab.prototype = {
 		for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) {
             wab.inputs.scrollwms.addScrollwms(i,findDataInputsByIdentifier(process.dataInputs, "L_input_wms"+i));
 		}
-        //if (noglob_table_L_input_wms.length >= 5) {
 
         // ----------------------------------------------------------------------
         // Data inputs Combobox
@@ -285,7 +284,7 @@ GEOR.Addons.wab.prototype = {
             Input window 	
             ----------------------------------------------------------------------------- */
     createWindow: function() {
-		noglob_table_input_param = [];
+		//noglob_table_input_param = [];
         // ----------------------------------------------------------------------
         // Parameter inputs
         // ----------------------------------------------------------------------
@@ -971,28 +970,38 @@ GEOR.Addons.wab.prototype = {
             // ----------------------------------------------------------------------
             // Outputs Param
             // ----------------------------------------------------------------------
-            if (noglob_table_L_output_param.length >= 1) {
+			for (i = 1; i <= wab.outputs.param.list.length; i++) {
+                L_output_param1_forXml = {
+                    asReference: false,
+                    identifier: "L_output_param"+i
+                }; 
+                //tableList_output_forXml.push(L_output_param1_forXml); 
+				wab.outputs.forXmlResponse.push(L_output_param1_forXml);
+			}
+			//
+			/*
+            if (wab.outputs.param.list.length >= 1) {
                 L_output_param1_forXml = {
                     asReference: false,
                     identifier: "L_output_param1"
                 }; 
                 tableList_output_forXml.push(L_output_param1_forXml); 
             }
-            if (noglob_table_L_output_param.length >= 2) {
+            if (wab.outputs.param.list.length >= 2) {
                 L_output_param2_forXml = {
                     asReference: false,
                     identifier: "L_output_param2"
                 }; 
                 tableList_output_forXml.push(L_output_param2_forXml); 
             }
-            if (noglob_table_L_output_param.length >= 3) {
+            if (wab.outputs.param.list.length >= 3) {
                 L_output_param3_forXml = {
                     asReference: false,
                     identifier: "L_output_param3"
                 };
                 tableList_output_forXml.push(L_output_param33_forXml); 
             }
-
+			*/
             // ----------------------------------------------------------------------
             // Sends the query
             // ----------------------------------------------------------------------
@@ -1009,7 +1018,8 @@ GEOR.Addons.wab.prototype = {
                         lineage: false,
                         status: false,
                         outputs: //[
-                            tableList_output_forXml
+                            //tableList_output_forXml
+							wab.outputs.forXmlResponse
                     }
                 }
             });
@@ -1076,12 +1086,14 @@ GEOR.Addons.wab.prototype = {
                 // ----------------------------------------------------------------------
                 // Outputs Param 
                 // ----------------------------------------------------------------------
-                if (identifier == "L_output_param1") {
-                    client_L_output_param1 = literalData[0].firstChild.nodeValue;
-                    console.log(client_L_output_param1);
-                }
-                noglob_execute_on_off = 0; // Limite le nombre de process wps a la fois
-            }
+                for (i = 1; i <= wab.outputs.param.list.length; i++) {
+					if (identifier == "L_output_param"+i) {
+						client_L_output_param1 = literalData[0].firstChild.nodeValue;
+						console.log(client_L_output_param1);
+					}
+					noglob_execute_on_off = 0; // Limite le nombre de process wps a la fois
+				}
+			}	
         }
         // ----------------------------------------------------------------------
         // Add WMS layer 
