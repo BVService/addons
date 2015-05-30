@@ -26,7 +26,6 @@ var wab = {
 				wab.inputs.param["param"+addParamID] = {obj : null} // ["param"+addParam] for dynamic var obj
 				wab.inputs.param["param"+addParamID].obj = addObj;
 				wab.inputs.param["param"+addParamID].objForWindowInput = null;
-				wab.inputs.param["param"+addParamID].objForWindowInput2 = null;
 			}
 		},
 		coordxy : {
@@ -323,7 +322,7 @@ GEOR.Addons.wab.prototype = {
 		var noglob_table_input_param_splitPanel1 = [];
 		var noglob_table_input_param_splitPanel2 = [];
 		for (i = 1; i <= wab.inputs.param.list.length; i++) {
-            wab.inputs.param['param'+i].objForWindowInput2 = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
+            wab.inputs.param['param'+i].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
                 fieldLabel: wab.inputs.param['param'+i].obj.title,//wps_Config_param1.input_param1_fromPython.title,
                 name: "uselessname"+i,
                 width: 40,
@@ -336,7 +335,7 @@ GEOR.Addons.wab.prototype = {
                 decimalPrecision: 2*/
             });
             //noglob_table_input_param.push(wab.inputs.param['param'+i].objForWindowInput);
-			wab.inputs.param.windowInput.push(wab.inputs.param['param'+i].objForWindowInput2);
+			wab.inputs.param.windowInput.push(wab.inputs.param['param'+i].objForWindowInput);
         }
         // ----------------------------------------------------------------------
         // WMS inputs
@@ -870,12 +869,12 @@ GEOR.Addons.wab.prototype = {
                 identifier: "L_input_param"+i,
                 data: {
                     literalData: {
-                        value: wab.inputs.param['param'+i].objForWindowInput2.getValue()
+                        value: wab.inputs.param['param'+i].objForWindowInput.getValue()
                     }
                 }
             }
             //noglob_tableList_input_forXml.push(tmpForXml);
-				if (wab.inputs.param['param'+i].objForWindowInput2.getValue() != "") {
+				if (wab.inputs.param['param'+i].objForWindowInput.getValue() != "") {
 					wab.inputs.forXmlPost.push(tmpForXml);
 				}
 			
