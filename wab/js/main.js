@@ -154,7 +154,6 @@ GEOR.Addons.wab.prototype = {
                 for (i = 0; i < wab.inputs.list.length; i++) {
                     switch (true) {
                         case (wab.inputs.list[i].slice(0, 13) == "L_input_param"):
-                            //noglob_table_L_input_param.push(wab.inputs.list[i]);
 							wab.inputs.param.list.push(wab.inputs.list[i]);
                             break;
                         case (wab.inputs.list[i].slice(0, 11) == "L_input_wms"):
@@ -164,16 +163,12 @@ GEOR.Addons.wab.prototype = {
 							wab.inputs.scroll.list.push(wab.inputs.list[i]);
                             break;
                         case (wab.inputs.list[i].slice(0, 15) == "L_input_coordxy"):
-                            //noglob_table_L_input_coordxy.push(wab.inputs.list[i]);
 							wab.inputs.coordxy.list.push(wab.inputs.list[i]);
                             break;
                         case (wab.inputs.list[i].slice(0, 11) == "C_input_gml"):
-                            //table_C_input_gml.push(wab.inputs.list[i]);
 							wab.inputs.gml.list.push(wab.inputs.list[i]);
-							//wab.inputs.gml.list.push(wab.inputs.list[i]);
                             break;
                         case (wab.inputs.list[i].slice(0, 16) == "L_input_checkbox"):
-                            //noglob_table_L_input_checkbox.push(wab.inputs.list[i]);
 							wab.inputs.checkbox.list.push(wab.inputs.list[i]);
                             break;						
                     }
