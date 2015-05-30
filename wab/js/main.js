@@ -26,12 +26,13 @@ var wab = {
 				wab.inputs.param["param"+addParamID] = {obj : null} // ["param"+addParam] for dynamic var obj
 				wab.inputs.param["param"+addParamID].obj = addObj;
 				wab.inputs.param["param"+addParamID].objForWindowInput = null;
+				wab.inputs.param["param"+addParamID].objForWindowInput2 = null;
 			}
 		},
 		coordxy : {
 			list : [],
 			addCoordxy : function(Coordxy,addObj) {
-				wab.inputs.coordxy["coordxy"+Coordxy] = {obj : null} // ["param"+addParam] for dynamic var obj
+				wab.inputs.coordxy["coordxy"+Coordxy] = {obj : null} 
 				wab.inputs.coordxy["coordxy"+Coordxy].obj = addObj;
 				wab.inputs.coordxy["coordxy"+Coordxy].objForWindowInput = null;
 				wab.inputs.coordxy["coordxy"+Coordxy].coordxyStore = null;
@@ -40,10 +41,19 @@ var wab = {
 		scrollwms : {
 			list : [],
 			addScrollwms : function(Scrollwms,addObj) {
-				wab.inputs.scrollwms["scrollwms"+Scrollwms] = {obj : null} // ["param"+addParam] for dynamic var obj
+				wab.inputs.scrollwms["scrollwms"+Scrollwms] = {obj : null} 
 				wab.inputs.scrollwms["scrollwms"+Scrollwms].obj = addObj;
 				wab.inputs.scrollwms["scrollwms"+Scrollwms].objForWindowInput = null;
-				wab.inputs.scrollwms["scrollwms"+Scrollwms].coordxyStore = null;
+				wab.inputs.scrollwms["scrollwms"+Scrollwms].scrollwms = null;
+			}
+		},
+		gml : {
+			list : [],
+			addGml : function(Gml,addObj) {
+				wab.inputs.gml["gml"+Gml] = {obj : null} 
+				wab.inputs.gml["gml"+Gml].obj = addObj;
+				wab.inputs.gml["gml"+Gml].objForWindowInput = null;
+				wab.inputs.gml["gml"+Gml].gmlValue = null;
 			}
 		}
 	},
@@ -73,9 +83,11 @@ var wab = {
 //var noglob_scroll_allowedValues = [];
 //var noglob_table_L_input_coordxy = [];
 //var noglob_coordxyTitle = [];
-var noglob_table_C_input_gml = [];
+//var noglob_table_C_input_gml = [];
 //var noglob_coordxyValue1, noglob_coordxyValue2, noglob_coordxyValue3, noglob_coordxyValue4, noglob_coordxyValue5;
-var noglob_gmlValue1, noglob_gmlValue2, noglob_gmlValue3, noglob_gmlValue4, noglob_gmlValue5;
+//var table_C_input_gml = [];
+//var coordxyValue1, coordxyValue2, coordxyValue3, coordxyValue4, coordxyValue5;
+//var gmlValue1, gmlValue2, gmlValue3, gmlValue4, gmlValue5;
 var noglob_execute_on_off = 0;
 //var layer_noglob_liste_WFS = [];
 var noglob_table_L_output_wms = [];
@@ -181,7 +193,9 @@ GEOR.Addons.wab.prototype = {
 							wab.inputs.coordxy.list.push(wab.inputs.list[i]);
                             break;
                         case (wab.inputs.list[i].slice(0, 11) == "C_input_gml"):
-                            noglob_table_C_input_gml.push(wab.inputs.list[i]);
+                            //table_C_input_gml.push(wab.inputs.list[i]);
+							wab.inputs.gml.list.push(wab.inputs.list[i]);
+							//wab.inputs.gml.list.push(wab.inputs.list[i]);
                             break;
                         case (wab.inputs.list[i].slice(0, 16) == "L_input_checkbox"):
                             //noglob_table_L_input_checkbox.push(wab.inputs.list[i]);
@@ -194,7 +208,7 @@ GEOR.Addons.wab.prototype = {
                 console.log("    - " + wab.inputs.scrollwms.list.length + " input(s) de WMS : " + wab.inputs.scrollwms.list);
                 console.log("    - " + wab.inputs.scroll.list.length + " input(s) de scroll : " + wab.inputs.scroll.list);
                 console.log("    - " + wab.inputs.coordxy.list.length + " input(s) de coordonnées xy : " + wab.inputs.coordxy.list);
-                console.log("    - " + noglob_table_C_input_gml.length + " input(s) de gml : " + noglob_table_C_input_gml);
+                console.log("    - " + wab.inputs.gml.list.length + " input(s) de gml : " + wab.inputs.gml.list);
 				console.log("    - " + wab.inputs.checkbox.list.length + " input(s) de checkbox : " + wab.inputs.checkbox.list);
 				
 				
@@ -282,11 +296,18 @@ GEOR.Addons.wab.prototype = {
 		}
 		
         // ----------------------------------------------------------------------
-        // Data inputs Checkbox (title)
+        // Data inputs Checkbox 
         // ----------------------------------------------------------------------		
 	    for (i = 1; i <= wab.inputs.checkbox.list.length; i++) {	 
 			wab.inputs.checkbox.addCheckbox(i,findDataInputsByIdentifier(process.dataInputs, "L_input_checkbox"+i));
-		}		
+		}
+		
+        // ----------------------------------------------------------------------
+        // Data inputs GML 
+        // ----------------------------------------------------------------------		
+	    for (i = 1; i <= wab.inputs.gml.list.length; i++) {	 
+			wab.inputs.gml.addGml(i,findDataInputsByIdentifier(process.dataInputs, "C_input_gml"+i));
+		}
 		
         this.wpsInitialized = true;
     },
@@ -302,7 +323,7 @@ GEOR.Addons.wab.prototype = {
 		var noglob_table_input_param_splitPanel1 = [];
 		var noglob_table_input_param_splitPanel2 = [];
 		for (i = 1; i <= wab.inputs.param.list.length; i++) {
-            wab.inputs.param['param'+i].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
+            wab.inputs.param['param'+i].objForWindowInput2 = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
                 fieldLabel: wab.inputs.param['param'+i].obj.title,//wps_Config_param1.input_param1_fromPython.title,
                 name: "uselessname"+i,
                 width: 40,
@@ -315,13 +336,14 @@ GEOR.Addons.wab.prototype = {
                 decimalPrecision: 2*/
             });
             //noglob_table_input_param.push(wab.inputs.param['param'+i].objForWindowInput);
-			wab.inputs.param.windowInput.push(wab.inputs.param['param'+i].objForWindowInput);
+			wab.inputs.param.windowInput.push(wab.inputs.param['param'+i].objForWindowInput2);
         }
         // ----------------------------------------------------------------------
         // WMS inputs
         // ----------------------------------------------------------------------		       
         // PART 1
 		layer_noglob_liste_WFS = [];
+		wab.inputs.scrollwms.windowInput = [];
         noglob_addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_noglob_liste_WFS
             //var empty = true;
             layerStore.each(function(record) {
@@ -371,8 +393,9 @@ GEOR.Addons.wab.prototype = {
                     data: noglob_addComboxFieldItemsWFS()
                 });
 				*/
-			wab.inputs.param['param'+i].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
+			//wab.inputs.scrollwms['scrollwms'+i].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
             //champ_pour_input_wms1 = new Ext.form.ComboBox(Ext.apply({
+			wab.inputs.scrollwms['scrollwms'+i].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
                 fieldLabel: wab.inputs.scrollwms.scrollwms1.obj.title,
                 emptyText: wab.inputs.scrollwms.scrollwms1.obj.abstract,
@@ -396,7 +419,9 @@ GEOR.Addons.wab.prototype = {
 					}
 				}				
             }, base));
-            noglob_table_input_param.push(wab.inputs.param['param'+i].objForWindowInput);
+            //noglob_table_input_param.push(wab.inputs.param['param'+i].objForWindowInput);
+			wab.inputs.scrollwms.windowInput.push(wab.inputs.scrollwms['scrollwms'+i].objForWindowInput);
+			
 			//console.log('ajout wms 1');
             //if (noglob_table_L_input_wms.length == 1) {
                 //noglob_table_input_param.push(warningMsg_wms);
@@ -422,21 +447,24 @@ GEOR.Addons.wab.prototype = {
         // GML inputs
         // ----------------------------------------------------------------------
         // PART 1
-        tmp_noglob_table_C_input_gml = [];
-        if (noglob_table_C_input_gml.length >= 1) {
-            var fifoo1 = {
+		wab.inputs.gml.windowInput = [];
+        if (wab.inputs.gml.list.length >= 1) {
+		//for (i = 1; i <= wab.inputs.gml.list.length; i++) {
+            tmpwindowgml = {
+				idgml: 'gml1',
                 xtype: 'fileuploadfield',
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
                 buttonText: '',
-                noglob_listeners: {
+                listeners: {
                     'fileselected': function(fb, v) {
                         file = fb.fileInput.dom.files[0];
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            noglob_gmlValue1 = e.target.result;
+                            //gmlValue1 = e.target.result;
+							wab.inputs.gml[tmpwindowgml.idgml].gmlValue = e.target.result; // flag : i undefined
                             if (myfilename.search('.gml') != -1) {} else {
                                 GEOR.util.errorDialog({
                                     title: "Erreur de format",
@@ -448,119 +476,7 @@ GEOR.Addons.wab.prototype = {
                     }
                 }
             };
-            tmp_noglob_table_C_input_gml.push(fifoo1);
-        }
-
-        if (noglob_table_C_input_gml.length >= 2) {
-            var fifoo2 = {
-                xtype: 'fileuploadfield',
-                emptyText: "Sélectionnez un GML.",
-                allowBlank: false,
-                hideLabel: true,
-                buttonText: '',
-                noglob_listeners: {
-                    'fileselected': function(fb, v) {
-                        file = fb.fileInput.dom.files[0];
-                        myfilename = v;
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            noglob_gmlValue2 = e.target.result;
-                            if (myfilename.search('.gml') != -1) {
-                                //
-                            } else {
-                                GEOR.util.errorDialog({
-                                    title: "Erreur de format",
-                                    msg: "Veuillez choisir un format GML."
-                                });
-                            }
-                        };
-                        reader.readAsText(file, "UTF-8");
-                    }
-                }
-            };
-            tmp_noglob_table_C_input_gml.push(fifoo2);
-        }
-
-        if (noglob_table_C_input_gml.length >= 3) {
-            var fifoo3 = {
-                xtype: 'fileuploadfield',
-                emptyText: "Sélectionnez un GML.",
-                allowBlank: false,
-                hideLabel: true,
-                buttonText: '',
-                noglob_listeners: {
-                    'fileselected': function(fb, v) {
-                        file = fb.fileInput.dom.files[0];
-                        myfilename = v;
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            noglob_gmlValue3 = e.target.result;
-                            if (myfilename.search('.gml') != -1) {} else {
-                                GEOR.util.errorDialog({
-                                    title: "Erreur de format",
-                                    msg: "Veuillez choisir un format GML."
-                                });
-                            }
-                        };
-                        reader.readAsText(file, "UTF-8");
-                    }
-                }
-            };
-            tmp_noglob_table_C_input_gml.push(fifoo3);
-        }
-        if (noglob_table_C_input_gml.length >= 4) {
-            var fifoo4 = {
-                xtype: 'fileuploadfield',
-                emptyText: "Sélectionnez un GML.",
-                allowBlank: false,
-                hideLabel: true,
-                buttonText: '',
-                noglob_listeners: {
-                    'fileselected': function(fb, v) {
-                        file = fb.fileInput.dom.files[0];
-                        myfilename = v;
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            noglob_gmlValue4 = e.target.result;
-                            if (myfilename.search('.gml') != -1) {} else {
-                                GEOR.util.errorDialog({
-                                    title: "Erreur de format",
-                                    msg: "Veuillez choisir un format GML."
-                                });
-                            }
-                        };
-                        reader.readAsText(file, "UTF-8");
-                    }
-                }
-            };
-            tmp_noglob_table_C_input_gml.push(fifoo4);
-        }
-        if (noglob_table_C_input_gml.length >= 5) {
-            var fifoo5 = {
-                xtype: 'fileuploadfield',
-                emptyText: "Sélectionnez un GML.",
-                allowBlank: false,
-                hideLabel: true,
-                buttonText: '',
-                noglob_listeners: {
-                    'fileselected': function(fb, v) {
-                        file = fb.fileInput.dom.files[0];
-                        myfilename = v;
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            noglob_gmlValue5 = e.target.result;
-                            if (myfilename.search('.gml') != -1) {} else {
-                                GEOR.util.errorDialog({
-                                    title: "Erreur de format",
-                                    msg: "Veuillez choisir un format GML."
-                                });
-                            }
-                        };
-                        reader.readAsText(file, "UTF-8");
-                    }
-                }
-            };
-            tmp_noglob_table_C_input_gml.push(fifoo5);
+			wab.inputs.gml.windowInput.push(tmpwindowgml);
         }
 
         // PART 2 GML Window
@@ -571,7 +487,7 @@ GEOR.Addons.wab.prototype = {
             autoWidth: true,
             bodyStyle: 'padding: 9px 10px 0 0px;',
             items: [
-                tmp_noglob_table_C_input_gml,
+                wab.inputs.gml.windowInput,
             ]
         });
 
@@ -764,8 +680,9 @@ GEOR.Addons.wab.prototype = {
 					wab.inputs.scroll.windowInput,
 					wab.inputs.checkbox.windowInput,
 					wab.inputs.coordxy.windowInput,
-                    noglob_table_input_param,
-					//fileLoadForm
+					wab.inputs.scrollwms.windowInput,
+                    //noglob_table_input_param,
+					fileLoadForm
 					//,champ_pour_input_wms1
                 ],		
 				/*tbar:[{ // Pour aligner a droite: tbar:['->', {
@@ -946,30 +863,31 @@ GEOR.Addons.wab.prototype = {
         // ----------------------------------------------------------------------
         // Inputs Param
         // ----------------------------------------------------------------------
-		noglob_tableList_input_forXml = [];
+		//noglob_tableList_input_forXml = [];
         for (i = 1; i <= wab.inputs.param.list.length; i++) { //if (wab.inputs.param.list.length >= 1) { // est important pour le message d'erreur si champs vide
             //var input_param1_fromPythonValue = wab.inputs.param['param'+i].objForWindowInput.getValue();
             tmpForXml = {
                 identifier: "L_input_param"+i,
                 data: {
                     literalData: {
-                        value: wab.inputs.param['param'+i].objForWindowInput.getValue()
+                        value: wab.inputs.param['param'+i].objForWindowInput2.getValue()
                     }
                 }
             }
-            noglob_tableList_input_forXml.push(tmpForXml);
-				if (wab.inputs.param['param'+i].objForWindowInput.getValue() != "") {
+            //noglob_tableList_input_forXml.push(tmpForXml);
+				if (wab.inputs.param['param'+i].objForWindowInput2.getValue() != "") {
 					wab.inputs.forXmlPost.push(tmpForXml);
-				}			
+				}
+			
         }
         // ----------------------------------------------------------------------
         // Inputs WMS
         // ----------------------------------------------------------------------
-		for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) {
-			if (wab.inputs.param['param'+i].objForWindowInput.getValue() !== "") {
-				tmpValue = wab.inputs.param['param'+i].objForWindowInput.getValue().data.WFS_URL + wab.inputs.param['param'+i].objForWindowInput.getValue().data.WFS_typeName;
+		for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) { //wab.inputs.param['param'+i].objForWindowInput
+			if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() !== "") {
+				tmpValue = wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_URL + wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_typeName;
 			}
-			if (wab.inputs.param['param'+i].objForWindowInput.getValue() == "") {
+			if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() == "") {
 				tmpValue = "null"
 			}
 			var tmpforXml = {
@@ -1018,62 +936,22 @@ GEOR.Addons.wab.prototype = {
         // ----------------------------------------------------------------------
         // Inputs GML
         // ----------------------------------------------------------------------
-        if (noglob_table_C_input_gml.length >= 1 && typeof(noglob_gmlValue1) != "undefined") {
-            var L_input_gml1_forXml = {
-                identifier: "C_input_gml1",
-                data: {
-                    complexData: {
-                        value: noglob_gmlValue1
-                    }
-                }
-            }
-            noglob_tableList_input_forXml.push(L_input_gml1_forXml);
+        if (wab.inputs.gml.list.length >= 1) {
+			for (i = 1; i <= wab.inputs.gml.list.length; i++) {
+				//console.log(gmlValue1);
+				var tmpGMLforXml = {
+					identifier: "C_input_gml"+i,
+					data: {
+						complexData: {
+							value: wab.inputs.gml['gml'+i].gmlValue //gmlValue1
+						}
+					}
+				}
+				if (typeof(wab.inputs.gml['gml'+i].gmlValue) == "string") {
+					wab.inputs.forXmlPost.push(tmpGMLforXml);
+				}
+			}
         }
-        if (noglob_table_C_input_gml.length >= 2 && typeof(noglob_gmlValue2) != "undefined") {
-            var L_input_gml2_forXml = {
-                identifier: "C_input_gml2",
-                data: {
-                    complexData: {
-                        value: noglob_gmlValue2
-                    }
-                }
-            }
-            noglob_tableList_input_forXml.push(L_input_gml2_forXml);
-        }
-        if (noglob_table_C_input_gml.length >= 3 && typeof(noglob_gmlValue3) != "undefined") {
-            var L_input_gml3_forXml = {
-                identifier: "C_input_gml3",
-                data: {
-                    complexData: {
-                        value: noglob_gmlValue3
-                    }
-                }
-            }
-            noglob_tableList_input_forXml.push(L_input_gml3_forXml);
-        }
-        if (noglob_table_C_input_gml.length >= 4 && typeof(noglob_gmlValue4) != "undefined") {
-            var L_input_gml4_forXml = {
-                identifier: "C_input_gml4",
-                data: {
-                    complexData: {
-                        value: noglob_gmlValue4
-                    }
-                }
-            }
-            noglob_tableList_input_forXml.push(L_input_gml4_forXml);
-        }
-        if (noglob_table_C_input_gml.length >= 5 && typeof(noglob_gmlValue5) != "undefined") {
-            var L_input_gml5_forXml = {
-                identifier: "C_input_gml5",
-                data: {
-                    complexData: {
-                        value: noglob_gmlValue5
-                    }
-                }
-            }
-            noglob_tableList_input_forXml.push(L_input_gml5_forXml);
-        }
-
         // ----------------------------------------------------------------------
         // Inputs Checkbox
         // ----------------------------------------------------------------------
