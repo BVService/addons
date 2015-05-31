@@ -342,7 +342,7 @@ GEOR.Addons.wab.prototype = {
         };
 
         
-		niee = new Ext.data.SimpleStore({
+		tmpStore = new Ext.data.SimpleStore({
                     fields: ['text', 'value'],
                     data: layer_noglob_liste_WFS
 					//,storeId: 'myStore'
@@ -364,39 +364,25 @@ GEOR.Addons.wab.prototype = {
 					//,lastQuery: ''
                 };
 
-            /*var gugu = new Ext.data.SimpleStore({
-                    fields: ['text', 'value'],
-                    data: noglob_addComboxFieldItemsWFS()
-                });
-				*/
-			//wab.inputs.scrollwms['scrollwms'+i].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
-            //champ_pour_input_wms1 = new Ext.form.ComboBox(Ext.apply({
 			wab.inputs.scrollwms['scrollwms'+i].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
                 fieldLabel: wab.inputs.scrollwms['scrollwms'+i].obj.title,
                 emptyText: wab.inputs.scrollwms['scrollwms'+i].obj.abstract,
                 width: FIELD_WIDTH,
-                store: niee,
+                store: tmpStore,
 				listeners: {
 					'beforequery': function() { // beforequery : Quand clic sur combobox
-							   console.log('beforequery');
-							//comboBox.bindStore(myStoreName)
+							   //console.log('beforequery');
 						 },
 					'beforerender': function() { // beforerender est juste au moment d ouvrir la fenetre avant qu elle saffiche
-							   console.log('beforerender');
+							   //console.log('beforerender');
 						 },
 					'select': function(combo, records, eOpts) { // select : quand a choisi un champ de la cbbox
-						console.log('select');
+						//console.log('select');
 					}
 				}				
             }, base));
-            //noglob_table_input_param.push(wab.inputs.param['param'+i].objForWindowInput);
 			wab.inputs.scrollwms.windowInput.push(wab.inputs.scrollwms['scrollwms'+i].objForWindowInput);
-			
-			//console.log('ajout wms 1');
-            //if (noglob_table_L_input_wms.length == 1) {
-                //noglob_table_input_param.push(warningMsg_wms);
-            //}
         }
         // ----------------------------------------------------------------------
         // Combobox inputs
@@ -434,7 +420,6 @@ GEOR.Addons.wab.prototype = {
                         myfilename = v;
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            //gmlValue1 = e.target.result;
 							wab.inputs.gml[tmpwindowgml.idgml].gmlValue = e.target.result; // flag : i undefined
                             if (myfilename.search('.gml') != -1) {} else {
                                 GEOR.util.errorDialog({
@@ -762,8 +747,7 @@ GEOR.Addons.wab.prototype = {
         // Inputs Param
         // ----------------------------------------------------------------------
 		//noglob_tableList_input_forXml = [];
-        for (i = 1; i <= wab.inputs.param.list.length; i++) { //if (wab.inputs.param.list.length >= 1) { // est important pour le message d'erreur si champs vide
-            //var input_param1_fromPythonValue = wab.inputs.param['param'+i].objForWindowInput.getValue();
+        for (i = 1; i <= wab.inputs.param.list.length; i++) { 
             tmpForXml = {
                 identifier: "L_input_param"+i,
                 data: {
@@ -846,7 +830,6 @@ GEOR.Addons.wab.prototype = {
 						}
 					}
 				}
-				//noglob_tableList_input_forXml.push(L_input_coordxy1_forXml);
 				if (wab.inputs.coordxy["coordxy"+i].coordxyStore != null) {
 					wab.inputs.forXmlPost.push(wab.inputs.coordxy['coordxy'+i].objForXml);
 				}
@@ -883,7 +866,6 @@ GEOR.Addons.wab.prototype = {
                     }
                 }
             }
-            //noglob_tableList_input_forXml.push(tmpForXml); // flag
 			wab.inputs.forXmlPost.push(tmpForXml);
         }
 		
