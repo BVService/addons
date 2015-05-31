@@ -541,26 +541,29 @@ GEOR.Addons.wab.prototype = {
         // Tab (in progress)
         // ----------------------------------------------------------------------		
         var onglet2 = {
-            title: OpenLayers.i18n("Options de deconnexion "),
-            closable: false,
-            activate: true,
-            region: 'south',
-            collapsible: true,
-            collapsed: false,
-            split: true,
-			//FAIL renderTo: Ext.getBody(), 
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+			title: OpenLayers.i18n("Selectionner les indicateurs "),
+            //width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
+			//height:Ext.getBody().getViewSize().height - 123,//62,
+			//y: '90px',//'31px', 
+			//x: '0%',
+            //iconCls: 'windo_icon',
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true, 
             items: [{
                 xtype: 'form',
-                autoWidth: true,
-                labelWidth: 300,
-                padding: 10,
+				id : 'reportGraphArea2',
+                labelWidth: 200,
                 bodyStyle: "padding:10px;",
-				layout:'column',
-				//FAIL columns: 2,
-				//FAIL vertical: true,
-                items: [noglob_table_input_param_splitPanel1//, champ_pour_input_wms1
-                    /*wab.inputs.scroll.scroll1.objForWindowInput,
-                    champ_pour_input_scroll2*/
+                items: [
+				wab.inputs.param.windowInput,
+					wab.inputs.scroll.windowInput,
+					wab.inputs.checkbox.windowInput,
+					wab.inputs.coordxy.windowInput,
+					fileLoadForm
+
                 ]
             }]
         };
@@ -632,14 +635,12 @@ GEOR.Addons.wab.prototype = {
                 labelWidth: 200,
                 bodyStyle: "padding:10px;",
                 items: [
+					wab.inputs.scrollwms.windowInput/*,
 					wab.inputs.param.windowInput,
 					wab.inputs.scroll.windowInput,
 					wab.inputs.checkbox.windowInput,
 					wab.inputs.coordxy.windowInput,
-					wab.inputs.scrollwms.windowInput,
-                    //noglob_table_input_param,
-					fileLoadForm
-					//,champ_pour_input_wms1
+					fileLoadForm*/
                 ],		
 				tbar:[{ // Pour aligner a droite: tbar:['->', {
 					text : 'Rafraichir',
@@ -699,7 +700,7 @@ GEOR.Addons.wab.prototype = {
 							
             },
 			
-			//onglet2,//onglet3,
+			onglet2,//onglet3,
 			noglob_regionContent,
 			],
             // Creation/Ajout des boutons
