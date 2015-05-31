@@ -44,7 +44,8 @@ var wab = {
 				wab.inputs.scrollwms["scrollwms"+Scrollwms].obj = addObj;
 				wab.inputs.scrollwms["scrollwms"+Scrollwms].objForWindowInput = null;
 				wab.inputs.scrollwms["scrollwms"+Scrollwms].scrollwms = null;
-			}
+				wab.inputs.scrollwms["scrollwms"+Scrollwms].refreshedObjForWindowInput = null;
+			},
 		},
 		gml : {
 			list : [],
@@ -340,7 +341,13 @@ GEOR.Addons.wab.prototype = {
             html: '<img src="http://91.121.171.75/grey_warn.png"> Seuls les WMS déjà chargés avant la première ouverture de l\'addon seront utilisables.'
         };
 
-        // PART 2
+        
+		niee = new Ext.data.SimpleStore({
+                    fields: ['text', 'value'],
+                    data: layer_noglob_liste_WFS
+					//,storeId: 'myStore'
+                });
+		// PART 2
 		for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) {
         //if (wab.inputs.scrollwms.list.length >= 1) {
             FIELD_WIDTH = 60, 
@@ -366,23 +373,18 @@ GEOR.Addons.wab.prototype = {
             //champ_pour_input_wms1 = new Ext.form.ComboBox(Ext.apply({
 			wab.inputs.scrollwms['scrollwms'+i].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
-                fieldLabel: wab.inputs.scrollwms.scrollwms1.obj.title,
-                emptyText: wab.inputs.scrollwms.scrollwms1.obj.abstract,
+                fieldLabel: wab.inputs.scrollwms['scrollwms'+i].obj.title,
+                emptyText: wab.inputs.scrollwms['scrollwms'+i].obj.abstract,
                 width: FIELD_WIDTH,
-                store: new Ext.data.SimpleStore({
-                    fields: ['text', 'value'],
-                    data: layer_noglob_liste_WFS
-					//,storeId: 'myStore'
-                }),
-				noglob_listeners: {
+                store: niee,
+				listeners: {
 					'beforequery': function() { // beforequery : Quand clic sur combobox
-							   console.log('beforequery');							   
+							   console.log('beforequery');
+							//comboBox.bindStore(myStoreName)
 						 },
-					
 					'beforerender': function() { // beforerender est juste au moment d ouvrir la fenetre avant qu elle saffiche
 							   console.log('beforerender');
 						 },
-
 					'select': function(combo, records, eOpts) { // select : quand a choisi un champ de la cbbox
 						console.log('select');
 					}
@@ -654,7 +656,7 @@ GEOR.Addons.wab.prototype = {
 					fileLoadForm
 					//,champ_pour_input_wms1
                 ],		
-				/*tbar:[{ // Pour aligner a droite: tbar:['->', {
+				tbar:[{ // Pour aligner a droite: tbar:['->', {
 					text : 'Rafraichir',
 					tooltip:'Rafraichir les couches chargees',
 					iconCls: 'arrow_refresh',//'add',
@@ -662,15 +664,16 @@ GEOR.Addons.wab.prototype = {
 					//----------------------------------------------------------------------
 					//Refresh wmsLayers
 					//----------------------------------------------------------------------
+					
 						function() {
-							console.log(noglob_table_input_param);
 							layer_noglob_liste_WFS = [];
-							noglob_addComboxFieldItemsWFS();
-							// Champ 1 
-							champ_pour_input_wms1 = new Ext.form.ComboBox({
+							noglob_addComboxFieldItemsWFS();					
+							// Create refresh wms inputs
+							for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) {
+							wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput = new Ext.form.ComboBox({
 								name: "wms",
-								fieldLabel: OpenLayers.i18n(noglob_wmsTitle[0]), // marche pas ?
-								emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[0]),
+								fieldLabel: wab.inputs.scrollwms["scrollwms"+i].obj.title,
+								emptyText: wab.inputs.scrollwms["scrollwms"+i].obj.abstract,
 								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
@@ -685,106 +688,32 @@ GEOR.Addons.wab.prototype = {
 								displayField: 'text',
 								labelWidth: 10				
 							});
-							noglob_table_input_param.push(champ_pour_input_wms1);
-							// Champ 2 
-							champ_pour_input_wms2 = new Ext.form.ComboBox({
-								name: "wms",
-								fieldLabel: OpenLayers.i18n(noglob_wmsTitle[1]), 
-								emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[1]),
-								width: 60,
-								store: new Ext.data.SimpleStore({
-									fields: ['text', 'value'],
-									data: layer_noglob_liste_WFS
-								}),
-								forceSelection: true,
-								editable: true,
-								allowBlank: true,
-								triggerAction: 'all',
-								mode: 'local',
-								valueField: 'value',
-								displayField: 'text',
-								labelWidth: 10				
-							});
-							noglob_table_input_param.push(champ_pour_input_wms2);
-							// Champ 3
-							champ_pour_input_wms3 = new Ext.form.ComboBox({
-								name: "wms",
-								fieldLabel: OpenLayers.i18n(noglob_wmsTitle[2]), // marche pas ?
-								emptyText: OpenLayers.i18n(noglob_noglob_wmsAbstract[2]),
-								width: 60,
-								store: new Ext.data.SimpleStore({
-									fields: ['text', 'value'],
-									data: layer_noglob_liste_WFS
-								}),
-								forceSelection: true,
-								editable: true,
-								allowBlank: true,
-								triggerAction: 'all',
-								mode: 'local',
-								valueField: 'value',
-								displayField: 'text',
-								labelWidth: 10				
-							});
-							noglob_table_input_param.push(champ_pour_input_wms3);
-							// remove les 3 anciens champs
-							var firstItem = Ext.getCmp('reportGraphArea').items.first();
-							 Ext.getCmp('reportGraphArea').remove(firstItem,true);
-							var firstItem2 = Ext.getCmp('reportGraphArea').items.first();
-							 Ext.getCmp('reportGraphArea').remove(firstItem2,true);		 
-							var firstItem3 = Ext.getCmp('reportGraphArea').items.first();
-							 Ext.getCmp('reportGraphArea').remove(firstItem3,true);	
-							var firstItem4 = Ext.getCmp('reportGraphArea').items.first();
-							Ext.getCmp('reportGraphArea').remove(firstItem4,true);			 
-							// Ajoute les 3 nouveaux
-							Ext.getCmp('reportGraphArea').add(champ_pour_input_wms1);
-							Ext.getCmp('reportGraphArea').add(champ_pour_input_wms2);
-							Ext.getCmp('reportGraphArea').add(champ_pour_input_wms3);					
-						//console.log('refreshtbar');
-						console.log(noglob_table_input_param);
-						// Retire les wms inputs 
-						for(var i = noglob_table_input_param.length - 1; i >= 0; i--) { if ( (noglob_table_input_param[i].name === 'wms')) { 
-							   noglob_table_input_param.splice(i, 1);
-							}}
-						
-						// Recharge la page (sans la recreer)
-						noglob_myPanel.hide();  
-						noglob_myPanel.show();						
-					}
+							}
+
+							// Remove all WMS inputs in the window
+							for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) {
+								for (var key in Ext.getCmp('reportGraphArea').items.items) { // flag il reste bloque sur les selection scrollwms du premer pas des rafraichis
+									if (Ext.getCmp('reportGraphArea').items.items.hasOwnProperty(key)) {
+										if (Ext.getCmp('reportGraphArea').items.items[key].name == "wms") { // si en trouve un
+											Ext.getCmp('reportGraphArea').remove(Ext.getCmp('reportGraphArea').items.items[key],true); // le retire
+										}
+									}
+								}
+							}
+							// Add refresh wms inputs
+							for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) {
+										Ext.getCmp('reportGraphArea').add(wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput); // ajoute un nouveau
+										}
+
+							// Reload window
+							noglob_myPanel.hide();  
+							noglob_myPanel.show();						
+						}
 					//----------------------------------------------------------------------
-				}],*/
+				}],
 							
             },
-// Exemple de combobox directe
-/*
-{
-    xtype: 'combo',
-    fieldLabel: 'Rating',
-    hiddenName: 'rating',
-	mode : 'local', // important sinon erreur proxy
-    store: new Ext.data.SimpleStore({
-        data: [
-            [1, 'Half star'],
-            [2, '1 star'],
-            [3, '1 and half star'],
-            [4, '2 star'],
-            [5, '2 and half star'],
-            [6, '3 star'],
-            [7, '3 and half star'],
-            [8, '4 star'],
-            [9, '4 and half star'],
-            [10, '5 star'],
-            [11, '5 and half star'],
-        ],
-        id: 0,
-        fields: ['value', 'text']
-    }),
-    valueField: 'value',
-    displayField: 'text',
-    triggerAction: 'all',
-    editable: false
-},
-*/
-//			
+			
 			//onglet2,//onglet3,
 			noglob_regionContent,
 			],
@@ -853,12 +782,33 @@ GEOR.Addons.wab.prototype = {
         // Inputs WMS
         // ----------------------------------------------------------------------
 		for (i = 1; i <= wab.inputs.scrollwms.list.length; i++) { //wab.inputs.param['param'+i].objForWindowInput
-			if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() !== "") {
-				tmpValue = wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_URL + wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_typeName;
+			// si pas de refresh l'objet est null
+			if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput === null) {
+				// si vide 
+				if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() == "") {
+					console.log('pas de refresh - vide')
+					tmpValue = "null"
+				}
+				// si select
+				if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() != "") {
+					console.log('pas de resresh - non vide')
+					tmpValue = wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_URL + wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_typeName;
+				}
 			}
-			if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() == "") {
-				tmpValue = "null"
+			//si refresh
+			else if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput !== null){
+				// si vide 
+				if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue() == "") {
+					console.log('refresh - vide')
+					tmpValue = "null2";
+				}
+				// si select
+				if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue() != "") {
+					console.log('resresh - non vide')
+					tmpValue = wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue().data.WFS_URL + wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue().data.WFS_typeName;
+				}
 			}
+					
 			var tmpforXml = {
 				identifier: "L_input_wms"+i,
 				data: {
