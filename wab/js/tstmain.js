@@ -91,7 +91,6 @@ var noglob_myPanel = "";
 //var noglob_addComboxFieldItemsWFS = "";
 var noglob_liste = "";
 //var noglob_table_input_param;
-//var base = "";
 
 GEOR.Addons.wab = function(map, options) {
     this.map = map;
@@ -404,17 +403,6 @@ GEOR.Addons.wab.prototype = {
         // ----------------------------------------------------------------------			 
 		wab.inputs.scroll.windowInput = [];
 		for (i = 1; i <= wab.inputs.scroll.list.length; i++) {
-            base = {
-                forceSelection: true,
-                editable: true,
-                allowBlank: true,
-                triggerAction: 'all',
-                mode: 'local',
-                labelSeparator: OpenLayers.i18n("labelSeparator"),
-                valueField: 'value',
-                displayField: 'text',
-                labelWidth: 10
-                };
 			wab.inputs.scroll['scroll'+i].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
 				width: 125, // line 1203
 				fieldLabel:wab.inputs.scroll['scroll'+i].obj.title, 
