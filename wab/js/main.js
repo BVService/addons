@@ -638,37 +638,11 @@ GEOR.Addons.wab.prototype = {
 	
         // ----------------------------------------------------------------------
         // Window : fields and buttons
-        // ----------------------------------------------------------------------	 
-        
-		noglob_myPanel = new Ext.Window({
-            // Config globale
-            title: OpenLayers.i18n("addon_wpsmaker_title"),
-            closable: true,
-            closeAction: 'hide', //FAIL noglob_myPanel.hide,
-            width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
-			height:Ext.getBody().getViewSize().height - 123,//62,
-			y: '90px',//'31px', 
-			x: '0%',
-            iconCls: 'windo_icon',
-            plain: true,
-            buttonAlign: 'right',
-            autoScroll: true,
-            items: [
-			// {title: 'Hello Ext',html : 'Hello! <b>Welcome</b> to Ext JS.'}
-			{
-                xtype: 'form',
-				id : 'reportGraphArea',
-                labelWidth: 200,
-                bodyStyle: "padding:10px;",
-                items: [
-					wab.inputs.scrollwms.windowInput/*,
-					wab.inputs.param.windowInput,
-					wab.inputs.scroll.windowInput,
-					wab.inputs.checkbox.windowInput,
-					wab.inputs.coordxy.windowInput,
-					fileLoadForm*/
-                ],		
-				tbar:[{ // Pour aligner a droite: tbar:['->', {
+        // ----------------------------------------------------------------------
+		addRefresh = {};
+		wmsbox = {};
+		if (wab.inputs.scrollwms.list.length > 0) {	
+			addRefresh = 	{ 
 					text : 'Rafraichir',
 					tooltip:'Rafraichir les couches chargees',
 					iconCls: 'arrow_refresh',//'add',
@@ -721,10 +695,57 @@ GEOR.Addons.wab.prototype = {
 							noglob_myPanel.hide();  
 							noglob_myPanel.show();						
 						}
+					}
 					//----------------------------------------------------------------------
-				}],
+					wmsbox = {
+                xtype: 'form',
+				id : 'reportGraphArea',
+                labelWidth: 200,
+                bodyStyle: "padding:10px;",
+                items: [
+					wab.inputs.scrollwms.windowInput
+					//,wab.inputs.param.windowInput,
+					//wab.inputs.scroll.windowInput,
+					//wab.inputs.checkbox.windowInput,
+					//wab.inputs.coordxy.windowInput,
+					//fileLoadForm
+                ],		
+				tbar:[addRefresh], // Pour aligner a droite: tbar:['->', {					
+					};
+				};
+        
+		noglob_myPanel = new Ext.Window({
+            // Config globale
+            title: OpenLayers.i18n("addon_wpsmaker_title"),
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
+			height:Ext.getBody().getViewSize().height - 123,//62,
+			y: '90px',//'31px', 
+			x: '0%',
+            iconCls: 'windo_icon',
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true,
+            items: [
+			// {title: 'Hello Ext',html : 'Hello! <b>Welcome</b> to Ext JS.'}
+			wmsbox,
+			/*{
+                xtype: 'form',
+				id : 'reportGraphArea',
+                labelWidth: 200,
+                bodyStyle: "padding:10px;",
+                items: [
+					wab.inputs.scrollwms.windowInput
+					//,wab.inputs.param.windowInput,
+					//wab.inputs.scroll.windowInput,
+					//wab.inputs.checkbox.windowInput,
+					//wab.inputs.coordxy.windowInput,
+					//fileLoadForm
+                ],		
+				tbar:[addRefresh], // Pour aligner a droite: tbar:['->', {
 							
-            },
+            },*/
 			
 			onglet2,//onglet3,
 			noglob_regionContent,
@@ -797,12 +818,12 @@ GEOR.Addons.wab.prototype = {
 			if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput === null) {
 				// si vide 
 				if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() == "") {
-					console.log('pas de refresh - vide')
+					//console.log('pas de refresh - vide')
 					tmpValue = "null"
 				}
 				// si select
 				if (wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue() != "") {
-					console.log('pas de resresh - non vide')
+					//console.log('pas de resresh - non vide')
 					tmpValue = wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_URL + wab.inputs.scrollwms['scrollwms'+i].objForWindowInput.getValue().data.WFS_typeName;
 				}
 			}
@@ -810,12 +831,12 @@ GEOR.Addons.wab.prototype = {
 			else if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput !== null){
 				// si vide 
 				if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue() == "") {
-					console.log('refresh - vide')
+					//console.log('refresh - vide')
 					tmpValue = "null2";
 				}
 				// si select
 				if (wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue() != "") {
-					console.log('resresh - non vide')
+					//console.log('resresh - non vide')
 					tmpValue = wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue().data.WFS_URL + wab.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput.getValue().data.WFS_typeName;
 				}
 			}
