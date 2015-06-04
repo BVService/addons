@@ -714,7 +714,7 @@ GEOR.Addons.wab.prototype = {
             // Config globale
             title: OpenLayers.i18n("addon_wpsmaker_title"),
             closable: true,
-            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            closeAction: 'hide', 
             width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
 			height:Ext.getBody().getViewSize().height - 123,//62,
 			y: '90px',//'31px', 
