@@ -84,14 +84,9 @@ var wab = {
 }
 
 var noglob_execute_on_off = 0;
-//var noglob_table_L_output_wms = [];
-//var noglob_table_L_output_param = [];
 var noglob_regionContent = "";
 var noglob_myPanel = "";
-//var noglob_addComboxFieldItemsWFS = "";
 var noglob_liste = "";
-//var noglob_table_input_param;
-//var base = "";
 
 GEOR.Addons.wab = function(map, options) {
     this.map = map;
@@ -439,6 +434,7 @@ GEOR.Addons.wab.prototype = {
                 emptyText: "Sélectionnez un GML.",
                 allowBlank: false,
                 hideLabel: true,
+				//buttonOnly: true,
                 buttonText: '',
                 listeners: {
                     'fileselected': function(fb, v) {
@@ -728,25 +724,7 @@ GEOR.Addons.wab.prototype = {
             buttonAlign: 'right',
             autoScroll: true,
             items: [
-			// {title: 'Hello Ext',html : 'Hello! <b>Welcome</b> to Ext JS.'}
-			wmsbox,
-			/*{
-                xtype: 'form',
-				id : 'reportGraphArea',
-                labelWidth: 200,
-                bodyStyle: "padding:10px;",
-                items: [
-					wab.inputs.scrollwms.windowInput
-					//,wab.inputs.param.windowInput,
-					//wab.inputs.scroll.windowInput,
-					//wab.inputs.checkbox.windowInput,
-					//wab.inputs.coordxy.windowInput,
-					//fileLoadForm
-                ],		
-				tbar:[addRefresh], // Pour aligner a droite: tbar:['->', {
-							
-            },*/
-			
+			wmsbox,	
 			onglet2,//onglet3,
 			noglob_regionContent,
 			],
@@ -755,8 +733,6 @@ GEOR.Addons.wab.prototype = {
                 text: OpenLayers.i18n("Fermer"),
                 handler: function() {
                     this.win.hide();
-					this.win = this.createWindow();
-					//this.win.show();
                 },
                 scope: this
             }, {
@@ -1093,7 +1069,7 @@ GEOR.Addons.wab.prototype = {
         }
 
         if (wab.outputs.wms.list.length >= 2) {	
-            // client_L_output_wms2 contient un string a parser composer de l'url + le nom de la couche :  http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
+            // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
             var layerNameparse2 = wab.outputs.wms['wms'+2].wmsValue.substring(wab.outputs.wms['wms'+2].wmsValue.indexOf('?') + 1); // cseb:vue_d_ensemble2 
             var layerUrlparse2 = wab.outputs.wms['wms'+2].wmsValue.substr(0, wab.outputs.wms['wms'+2].wmsValue.indexOf('?')); // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
             console.log("Une couche WMS a été ajoutée :");
@@ -1132,60 +1108,10 @@ GEOR.Addons.wab.prototype = {
             });
         }
 		
-		
-        /*
-		// PART 1 : Load wms layer from recovered data	
-        GEOR.waiter.show(); // Barre bleu de chargement
-        //if (noglob_table_L_output_wms.length >= 1) { // et si non vide
-		for (var keyWmsOutputs = 1; keyWmsOutputs <= wab.outputs.wms.list.length; keyWmsOutputs++) {
-            // wmsValue : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
-			wab.outputs.wms['wms'+keyWmsOutputs].name = wab.outputs.wms['wms'+keyWmsOutputs].wmsValue.substring(wab.outputs.wms['wms'+keyWmsOutputs].wmsValue.indexOf('?') + 1); // cseb:vue_d_ensemble2 
-            wab.outputs.wms['wms'+keyWmsOutputs].url = wab.outputs.wms['wms'+keyWmsOutputs].wmsValue.substr(0, wab.outputs.wms['wms'+keyWmsOutputs].wmsValue.indexOf('?'));
-            console.log("Une couche WMS a été ajoutée :");
-            console.log("    - URL : " + wab.outputs.wms['wms'+keyWmsOutputs].url);
-            console.log("    - Nom : " + wab.outputs.wms['wms'+keyWmsOutputs].name); 		
-			
-        // PART 2 : Ajout du WMS	
-			wab.outputs.wms['wms'+keyWmsOutputs].layer = new OpenLayers.Layer.WMS("wms"+keyWmsOutputs,
-					wab.outputs.wms['wms'+keyWmsOutputs].url, 
-					{'layers': wab.outputs.wms['wms'+keyWmsOutputs].name,transparent: true} //, transparent: true, format: 'image/gif'
-					//,{isBaseLayer: true}
-				);
-			
-            wab.outputs.wms['wms'+keyWmsOutputs].cReccord = GEOR.util.createRecordType();
-            wab.outputs.wms['wms'+keyWmsOutputs].lReccord = new wab.outputs.wms['wms'+keyWmsOutputs].cReccord({
-                layer: wab.outputs.wms['wms'+keyWmsOutputs].layer,
-                name: wab.outputs.wms['wms'+keyWmsOutputs].name, 
-                type: "WMS"
-            });
-            wab.outputs.wms['wms'+keyWmsOutputs].clone = wab.outputs.wms['wms'+keyWmsOutputs].lReccord.clone();
-			console.log(keyWmsOutputs);
-            GEOR.ows.hydrateLayerRecord(wab.outputs.wms['wms'+keyWmsOutputs].clone, { // flag j'arrive pas a lui donner du i
-                success: function(index) {
-					console.log(index);
-					console.log(wab.outputs.wms['wms'+index].clone.get("title"));
-                    wab.outputs.wms['wms'+index].clone.get("layer").setName(wab.outputs.wms['wms'+index].clone.get("title")); // flag no title
-                    layerStore.addSorted(wab.outputs.wms['wms'+index].clone);
-					
-                    //GEOR.waiter.hide();
-                }(keyWmsOutputs),
-                failure: function() {
-                    GEOR.util.errorDialog({
-                        msg: "Impossible d'obtenir les informations de la couche !"
-
-                    });
-                    GEOR.waiter.hide();
-                },
-                scope: this
-            });
-			
-        }
-		*/
         // ----------------------------------------------------------------------
         // Display output settings on the client side
         // ----------------------------------------------------------------------		
-        //GEOR.util.infoDialog({msg: "test"});
-		//	noglob_myPanel.hide();
+
         // ----------------------------------------------------------------------
         // Update panel 
         // ----------------------------------------------------------------------
@@ -1196,9 +1122,6 @@ GEOR.Addons.wab.prototype = {
         // ----------------------------------------------------------------------
         // WMC
         // ----------------------------------------------------------------------
-		// map sactualise tt le temps peu importe son placement dans le code, il faut donc faire le wmc que quand la somme des layers de map est egale aux wms attendu
-		
-		//for (i = 0; i < 100; i++) { 
 		setTimeout(function() { // la fonction se declence 20 seconde apres ?
 			// Creation du WMC vierge
 			var parserWMC = new OpenLayers.Format.WMC({
@@ -1207,15 +1130,14 @@ GEOR.Addons.wab.prototype = {
                     noMagic: true
                 }
             });
-			// Creation du wmc a partir des couches ajoutees
+			// Create WMC
 			var writeWMC = parserWMC.write(this.map);
-			// Correction pour que les wms sonient correctement declares en queryable
+			// Set wms to queryable
 			var writeWMCbis = writeWMC.replace('</Extension></Layer><Layer queryable="0"', '</Extension></Layer><Layer queryable="1"');
 			var writeWMCbisbis = writeWMCbis.replace(/General.*General/, 'General><Window width="1293" height="765" /><BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title /><Extension>  <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="-357823.236499999999" miny="5037008.69390000030" maxx="1313632.36280000000" maxy="7230727.37710000016" /></Extension></General');
 			
 			layerStore2 = Ext.getCmp("mappanel").layers;	
 			var huhu6 = GEOR.wmc.write(layerStore2); //  ok
-			//console.log(huhu6);
 		},20250);
     },
 
@@ -1234,8 +1156,6 @@ GEOR.Addons.wab.prototype = {
         ----------------------------------------------------------------------------- */
     showWindow: function() {
         if (!this.win) {
-            // N'affiche que le dernier
-			//GEOR.util.infoDialog({msg: "Bienvenue sur wab. <br> Un <b>tutoriel</b> est disponible, cliquez sur ce <A HREF='https://www.google.fr/' target='_blank'>lien</a> ou sur le bouton \"Aide\" situé en bas à gauche de votre écran."});
 			this.win = this.createWindow();		
         }
         this.win.show();
