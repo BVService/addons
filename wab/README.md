@@ -1,29 +1,27 @@
-wpsmaker ADDON
+WAB ADDON
 ================
 
 This addon allows users to use a WPS.
 author: @Vanhouteghem
 
+Install 
+
 Typical configuration to include in your GEOR_custom.js file:
 
-{
-        "id": "wpsmaker",
-        "name": "wpsmaker",
-        "preloaded": false,
+    {
+        id": "wab",
+        "name": "wab",
+        "preloaded": true,
         "title": {
-            "en": "WPS Maker",
-            "es": "WPS Maker",
-            "fr": "WPS Maker"
+            "en": "wab",
+            "es": "wab",
+            "fr": "wab"
         },
         "description": {
-            "en": "<br/>WPS Maker est un générateur de WPS pour le client Georchestra.",
-            "es": "<br/>Générateur de WPS pour le client Georchestra.",
-            "fr": "<br/>Générateur de WPS pour le client Georchestra."
+            "en": "WPS addon",
+            "es": "WPS addon",
+            "fr": "Addon WPS"
         },
         "options": {
-
-
         }
     }
-
-The above options are the defaults. Feel free to customize their values.
