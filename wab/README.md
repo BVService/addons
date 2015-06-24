@@ -2,7 +2,7 @@ WAB ADDON
 ================
 author: @Vanhouteghem
 
-** Description **
+**Description**
 
 Wab (WPS Addon Builder) is a generic WPS addon for mapfishapp viewer. It works efficiently across all major web browser (Firefox, Chrome, Safari).
 
@@ -10,7 +10,7 @@ Wab has several advantages:
 - It saves time: each inputs is generated directly from the WPS file.
 - Its easy to use: it is not necessary to know Javascript and ExtJs library.
 
-How to use ?
+**How to use ?**
 
 Wab automatically creates the inputs window that will run the WPS. The creation of the inputs is the reading result of the Describe Process.
 
@@ -25,7 +25,7 @@ Wab automatically creates the inputs window that will run the WPS. The creation 
 | Info window | Output | ---                   | self.addLiteralOutput (identifier="L_output_paramX",title="foo")                                                                          |
 
 
-Install 
+**Install** 
 
 Typical configuration to include in your GEOR_custom.js file:
 
