@@ -1,6 +1,6 @@
 WAB ADDON
 ================
-author: @Vanhouteghem
+author: @JVanhouteghem
 
 **Description**
 
@@ -12,7 +12,7 @@ Wab has several advantages:
 
 **How to use ?**
 
-Wab automatically creates the inputs window that will run the WPS in mapfishapp. The creation of this inputs is the reading result of the Describe Process.
+Wab automatically creates the inputs window that will run the WPS in mapfishapp. The creation of this inputs is the reading result of the identifier in the Describe Process.
 
 | Name        | Type   | Details               | WPS name input                                                                                                                            |
 |-------------|--------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
