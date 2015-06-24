@@ -24,8 +24,7 @@ Wab automatically creates the inputs window that will run the WPS in mapfishapp.
 | Checkbox    | Input  | ---                   | ```self.addLiteralInput (identifier="L_input_checkboxX",title = "foo",type = type(""))```                                                       |
 | GML         | Input  | Load gml from desktop | ```self.addComplexInput (identifier="C_input_gmlX",title = "foo",abstract = "",formats = [{'mimeType': 'text/xml'}]) ```                        |
 | Load WMS    | Output | ---                   | ```self.addLiteralOutput (identifier="L_output_wmsX",title="")```                                                                               |
-| Info window | Output | ---                   | ```self.addLiteralOutput (identifier="L_output_paramX",title="foo")```                                                                          
-|
+| Info window | Output | ---                   | ```self.addLiteralOutput (identifier="L_output_paramX",title="foo")```|
 ---------------------------------------------------------------------------
 
 **Install** 
