@@ -7,53 +7,53 @@ var openfluid = {
 		scrollwms : {
 			list : [],
 			addScrollwms : function(Scrollwms,addObj) {
-				openfluid.inputs.scrollwms["scrollwms"+Scrollwms] = {obj : null} 
-				openfluid.inputs.scrollwms["scrollwms"+Scrollwms].obj = addObj;
-				openfluid.inputs.scrollwms["scrollwms"+Scrollwms].objForWindowInput = null;
-				openfluid.inputs.scrollwms["scrollwms"+Scrollwms].scrollwms = null;
-				openfluid.inputs.scrollwms["scrollwms"+Scrollwms].refreshedObjForWindowInput = null;
+				openfluid.inputs.scrollwms[Scrollwms] = {obj : null} 
+				openfluid.inputs.scrollwms[Scrollwms].obj = addObj;
+				openfluid.inputs.scrollwms[Scrollwms].objForWindowInput = null;
+				openfluid.inputs.scrollwms[Scrollwms].scrollwms = null;
+				openfluid.inputs.scrollwms[Scrollwms].refreshedObjForWindowInput = null;
 			},
 		},
         scroll : {
 			list : [],
 			addScroll : function(addScrollID,addObj) {
-				openfluid.inputs.scroll["scroll"+addScrollID] = {obj : null} // ["param"+addParam] for dynamic var obj
-				openfluid.inputs.scroll["scroll"+addScrollID].obj = addObj;
-				openfluid.inputs.scroll["scroll"+addScrollID].objForWindowInput = null;
+				openfluid.inputs.scroll[addScrollID] = {obj : null} // ["param"+addParam] for dynamic var obj
+				openfluid.inputs.scroll[addScrollID].obj = addObj;
+				openfluid.inputs.scroll[addScrollID].objForWindowInput = null;
 			}
 		},
 		checkbox : {
 			list : [],
 			addCheckbox : function(addCheckboxID,addObj) {
-				openfluid.inputs.checkbox["checkbox"+addCheckboxID] = {obj : null} // ["param"+addParam] for dynamic var obj
-				openfluid.inputs.checkbox["checkbox"+addCheckboxID].obj = addObj;
-				openfluid.inputs.checkbox["checkbox"+addCheckboxID].objForWindowInput = null;
+				openfluid.inputs.checkbox[addCheckboxID] = {obj : null} // ["param"+addParam] for dynamic var obj
+				openfluid.inputs.checkbox[addCheckboxID].obj = addObj;
+				openfluid.inputs.checkbox[addCheckboxID].objForWindowInput = null;
 			}
 		},
 		param : {
 			list : [],
 			addParam : function(addParamID,addObj) {
-				openfluid.inputs.param["param"+addParamID] = {obj : null} // ["param"+addParam] for dynamic var obj
-				openfluid.inputs.param["param"+addParamID].obj = addObj;
-				openfluid.inputs.param["param"+addParamID].objForWindowInput = null;
+				openfluid.inputs.param[addParamID] = {obj : null} // ["param"+addParam] for dynamic var obj
+				openfluid.inputs.param[addParamID].obj = addObj;
+				openfluid.inputs.param[addParamID].objForWindowInput = null;
 			}
 		},
 		coordxy : {
 			list : [],
 			addCoordxy : function(Coordxy,addObj) {
-				openfluid.inputs.coordxy["coordxy"+Coordxy] = {obj : null} 
-				openfluid.inputs.coordxy["coordxy"+Coordxy].obj = addObj;
-				openfluid.inputs.coordxy["coordxy"+Coordxy].objForWindowInput = null;
-				openfluid.inputs.coordxy["coordxy"+Coordxy].coordxyStore = null;
+				openfluid.inputs.coordxy[Coordxy] = {obj : null} 
+				openfluid.inputs.coordxy[Coordxy].obj = addObj;
+				openfluid.inputs.coordxy[Coordxy].objForWindowInput = null;
+				openfluid.inputs.coordxy[Coordxy].coordxyStore = null;
 			}
 		},
 		gml : {
 			list : [],
 			addGml : function(Gml,addObj) {
-				openfluid.inputs.gml["gml"+Gml] = {obj : null} 
-				openfluid.inputs.gml["gml"+Gml].obj = addObj;
-				openfluid.inputs.gml["gml"+Gml].objForWindowInput = null;
-				openfluid.inputs.gml["gml"+Gml].gmlValue = null;
+				openfluid.inputs.gml[Gml] = {obj : null} 
+				openfluid.inputs.gml[Gml].obj = addObj;
+				openfluid.inputs.gml[Gml].objForWindowInput = null;
+				openfluid.inputs.gml[Gml].gmlValue = null;
 			}
 		}
 	},
@@ -69,21 +69,21 @@ var openfluid = {
 		wms : {
 			list : [],
 			addWms : function(addWmsID,addObj) {
-				openfluid.outputs.wms["wms"+addWmsID] = {wmsValue : null} // ["param"+addParam] for dynamic var obj
-				openfluid.outputs.wms["wms"+addWmsID].wmsValue = addObj;
-				openfluid.outputs.wms["wms"+addWmsID].wmsdyn = null;
-				openfluid.outputs.wms["wms"+addWmsID].layerclone = null;
-				openfluid.outputs.wms["wms"+addWmsID].name = null;
-				openfluid.outputs.wms["wms"+addWmsID].layer = null;
-				openfluid.outputs.wms["wms"+addWmsID].cReccord = null;
-				openfluid.outputs.wms["wms"+addWmsID].lReccord = null;
-				openfluid.outputs.wms["wms"+addWmsID].clone = null;
+				openfluid.outputs.wms[addWmsID] = {wmsValue : null} // ["param"+addParam] for dynamic var obj
+				openfluid.outputs.wms[addWmsID].wmsValue = addObj;
+				openfluid.outputs.wms[addWmsID].wmsdyn = null;
+				openfluid.outputs.wms[addWmsID].layerclone = null;
+				openfluid.outputs.wms[addWmsID].name = null;
+				openfluid.outputs.wms[addWmsID].layer = null;
+				openfluid.outputs.wms[addWmsID].cReccord = null;
+				openfluid.outputs.wms[addWmsID].lReccord = null;
+				openfluid.outputs.wms[addWmsID].clone = null;
 			}
 		}
 	}
 }
 
-console.log("openfluid : ");
+console.log("openfluid object :");
 console.log(openfluid);
 
 var noglob_execute_on_off = 0;
@@ -271,11 +271,11 @@ var name_inputs = openfluid.inputs.scroll.list[i];
 //console.log(openfluid.inputs.scroll);
 			openfluid.inputs.scroll.addScroll(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 			trashArray = [];
-            for (var k in openfluid.inputs.scroll["scroll" + name_inputs].obj.literalData.allowedValues) {
+            for (var k in openfluid.inputs.scroll[name_inputs].obj.literalData.allowedValues) {
 					trashArray.push(k);
             }
-			openfluid.inputs.scroll["scroll" + name_inputs].obj.literalData.allowedValues.list = [];
-			openfluid.inputs.scroll["scroll" + name_inputs].obj.literalData.allowedValues.list = trashArray;
+			openfluid.inputs.scroll[name_inputs].obj.literalData.allowedValues.list = [];
+			openfluid.inputs.scroll[name_inputs].obj.literalData.allowedValues.list = trashArray;
         }
 		
         // ----------------------------------------------------------------------
@@ -301,7 +301,7 @@ var name_inputs = openfluid.inputs.checkbox.list[i];
         // ----------------------------------------------------------------------		
 	    for (i = 0; i < openfluid.inputs.gml.list.length; i++) {
 var name_inputs = openfluid.inputs.gml.list[i];
-console.log(openfluid.inputs.gml);
+//console.log(openfluid.inputs.gml);
 			openfluid.inputs.gml.addGml(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 		}
 		
@@ -331,12 +331,12 @@ console.log(openfluid.inputs.gml);
         // Parameter inputs
         // ----------------------------------------------------------------------
 		openfluid.inputs.param.windowInput = [];
-		var noglob_table_input_param_splitPanel1 = [];
+		//var noglob_table_input_param_splitPanel1 = [];
 		var noglob_table_input_param_splitPanel2 = [];
 		for (i = 0; i < openfluid.inputs.param.list.length; i++) {
 var name_inputs = openfluid.inputs.param.list[i];
-            openfluid.inputs.param['param' + name_inputs].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
-                fieldLabel: openfluid.inputs.param['param' + name_inputs].obj.title,//wps_Config_param1.input_param1_fromPython.title,
+            openfluid.inputs.param[name_inputs].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
+                fieldLabel: openfluid.inputs.param[name_inputs].obj.title,//wps_Config_param1.input_param1_fromPython.title,
                 name: "uselessname"+i,
                 width: 40,
                 /*maxValue: 298,
@@ -348,10 +348,10 @@ var name_inputs = openfluid.inputs.param.list[i];
                 decimalPrecision: 2*/
             });
             //noglob_table_input_param.push(openfluid.inputs.param['param'+i].objForWindowInput);
-			openfluid.inputs.param.windowInput.push(openfluid.inputs.param['param' + name_inputs].objForWindowInput);
+			openfluid.inputs.param.windowInput.push(openfluid.inputs.param[name_inputs].objForWindowInput);
         }
-console.log("openfluid.inputs.param.windowInput :");
-console.log(openfluid.inputs.param.windowInput);
+//console.log("openfluid.inputs.param.windowInput :");
+//console.log(openfluid.inputs.param.windowInput);
         // ----------------------------------------------------------------------
         // WMS inputs
         // ----------------------------------------------------------------------		       
@@ -397,14 +397,12 @@ console.log(openfluid.inputs.param.windowInput);
         //if (openfluid.inputs.scrollwms.list.length >= 1) {
 
 var name_inputs = openfluid.inputs.scrollwms.list[i];
-/*console.log(openfluid.inputs.scrollwms);
-console.log(openfluid.inputs.scrollwms["scrollwms" + name_inputs].obj.title);
-console.log(openfluid.inputs.scrollwms["scrollwms" + name_inputs].obj.abstract);*/
+//console.log(openfluid.inputs.scrollwms);
             
-			openfluid.inputs.scrollwms["scrollwms" + name_inputs].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
+			openfluid.inputs.scrollwms[name_inputs].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
                 name: "wms",
-                fieldLabel: openfluid.inputs.scrollwms["scrollwms" + name_inputs].obj.title,
-                emptyText: openfluid.inputs.scrollwms["scrollwms" + name_inputs].obj.abstract,
+                fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
+                emptyText: openfluid.inputs.scrollwms[name_inputs].obj.abstract,
                 width: FIELD_WIDTH,
                 store: tmpStore,
 				listeners: {
@@ -419,10 +417,10 @@ console.log(openfluid.inputs.scrollwms["scrollwms" + name_inputs].obj.abstract);
 					}
 				}				
             }, base));
-			openfluid.inputs.scrollwms.windowInput.push(openfluid.inputs.scrollwms["scrollwms" + name_inputs].objForWindowInput);
+			openfluid.inputs.scrollwms.windowInput.push(openfluid.inputs.scrollwms[name_inputs].objForWindowInput);
         }
-console.log("openfluid.inputs.scrollwms.windowInput :");
-console.log(openfluid.inputs.scrollwms.windowInput);
+//console.log("openfluid.inputs.scrollwms.windowInput :");
+//console.log(openfluid.inputs.scrollwms.windowInput);
         
         
 
@@ -434,19 +432,19 @@ console.log(openfluid.inputs.scrollwms.windowInput);
 		openfluid.inputs.scroll.windowInput = [];
 		for (i = 0; i < openfluid.inputs.scroll.list.length; i++) {
 var name_inputs = openfluid.inputs.scroll.list[i];
-			openfluid.inputs.scroll['scroll' + name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
+			openfluid.inputs.scroll[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
 				width: 125, // line 1203
-				fieldLabel:openfluid.inputs.scroll['scroll' + name_inputs].obj.title, 
+				fieldLabel:openfluid.inputs.scroll[name_inputs].obj.title, 
 				name:'division'+i,
-                value: openfluid.inputs.scroll['scroll' + name_inputs].obj.literalData.allowedValues.list[0],
-				store: openfluid.inputs.scroll['scroll' + name_inputs].obj.literalData.allowedValues.list,
+                value: openfluid.inputs.scroll[name_inputs].obj.literalData.allowedValues.list[0],
+				store: openfluid.inputs.scroll[name_inputs].obj.literalData.allowedValues.list,
 				editable: false,
 				triggerAction:'all',
 						}, base));	
-			openfluid.inputs.scroll.windowInput.push(openfluid.inputs.scroll['scroll' + name_inputs].objForWindowInput);
+			openfluid.inputs.scroll.windowInput.push(openfluid.inputs.scroll[name_inputs].objForWindowInput);
         }
-console.log("openfluid.inputs.scroll.windowInput :");
-console.log(openfluid.inputs.scroll.windowInput);
+//console.log("openfluid.inputs.scroll.windowInput :");
+//console.log(openfluid.inputs.scroll.windowInput);
         // ----------------------------------------------------------------------
         // GML inputs
         // ----------------------------------------------------------------------
@@ -533,7 +531,7 @@ console.log(openfluid.inputs.scroll.windowInput);
 					for (i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
 var name_inputs = openfluid.inputs.coordxy.list[i];
 						//if (log_coord == i) {
-							openfluid.inputs.coordxy["coordxy"+ name_inputs].coordxyStore = lonlat.lat; 
+							openfluid.inputs.coordxy[name_inputs].coordxyStore = lonlat.lat; 
 							alert("Input 1 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
 							log_coord = 0;
 						//}
@@ -551,9 +549,9 @@ var name_inputs = openfluid.inputs.coordxy.list[i];
 		openfluid.inputs.coordxy.windowInput = [];
 		for (i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
 var name_inputs = openfluid.inputs.coordxy.list[i];
-            openfluid.inputs.coordxy["coordxy"+ name_inputs].objForWindowInput = new Ext.Button({
+            openfluid.inputs.coordxy[name_inputs].objForWindowInput = new Ext.Button({
                 iconCls: 'add_icon',
-                text: openfluid.inputs.coordxy["coordxy"+ name_inputs].obj.title, //OpenLayers.i18n(noglob_coordxyTitle[0]),
+                text: openfluid.inputs.coordxy[name_inputs].obj.title, //OpenLayers.i18n(noglob_coordxyTitle[0]),
                 style: 'padding-top:5px',
                 handler: function() {
                     clickbv.activate();
@@ -561,10 +559,10 @@ var name_inputs = openfluid.inputs.coordxy.list[i];
                 },
                 scope: this
             });
-			openfluid.inputs.coordxy.windowInput.push(openfluid.inputs.coordxy["coordxy"+ name_inputs].objForWindowInput);
+			openfluid.inputs.coordxy.windowInput.push(openfluid.inputs.coordxy[name_inputs].objForWindowInput);
 		}
-console.log("openfluid.inputs.coordxy.windowInput :");
-console.log(openfluid.inputs.coordxy.windowInput);
+//console.log("openfluid.inputs.coordxy.windowInput :");
+//console.log(openfluid.inputs.coordxy.windowInput);
 		
         // ----------------------------------------------------------------------
         // Checkbox inputs
@@ -572,15 +570,15 @@ console.log(openfluid.inputs.coordxy.windowInput);
 		openfluid.inputs.checkbox.windowInput = [];
 		for (i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
 var name_inputs = openfluid.inputs.checkbox.list[i];
-			openfluid.inputs.checkbox['checkbox'+ name_inputs].objForWindowInput = new Ext.form.Checkbox({ // flag
+			openfluid.inputs.checkbox[name_inputs].objForWindowInput = new Ext.form.Checkbox({ // flag
 					//boxLabel: noglob_checkboxTitle[i-1],
 					id: 'checkbox'+i,
-					width: 150,
+					width: 5,
 					xtype: 'checkbox',
-					fieldLabel: openfluid.inputs.checkbox['checkbox'+ name_inputs].obj.title,
+					fieldLabel: openfluid.inputs.checkbox[name_inputs].obj.title,
 					checked: true
             });
-			openfluid.inputs.checkbox.windowInput.push(openfluid.inputs.checkbox['checkbox'+ name_inputs].objForWindowInput);
+			openfluid.inputs.checkbox.windowInput.push(openfluid.inputs.checkbox[name_inputs].objForWindowInput);
 			/*
 			if (i <= 6) {
 			//noglob_table_input_param.push(openfluid.inputs.checkbox['checkbox'+i].objForWindowInput);
@@ -591,15 +589,19 @@ var name_inputs = openfluid.inputs.checkbox.list[i];
 			}
 			*/
 		}
-console.log("openfluid.inputs.checkbox.windowInput :");
-console.log(openfluid.inputs.checkbox.windowInput);
+//console.log("openfluid.inputs.checkbox.windowInput :");
+//console.log(openfluid.inputs.checkbox.windowInput);
         // ----------------------------------------------------------------------
         // Tab (in progress)
         // ----------------------------------------------------------------------		
         var onglet2 = {
             closable: true,
             closeAction: 'hide', //FAIL noglob_myPanel.hide,
-			title: OpenLayers.i18n("Selectionner les indicateurs "),
+			title: OpenLayers.i18n("Paramétrage des indicateurs"),
+            closable: false,
+            activate: true,
+            collapsible: true,
+            collapsed: true,
             //width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
 			//height:Ext.getBody().getViewSize().height - 123,//62,
 			//y: '90px',//'31px', 
@@ -611,7 +613,7 @@ console.log(openfluid.inputs.checkbox.windowInput);
             items: [{
                 xtype: 'form',
 				id : 'reportGraphArea2',
-                labelWidth: 200,
+                labelWidth: 300,
                 bodyStyle: "padding:10px;",
                 items: [
 				    openfluid.inputs.param.windowInput,
@@ -630,7 +632,7 @@ console.log(openfluid.inputs.checkbox.windowInput);
             activate: true,
             region: 'south',
             collapsible: true,
-            collapsed: false,
+            collapsed: true,
             split: true,
             items: [{
                 xtype: 'form',
@@ -652,7 +654,7 @@ console.log(openfluid.inputs.checkbox.windowInput);
             activate: true,
             region: 'south',
             collapsible: true,
-            collapsed: false,
+            collapsed: true,
             split: true,
             /*items: [{
                 xtype: 'form',
@@ -689,10 +691,10 @@ console.log(openfluid.inputs.checkbox.windowInput);
 							// Create refresh wms inputs
 							for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
 var name_inputs = openfluid.inputs.scrollwms.list[i];
-							openfluid.inputs.scrollwms["scrollwms"+ name_inputs].refreshedObjForWindowInput = new Ext.form.ComboBox({
+							openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput = new Ext.form.ComboBox({
 								name: "wms",
-								fieldLabel: openfluid.inputs.scrollwms["scrollwms"+ name_inputs].obj.title,
-								emptyText: openfluid.inputs.scrollwms["scrollwms"+ name_inputs].obj.abstract,
+								fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
+								emptyText: openfluid.inputs.scrollwms[name_inputs].obj.abstract,
 								width: 60,
 								store: new Ext.data.SimpleStore({
 									fields: ['text', 'value'],
@@ -722,7 +724,7 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
 							// Add refresh wms inputs
 							for (i = 1; i <= openfluid.inputs.scrollwms.list.length; i++) {
 var name_inputs = openfluid.inputs.scrollwms.list[i];
-										Ext.getCmp('reportGraphArea').add(openfluid.inputs.scrollwms["scrollwms"+ name_inputs].refreshedObjForWindowInput); // ajoute un nouveau
+										Ext.getCmp('reportGraphArea').add(openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput); // ajoute un nouveau
 										}
 
 							// Reload window
@@ -754,7 +756,7 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
             closable: true,
             closeAction: 'hide', 
             width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
-			height:Ext.getBody().getViewSize().height - 123,//62,
+			//height:Ext.getBody().getViewSize().height - 123,//62,
 			y: '30px',
 			x: '0%',
             iconCls: 'windo_icon',
@@ -779,13 +781,13 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
                     window.open(Help_URL);
                 },
                 scope: this
-            }, {
+            }, /*{
                 text: OpenLayers.i18n("Métadonnées"),
                 handler: function() {
                     window.open(Metadata_URL);
                 },
                 scope: this
-            }, {
+            },*/ {
                 text: OpenLayers.i18n("Exécuter"),
                 handler: this.ExecuteWps,
                 scope: this
@@ -815,12 +817,12 @@ var name_inputs = openfluid.inputs.param.list[i];
                 identifier: name_inputs,
                 data: {
                     literalData: {
-                        value: openfluid.inputs.param['param' + name_inputs].objForWindowInput.getValue()
+                        value: openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
                     }
                 }
             }
             //noglob_tableList_input_forXml.push(tmpForXml);
-				if (openfluid.inputs.param['param' + name_inputs].objForWindowInput.getValue() != "") {
+				if (openfluid.inputs.param[name_inputs].objForWindowInput.getValue() != "") {
 					openfluid.inputs.forXmlPost.push(tmpForXml);
 				}
 			
@@ -831,29 +833,29 @@ var name_inputs = openfluid.inputs.param.list[i];
 		for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) { //openfluid.inputs.param['param'+i].objForWindowInput
 			// si pas de refresh l'objet est null
 var name_inputs = openfluid.inputs.scrollwms.list[i];
-			if (openfluid.inputs.scrollwms["scrollwms" + name_inputs].refreshedObjForWindowInput === null) {
+			if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput === null) {
 				// si vide 
-				if (openfluid.inputs.scrollwms["scrollwms" + name_inputs].objForWindowInput.getValue() == "") {
+				if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() == "") {
 					//console.log('pas de refresh - vide')
 					tmpValue = "null"
 				}
 				// si select
-				if (openfluid.inputs.scrollwms["scrollwms" + name_inputs].objForWindowInput.getValue() != "") {
+				if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() != "") {
 					//console.log('pas de resresh - non vide')
-					tmpValue = openfluid.inputs.scrollwms["scrollwms" + name_inputs].objForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms["scrollwms" + name_inputs].objForWindowInput.getValue().data.WFS_typeName;
+					tmpValue = openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue().data.WFS_typeName;
 				}
 			}
 			//si refresh
-			else if (openfluid.inputs.scrollwms["scrollwms" + name_inputs].refreshedObjForWindowInput !== null){
+			else if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput !== null){
 				// si vide 
-				if (openfluid.inputs.scrollwms["scrollwms" + name_inputs].refreshedObjForWindowInput.getValue() == "") {
+				if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue() == "") {
 					//console.log('refresh - vide')
 					tmpValue = "null2";
 				}
 				// si select
-				if (openfluid.inputs.scrollwms["scrollwms" + name_inputs].refreshedObjForWindowInput.getValue() != "") {
+				if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue() != "") {
 					//console.log('resresh - non vide')
-					tmpValue = openfluid.inputs.scrollwms["scrollwms" + name_inputs].refreshedObjForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms["scrollwms" + name_inputs].refreshedObjForWindowInput.getValue().data.WFS_typeName;
+					tmpValue = openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue().data.WFS_typeName;
 				}
 			}
 					
@@ -871,15 +873,15 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
         if (openfluid.inputs.scroll.list.length >= 0) {
 			for (i = 0; i < openfluid.inputs.scroll.list.length; i++) {
 var name_inputs = openfluid.inputs.scroll.list[i];
-                 openfluid.inputs.scroll['scroll' + name_inputs].objForXml = {
+                 openfluid.inputs.scroll[name_inputs].objForXml = {
                     identifier: name_inputs,
                     data: {
                         literalData: {
-                            value: openfluid.inputs.scroll['scroll' + name_inputs].objForWindowInput.getValue()
+                            value: openfluid.inputs.scroll[name_inputs].objForWindowInput.getValue()
                         }
                     }
                 }
-				openfluid.inputs.forXmlPost.push(openfluid.inputs.scroll['scroll' + name_inputs].objForXml);
+				openfluid.inputs.forXmlPost.push(openfluid.inputs.scroll[name_inputs].objForXml);
             }
         }
         // ----------------------------------------------------------------------
@@ -888,16 +890,16 @@ var name_inputs = openfluid.inputs.scroll.list[i];
         if (openfluid.inputs.coordxy.list.length >= 0) {
 			for (i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
 var name_inputs = openfluid.inputs.coordxy.list[i];
-				openfluid.inputs.coordxy['coordxy' + name_inputs].objForXml = {
+				openfluid.inputs.coordxy[name_inputs].objForXml = {
 					identifier: name_inputs,
 					data: {
 						literalData: {
-							value: openfluid.inputs.coordxy['coordxy' + name_inputs].coordxyStore
+							value: openfluid.inputs.coordxy[name_inputs].coordxyStore
 						}
 					}
 				}
-				if (openfluid.inputs.coordxy['coordxy' + name_inputs].coordxyStore != null) {
-					openfluid.inputs.forXmlPost.push(openfluid.inputs.coordxy['coordxy' + name_inputs].objForXml);
+				if (openfluid.inputs.coordxy[name_inputs].coordxyStore != null) {
+					openfluid.inputs.forXmlPost.push(openfluid.inputs.coordxy[name_inputs].objForXml);
 				}
 			}
 		}
@@ -912,11 +914,11 @@ var name_inputs = openfluid.inputs.gml.list[i];
 					identifier: name_inputs,
 					data: {
 						complexData: {
-							value: openfluid.inputs.gml['gml' + name_inputs].gmlValue //gmlValue1
+							value: openfluid.inputs.gml[name_inputs].gmlValue //gmlValue1
 						}
 					}
 				}
-				if (typeof(openfluid.inputs.gml['gml' + name_inputs].gmlValue) == "string") {
+				if (typeof(openfluid.inputs.gml[name_inputs].gmlValue) == "string") {
 					openfluid.inputs.forXmlPost.push(tmpGMLforXml);
 				}
 			}
@@ -930,7 +932,7 @@ var name_inputs = openfluid.inputs.checkbox.list[i];
                 identifier: name_inputs,
                 data: {
                     literalData: {
-                        value: openfluid.inputs.checkbox['checkbox' + name_inputs].objForWindowInput.getValue()
+                        value: openfluid.inputs.checkbox[name_inputs].objForWindowInput.getValue()
                     }
                 }
             }
@@ -1039,11 +1041,15 @@ var name_outputs = openfluid.outputs.param.list[i];
                 // ----------------------------------------------------------------------
 				for (outputKeyWms = 0; outputKeyWms < openfluid.outputs.wms.list.length; outputKeyWms++) {
 var name_outputs = openfluid.outputs.wms.list[outputKeyWms];
+//console.log("openfluid.outputs.wms.list[outputKeyWms] :");
+//console.log(openfluid.outputs.wms.list[outputKeyWms]);
                 // Recover data from the output sent by the PyWPS server
 					if (identifier == name_outputs) {
 						openfluid.outputs.wms.addWms(name_outputs,literalData[0].firstChild.nodeValue);
 					}
 				}
+//console.log("openfluid.outputs.wms :");
+//console.log(openfluid.outputs.wms);
 				
                 // ----------------------------------------------------------------------
                 // Outputs Param 
@@ -1066,40 +1072,121 @@ console.log(openfluid.outputs.wms.list);
         // PART 1 : Load wms layer from recovered data	
         GEOR.waiter.show(); // Barre bleu de chargement
 
-var layerUrlparse = [];
-var layerNameparse = [];
-for (i = 0; i < openfluid.outputs.wms.list.length; i++) {
-var name_outputs = openfluid.outputs.wms.list[i]; 
-    
-/*        if (openfluid.outputs.wms.list.length >= 1) { // et si non vide	
-            // client_L_output_wms1 contient un string a parser composer de l'url + le nom de la couche :  http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 */
-            layerUrlparse[i] = openfluid.outputs.wms['wms' + name_outputs].wmsValue.substr(0, openfluid.outputs.wms['wms' + name_outputs].wmsValue.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
-            layerNameparse[i] = openfluid.outputs.wms['wms' + name_outputs].wmsValue.substring(openfluid.outputs.wms['wms' + name_outputs].wmsValue.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
+//        
+//
+//// Dynamic variabls
+//var layerUrlparse = [];
+//var layerNameparse = [];
+//var wmsdyn = [];
+//var c = [];
+//var layerRecord = [];
+//var clone = [];
+//var mapforzoom = [];
+//var llbbox = [];
+//
+//
+//for (i = 0; i < openfluid.outputs.wms.list.length; i++) {
+//    
+//var name_outputs = openfluid.outputs.wms.list[i]; 
+//    
+//
+//            layerUrlparse[i] = openfluid.outputs.wms['wms' + name_outputs].wmsValue.substr(0, openfluid.outputs.wms['wms' + name_outputs].wmsValue.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
+//            layerNameparse[i] = openfluid.outputs.wms['wms' + name_outputs].wmsValue.substring(openfluid.outputs.wms['wms' + name_outputs].wmsValue.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
+//
+//            console.log("Une couche WMS a été ajoutée :");
+//            console.log(" - URL : " + layerUrlparse[i]);
+//            console.log(" - Nom : " + layerNameparse[i]); //console.log("    - Entrepot :"+entrepotName);		
+//			
+//        // PART 2 : Ajout du WMS	
+//			wmsdyn[i] = new OpenLayers.Layer.WMS(name_outputs,
+//					layerUrlparse[i], 
+//					{'layers': layerNameparse[i],transparent: true} //, transparent: true, format: 'image/gif'
+//					//,{isBaseLayer: true}
+//				);
+//console.log("wmsdyn"+i+" :");
+//console.log(wmsdyn[i]);
+//    
+//            var c = GEOR.util.createRecordType();
+//
+//            layerRecord = new c[i]({
+//                layer: wmsdyn[i],
+//                name: layerNameparse[i], 
+//                type: "WMS"
+//            });
+//
+//
+//            clone = layerRecord.clone();
+///*console.log("clone  :");
+//console.log(clone);
+//            
+//console.log("clone"+i+" = ");
+//console.log(clone[i]);*/
+//            GEOR.ows.hydrateLayerRecord(clone[i], {
+//                success: function() {
+//                    clone.get("layer").setName(clone.get("title"));
+//                    layerStore.addSorted(clone[i]);
+//
+//					
+//		// PART 2.2 : Zoom sur le premier wms charge
+//					mapforzoom[i] = clone[i].get('layer').map ; 
+//					bb = clone[i].get('bbox');
+//console.log("bb = "+bb);
+//					//GOOD mapforzoom.zoomToExtent(bboxlol); // ATTENTION a lui donner un array et pas un string ("","","","") exemple : var bboxlol = ["372528","5385155","374112","5386725"];					
+//					llbbox[i] = OpenLayers.Bounds.fromArray(clone.get('llbbox'));
+//console.log("bbox"+[i]+" ="+llbbox[i]);
+//					var getproj = mapforzoom.getProjectionObject(); 
+//					llbbox.transform(new OpenLayers.Projection('EPSG:4326'), getproj);
+//					map.zoomToExtent(llbbox[i]);					
+//
+//					
+//                    //GEOR.waiter.hide();
+//                },
+//                failure: function() {
+//                    GEOR.util.errorDialog({
+//                        msg: "Impossible d'obtenir les informations de la couche !"
+//
+//                    });
+//                    GEOR.waiter.hide();
+//                },
+//                //scope: this
+//            });
+//console.log("layerNameparse"+[i]+" ="+layerNameparse[i]);
+//        /*}*/
+//    }
+//        
+        
+        
 
+        if (openfluid.outputs.wms.list.length >= 1) { // et si non vide	
+            // client_L_output_wms1 contient un string a parser composer de l'url + le nom de la couche :  http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
+var name_outputs = openfluid.outputs.wms.list[0]; 
+    
+
+            var layerUrlparse1 = openfluid.outputs.wms[name_outputs].wmsValue.substr(0, openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
+
+            
+            var layerNameparse1 = openfluid.outputs.wms[name_outputs].wmsValue.substring(openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2
+
+            
             console.log("Une couche WMS a été ajoutée :");
-            console.log(" - URL : " + layerUrlparse[i]);
-            console.log(" - Nom : " + layerNameparse[i]); //console.log("    - Entrepot :"+entrepotName);		
+            console.log(" - URL : " + layerUrlparse1);
+            console.log(" - Nom : " + layerNameparse1); //console.log("    - Entrepot :"+entrepotName);		
 			
         // PART 2 : Ajout du WMS	
 			var wmsdyn = new OpenLayers.Layer.WMS(name_outputs,
-					layerUrlparse[i], 
-					{'layers': layerNameparse[i],transparent: true} //, transparent: true, format: 'image/gif'
+					layerUrlparse1, 
+					{'layers': layerNameparse1,transparent: true} //, transparent: true, format: 'image/gif'
 					//,{isBaseLayer: true}
 				);
-console.log("wmsdyn :");
-console.log(wmsdyn);
-    
+			
             var c = GEOR.util.createRecordType();
-
             var layerRecord = new c({
                 layer: wmsdyn,
-                name: layerNameparse[i], 
+                name: layerNameparse1, 
                 type: "WMS"
             });
             var clone = layerRecord.clone();
-console.log("clone "+ i +" :");
-console.log(clone);
-         
+
             GEOR.ows.hydrateLayerRecord(clone, {
                 success: function() {
                     clone.get("layer").setName(clone.get("title"));
@@ -1108,10 +1195,9 @@ console.log(clone);
 					
 		// PART 2.2 : Zoom sur le premier wms charge
 					var mapforzoom = clone.get('layer').map ; 
-					bb = clone.get('bbox');											
+					//bb = clone.get('bbox');											
 					//GOOD mapforzoom.zoomToExtent(bboxlol); // ATTENTION a lui donner un array et pas un string ("","","","") exemple : var bboxlol = ["372528","5385155","374112","5386725"];					
-					var llbbox = OpenLayers.Bounds.fromArray(clone.get('llbbox'));
-console.log("bbox = "+llbbox);
+					var llbbox = OpenLayers.Bounds.fromArray(clone.get('llbbox')); 
 					var getproj = mapforzoom.getProjectionObject(); 
 					llbbox.transform(new OpenLayers.Projection('EPSG:4326'), getproj);
 					map.zoomToExtent(llbbox);					
@@ -1126,21 +1212,22 @@ console.log("bbox = "+llbbox);
                     });
                     GEOR.waiter.hide();
                 },
-                //scope: this
+                scope: this
             });
-console.log(layerNameparse);
-        /*}*/
-    }
-/*        if (openfluid.outputs.wms.list.length >= 2) {	
+			
+        }
+
+        if (openfluid.outputs.wms.list.length >= 2) {	
             // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
-            var layerNameparse2 = openfluid.outputs.wms['wms'+2].wmsValue.substring(openfluid.outputs.wms['wms'+2].wmsValue.indexOf('?') + 1); // cseb:vue_d_ensemble2 
-            var layerUrlparse2 = openfluid.outputs.wms['wms'+2].wmsValue.substr(0, openfluid.outputs.wms['wms'+2].wmsValue.indexOf('?')); // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
+var name_outputs = openfluid.outputs.wms.list[1];
+            var layerNameparse2 = openfluid.outputs.wms[name_outputs].wmsValue.substring(openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?') + 1); // cseb:vue_d_ensemble2 
+            var layerUrlparse2 = openfluid.outputs.wms[name_outputs].wmsValue.substr(0, openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?')); // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
             console.log("Une couche WMS a été ajoutée :");
             console.log("    - URL : " + layerUrlparse2);
             console.log("    - Nom : " + layerNameparse2); 		
 			
         // PART 2 : Ajout du WMS	
-			var wmsdyn2 = new OpenLayers.Layer.WMS("wms2",
+			var wmsdyn2 = new OpenLayers.Layer.WMS(name_outputs,
 					layerUrlparse2, 
 					{'layers': layerNameparse2,transparent: true} //, transparent: true, format: 'image/gif'
 					//,{isBaseLayer: true}
@@ -1170,16 +1257,17 @@ console.log(layerNameparse);
             });
         }
 
-        if (openfluid.outputs.wms.list.length >= 3) {	
-            // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2 
-            var layerNameparse3 = openfluid.outputs.wms['wms'+3].wmsValue.substring(openfluid.outputs.wms['wms'+3].wmsValue.indexOf('?') + 1); // cseb:vue_d_ensemble2 
-            var layerUrlparse3 = openfluid.outputs.wms['wms'+3].wmsValue.substr(0, openfluid.outputs.wms['wms'+3].wmsValue.indexOf('?')); // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
+        if (openfluid.outputs.wms.list.length >= 3) {
+            // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs?+++cseb:vue_d_ensemble2
+var name_outputs = openfluid.outputs.wms.list[2];
+            var layerNameparse3 = openfluid.outputs.wms[name_outputs].wmsValue.substring(openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?') + 1); // cseb:vue_d_ensemble2 
+            var layerUrlparse3 = openfluid.outputs.wms[name_outputs].wmsValue.substr(0, openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?')); // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
             console.log("Une couche WMS a été ajoutée :");
             console.log("    - URL : " + layerUrlparse3);
             console.log("    - Nom : " + layerNameparse3); 		
 			
         // PART 2 : Ajout du WMS	
-			var wmsdyn3 = new OpenLayers.Layer.WMS("wms3",
+			var wmsdyn3 = new OpenLayers.Layer.WMS(name_outputs,
 					layerUrlparse3, 
 					{'layers': layerNameparse3,transparent: true} //, transparent: true, format: 'image/gif'
 					//,{isBaseLayer: true}
@@ -1207,7 +1295,8 @@ console.log(layerNameparse);
                 },
                 scope: this
             });
-        }*/
+        }
+
 		
         // ----------------------------------------------------------------------
         // Display output settings on the client side
@@ -1235,7 +1324,7 @@ console.log(layerNameparse);
 			var writeWMC = parserWMC.write(this.map);
 			// Set wms to queryable
 			var writeWMCbis = writeWMC.replace('</Extension></Layer><Layer queryable="0"', '</Extension></Layer><Layer queryable="1"');
-			var writeWMCbisbis = writeWMCbis.replace(/General.*General/, 'General><Window width="1293" height="765" /><BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title /><Extension>  <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="-357823.236499999999" miny="5037008.69390000030" maxx="1313632.36280000000" maxy="7230727.37710000016" /></Extension></General');
+			var writeWMCbis1 = writeWMCbis.replace(/General.*General/, 'General><Window width="1293" height="765" /><BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title /><Extension>  <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="-357823.236499999999" miny="5037008.69390000030" maxx="1313632.36280000000" maxy="7230727.37710000016" /></Extension></General');
 			
 			layerStore2 = Ext.getCmp("mappanel").layers;	
 			var huhu6 = GEOR.wmc.write(layerStore2); //  ok
