@@ -1,24 +1,24 @@
-wpsmaker ADDON
+openfluid_2 ADDON
 ================
 
 This addon allows users to use a WPS.
-author: @Vanhouteghem
+author: @Mounirsky
 
 Typical configuration to include in your GEOR_custom.js file:
 
-{
-        "id": "wpsmaker",
-        "name": "wpsmaker",
-        "preloaded": false,
+    {
+        "id": "openfluid_2",
+        "name": "openfluid_2",
+        "preloaded": true,
         "title": {
-            "en": "WPS Maker",
-            "es": "WPS Maker",
-            "fr": "WPS Maker"
+            "en": "Bvservice Openfluid",
+            "es": "Bvservice Openfluid",
+            "fr": "Bvservice Openfluid"
         },
         "description": {
-            "en": "<br/>WPS Maker est un générateur de WPS pour le client Georchestra.",
-            "es": "<br/>Générateur de WPS pour le client Georchestra.",
-            "fr": "<br/>Générateur de WPS pour le client Georchestra."
+            "en": "Bvservice Openfluid est un addon (client WPS) pour l'IDS gOrchestra",
+            "es": "Bvservice Openfluid is an addon (WPS client) for gOorchestra DSI",
+            "fr": "Bvservice Openfluid is an addon (WPS client) for gOorchestra DSI"
         },
         "options": {
 
