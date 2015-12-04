@@ -138,6 +138,8 @@ GEOR.Addons.openfluid_2.prototype = {
         Describe process    	
         ----------------------------------------------------------------------------- */
     describeProcess: function(url, identifier) {
+
+        
         var onDescribeP = this.onDescribeProcess;
         OpenLayers.Request.GET({
             url: url, // Url of the pywps.cgi (manifest.js)
@@ -332,7 +334,7 @@ var name_inputs = openfluid.inputs.gml.list[i];
         // ----------------------------------------------------------------------
 		openfluid.inputs.param.windowInput = [];
 		//var noglob_table_input_param_splitPanel1 = [];
-		var noglob_table_input_param_splitPanel2 = [];
+		//var noglob_table_input_param_splitPanel2 = [];
 		for (i = 0; i < openfluid.inputs.param.list.length; i++) {
 var name_inputs = openfluid.inputs.param.list[i];
             openfluid.inputs.param[name_inputs].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
@@ -352,6 +354,9 @@ var name_inputs = openfluid.inputs.param.list[i];
         }
 //console.log("openfluid.inputs.param.windowInput :");
 //console.log(openfluid.inputs.param.windowInput);
+        
+        
+        
         // ----------------------------------------------------------------------
         // WMS inputs
         // ----------------------------------------------------------------------		       
@@ -483,7 +488,6 @@ var name_inputs = openfluid.inputs.scroll.list[i];
         }
 
         // PART 2 GML Window
-        var fileWindow;
         var fileLoadForm = new Ext.FormPanel({
             frame: false,
             border: false,
@@ -494,7 +498,7 @@ var name_inputs = openfluid.inputs.scroll.list[i];
             ]
         });
 
-        fileWindow = new Ext.Window({
+        var fileWindow = new Ext.Window({
             closable: true,
             width: 320,
             title: "Parcourir",
@@ -579,94 +583,162 @@ var name_inputs = openfluid.inputs.checkbox.list[i];
 					checked: true
             });
 			openfluid.inputs.checkbox.windowInput.push(openfluid.inputs.checkbox[name_inputs].objForWindowInput);
-			/*
-			if (i <= 6) {
-			//noglob_table_input_param.push(openfluid.inputs.checkbox['checkbox'+i].objForWindowInput);
-			openfluid.inputs.scroll.windowInput.push(openfluid.inputs.checkbox['checkbox'+i].objForWindowInput);
-			}
-			else {
-			noglob_table_input_param_splitPanel2.push(openfluid.inputs.checkbox['checkbox'+i].objForWindowInput);
-			}
-			*/
 		}
 //console.log("openfluid.inputs.checkbox.windowInput :");
 //console.log(openfluid.inputs.checkbox.windowInput);
         // ----------------------------------------------------------------------
         // Tab (in progress)
         // ----------------------------------------------------------------------		
-        var onglet2 = {
+        
+        if (openfluid.inputs.scrollwms.list.length == 0){ 
+            var v_collapsed0 = true; //fermé
+        }else{
+            v_collapsed0 = false; //ouvert
+        }
+        
+        if (openfluid.inputs.scroll.list.length == 0){
+            var v_collapsed1 = true;
+        }else{
+            v_collapsed1 = false;
+        }
+        
+        if (openfluid.inputs.checkbox.list.length == 0){
+            var v_collapsed2 = true;
+        }else{
+            v_collapsed2 = false;
+        }
+        
+        if (openfluid.inputs.param.list.length == 0){
+            var v_collapsed3 = true;
+        }else{
+            v_collapsed3 = false;
+        }
+        
+        if (openfluid.inputs.coordxy.list.length == 0){
+            var v_collapsed4 = true;
+        }else{
+            v_collapsed4 = false;
+        }
+        
+        if (openfluid.inputs.gml.list.length == 0){
+            var v_collapsed5 = true;
+        }else{
+            v_collapsed5 = false;
+        }
+        
+        var onglet_scroll = {
             closable: true,
             closeAction: 'hide', //FAIL noglob_myPanel.hide,
-			title: OpenLayers.i18n("Paramétrage des indicateurs"),
+			title: OpenLayers.i18n("Valeurs permises au choix"),
             closable: false,
             activate: true,
             collapsible: true,
-            collapsed: true,
-            //width: globalWidth*1.3, // auto provoque un bug de largeur sur Chrome
-			//height:Ext.getBody().getViewSize().height - 123,//62,
-			//y: '90px',//'31px', 
-			//x: '0%',
-            //iconCls: 'windo_icon',
+            collapsed: v_collapsed1,
             plain: true,
             buttonAlign: 'right',
             autoScroll: true, 
             items: [{
                 xtype: 'form',
-				id : 'reportGraphArea2',
-                labelWidth: 300,
+                labelWidth: 250,
                 bodyStyle: "padding:10px;",
                 items: [
-				    openfluid.inputs.param.windowInput,
+//				    openfluid.inputs.param.windowInput,
 					openfluid.inputs.scroll.windowInput,
-					openfluid.inputs.checkbox.windowInput,
-					openfluid.inputs.coordxy.windowInput,
-					fileLoadForm
-
                 ]
             }]
         };
-
-        var onglet3 = {
-            title: OpenLayers.i18n("Selectionner les indicateurs a calculer sur le reseau hydrographique "),
+        
+        var onglet_checkbox = {
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+			title: OpenLayers.i18n("Paramétrage 0/1"),
             closable: false,
             activate: true,
-            region: 'south',
             collapsible: true,
-            collapsed: true,
-            split: true,
+            collapsed: v_collapsed2,
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true, 
             items: [{
                 xtype: 'form',
-                autoWidth: true,
                 labelWidth: 300,
-                padding: 10,
                 bodyStyle: "padding:10px;",
-				layout:'column', 
                 items: [
-                    noglob_table_input_param_splitPanel2
+					openfluid.inputs.checkbox.windowInput,
+                ]
+            }]
+        };
+        var onglet_param = {
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+			title: OpenLayers.i18n("Paramétrage text en entrée"),
+            closable: false,
+            activate: true,
+            collapsible: true,
+            collapsed: v_collapsed3,
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true, 
+            items: [{
+                xtype: 'form',
+                labelWidth: 200,
+                bodyStyle: "padding:10px;",
+                items: [
+					openfluid.inputs.param.windowInput,
+                ]
+            }]
+        };
+        var onglet_coordxy = {
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+			title: OpenLayers.i18n("Choix d'un mpoint sur la carte"),
+            closable: false,
+            activate: true,
+            collapsible: true,
+            collapsed: v_collapsed4,
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true, 
+            items: [{
+                xtype: 'form',
+                labelWidth: 200,
+                bodyStyle: "padding:10px;",
+                items: [
+					openfluid.inputs.coordxy.windowInput,
+                ]
+            }]
+        };
+        var onglet_gml = {
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+			title: OpenLayers.i18n("Uploader un fichier GML"),
+            closable: false,
+            activate: true,
+            collapsible: true,
+            collapsed: v_collapsed5,
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true, 
+            items: [{
+                xtype: 'form',
+                labelWidth: 200,
+                bodyStyle: "padding:10px;",
+                items: [
+					fileLoadForm
                 ]
             }]
         };
 		
-    noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
-            title: OpenLayers.i18n(""),
-            //frame: true, // TEST
-			//closable: false,
-            activate: true,
-            region: 'south',
-            collapsible: true,
-            collapsed: true,
-            split: true,
-            /*items: [{
-                xtype: 'form',
-                autoWidth: true,
-                labelWidth: 300,
-                padding: 10,
-                bodyStyle: "padding:10px;",
-				layout:'column', 
-                items: []}],
-			*/
-        //html: ''//'this is the <b>original</b> content'			
-    });
+        noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
+                title: OpenLayers.i18n("Résultats text"),
+                //frame: true, // TEST
+                //closable: false,
+                activate: true,
+                region: 'south',
+                collapsible: true,
+                collapsed: true,
+                split: true,		
+        });
 	
 
 	
@@ -734,20 +806,29 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
 					}
 					//----------------------------------------------------------------------
 					wmsbox = {
-                        xtype: 'form',
-                        id : 'reportGraphArea',
-                        labelWidth: 200,
-                        bodyStyle: "padding:10px;",
-                        items: [
-                            openfluid.inputs.scrollwms.windowInput
-                            //,openfluid.inputs.param.windowInput,
-                            //openfluid.inputs.scroll.windowInput,
-                            //openfluid.inputs.checkbox.windowInput,
-                            //openfluid.inputs.coordxy.windowInput,
-                            //fileLoadForm
-                        ],		
-                        tbar:[addRefresh], // Pour aligner a droite: tbar:['->', {					
+                        closable: true,
+                        closeAction: 'hide', //FAIL noglob_myPanel.hide,
+                        title: OpenLayers.i18n("Couches WMS"),
+                        closable: false,
+                        activate: true,
+                        collapsible: true,
+                        collapsed: v_collapsed0,
+                        plain: true,
+                        buttonAlign: 'right',
+                        autoScroll: true, 
+                        tbar:['->', addRefresh], // Pour aligner a droite: tbar:['->', {
+                        items: [{
+                            xtype: 'form',
+                            labelWidth: 200,
+                            bodyStyle: "padding:10px;",
+                            items: [
+                                openfluid.inputs.scrollwms.windowInput
+                            ]
+                        }],							
 					};
+            
+            
+            
 				};
         
 		noglob_myPanel = new Ext.Window({
@@ -765,8 +846,11 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
             autoScroll: true,
             items: [
                 wmsbox,	
-                onglet2,//onglet3,
-                noglob_regionContent,
+                onglet_scroll,
+                onglet_checkbox,
+                onglet_param,
+                onglet_gml,
+                noglob_regionContent
                 ],
             // Creation/Ajout des boutons
             fbar: ['->', {
@@ -1007,6 +1091,7 @@ var name_outputs = openfluid.outputs.param.list[i];
                 msg: "Veuillez remplir tous les champs requis (il en reste " + champs_restant + ")."
             });
         }
+        this.win.hide();
     },
 
     /** -----------------------------------------------------------------------------
@@ -1357,7 +1442,7 @@ var name_outputs = openfluid.outputs.wms.list[2];
     destroy: function() {
         this.win.hide();
         this.map = null;
-		console.log('hide');
+		//console.log('hide');
     },
 
 };
