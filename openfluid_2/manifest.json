@@ -4,6 +4,7 @@
         "../../../lib/externals/openlayers/lib/OpenLayers/Format/OWSCommon/v1_1_0.js",
         "../../../lib/externals/openlayers/lib/OpenLayers/Format/WPSDescribeProcess.js",
         "../../../lib/externals/openlayers/lib/OpenLayers/Format/WKT.js",
+        "js/FileUploadField.js",
         "js/WPSAxecute.js",
         "js/main.js"
         
@@ -12,11 +13,13 @@
         "css/main.css"
     ],
     "default_options": {
-        "WPS_URL": "http://coding.umr-lisah.fr/bvservice-openfluid/cgi-bin/pywps.cgi",
+        "WPS_URL": "http://localhost/cgi-bin/mywps.cgi",
         "WPS_identifier": "mhydasopenfluid_sync",
+        "URL_cgi": "http://bvservice.fr/cgi-bin/GetWSList.cgi",
+        "URL_WS": "http://bvservice.fr/geoserver/",
 		"Help_URL": "http://www.openfluid-project.org/",
 		"Metadata_URL": "http://www.openfluid-project.org/",	
-		"globalWidth": "330"
+		"globalWidth": "315"
     },
     "i18n": {
         "en": {
