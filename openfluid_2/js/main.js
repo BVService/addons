@@ -39,7 +39,8 @@ var openfluid = {
                     
                     // Ajouter l'objet openlayer capabilities response to "openfluid.geoworkspace.WSCapabilities"
                     openfluid.geoworkspace.WSCapabilities.push(Cap);
-
+                    
+                    console.log("Couches dans "+ws+" : ")
 
                     for (var i = 0; i < n_layers; i++) {
                         var couche = c.capability.layers[i].name;                       
@@ -53,7 +54,7 @@ var openfluid = {
                     });
                 },
                 callback : function(success){
-                    console.log("nombre de couches dans "+ws+" = "+openfluid.geoworkspace.WSLayersObject.length+1)
+//                    console.log("nombre de couches dans "+ws+" = "+openfluid.geoworkspace.WSLayersObject.length+1)
                 },
             });
 
@@ -69,7 +70,6 @@ var openfluid = {
 				openfluid.inputs.scrollwms[Scrollwms].obj = addObj;
 				openfluid.inputs.scrollwms[Scrollwms].objForWindowInput = null;
 				openfluid.inputs.scrollwms[Scrollwms].scrollwms = null;
-				openfluid.inputs.scrollwms[Scrollwms].refreshedObjForWindowInput = null;
 			},
 		},
         scroll : {
@@ -138,10 +138,11 @@ var openfluid = {
 	}
 }
 
-var noglob_execute_on_off = 0;
+console.log("openfluid object :");
+console.log(openfluid);
+
 var noglob_regionContent = "";
 var noglob_myPanel = "";
-var noglob_liste = "";
 
 GEOR.Addons.openfluid_2 = function(map, options) {
     this.map = map;
@@ -206,7 +207,7 @@ GEOR.Addons.openfluid_2.prototype = {
                     //console.log("ws "+i+" = "+ ws);
                     openfluid.geoworkspace.list[i-1] = ws;
                 }
-                console.log(openfluid.geoworkspace.list);
+//                console.log(openfluid.geoworkspace.list);
             },
             failure: function (response, request) {
                 Ext.MessageBox.alert('failure', response.responseText);
@@ -301,8 +302,8 @@ GEOR.Addons.openfluid_2.prototype = {
     onDescribeProcess: function(process) {
         // onDescribeProcess lists the necessary inputs
         findDataInputsByIdentifier = function(datainputs, identifier) {
-            var datainput, i;
-            for (i = 0; i < datainputs.length; i++) {
+            //var datainput, i;
+            for (var i = 0; i < datainputs.length; i++) {
                 if (datainputs[i].identifier === identifier) {
                     datainput = datainputs[i]; // console.log(datainputs[i]) =  Object { maxOccurs=1, minOccurs=0, identifier="L_input_param1", plus...}
                     break;
@@ -314,7 +315,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs param 		
         // ----------------------------------------------------------------------
-	    for (i = 0; i < openfluid.inputs.param.list.length; i++) {	
+	    for (var i = 0; i < openfluid.inputs.param.list.length; i++) {	
             var name_inputs = openfluid.inputs.param.list[i];
 			openfluid.inputs.param.addParam(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 		}
@@ -323,7 +324,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // Data input WMS 	
         // ----------------------------------------------------------------------	
         // Add the title of each WMS input WMS -- openfluid.inputs.scrollwms.list
-		for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
+		for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
             var name_inputs = openfluid.inputs.scrollwms.list[i];
             openfluid.inputs.scrollwms.addScrollwms(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 		}
@@ -331,7 +332,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs Combobox
         // ----------------------------------------------------------------------		
-        for (i = 0; i < openfluid.inputs.scroll.list.length; i++) {
+        for (var i = 0; i < openfluid.inputs.scroll.list.length; i++) {
             var name_inputs = openfluid.inputs.scroll.list[i]; 
 			openfluid.inputs.scroll.addScroll(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 			trashArray = [];
@@ -345,7 +346,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs Coordinates
         // ----------------------------------------------------------------------
-		for (i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
+		for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
             var name_inputs = openfluid.inputs.coordxy.list[i];
             openfluid.inputs.coordxy.addCoordxy(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 		}
@@ -353,7 +354,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs Checkbox 
         // ----------------------------------------------------------------------		
-	    for (i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
+	    for (var i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
             var name_inputs = openfluid.inputs.checkbox.list[i];
 			openfluid.inputs.checkbox.addCheckbox(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 		}
@@ -361,7 +362,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs GML 
         // ----------------------------------------------------------------------		
-	    for (i = 0; i < openfluid.inputs.gml.list.length; i++) {
+	    for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
             var name_inputs = openfluid.inputs.gml.list[i];
 			openfluid.inputs.gml.addGml(name_inputs,findDataInputsByIdentifier(process.dataInputs, name_inputs));
 		}
@@ -394,11 +395,11 @@ GEOR.Addons.openfluid_2.prototype = {
 		openfluid.inputs.param.windowInput = [];
 		//var noglob_table_input_param_splitPanel1 = [];
 		//var noglob_table_input_param_splitPanel2 = [];
-		for (i = 0; i < openfluid.inputs.param.list.length; i++) {
+		for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
             var name_inputs = openfluid.inputs.param.list[i];
             openfluid.inputs.param[name_inputs].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
                 fieldLabel: openfluid.inputs.param[name_inputs].obj.title,//wps_Config_param1.input_param1_fromPython.title,
-                name: "uselessname"+i,
+                name: "param"+i,
                 width: FIELD_WIDTH,
                 allowBlank: false,
                 labelSeparator: OpenLayers.i18n("labelSeparator"),
@@ -428,62 +429,6 @@ GEOR.Addons.openfluid_2.prototype = {
         }, base));
         
         // ----------------------------------------------------------------------
-        // WMS inputs
-        // ----------------------------------------------------------------------		       
-        // PART 1
-		layer_noglob_liste_WFS = [];
-		openfluid.inputs.scrollwms.windowInput = [];
-        var noglob_addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_noglob_liste_WFS
-            //var empty = true;
-            layerStore.each(function(record) {
-                var layer = record.get('layer');
-                var queryable = record.get('queryable');
-                var hasEquivalentWFS = record.hasEquivalentWFS();
-                if (queryable && hasEquivalentWFS) {
-                    //empty = false;
-
-                    var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-                    var rec = new ObjectRecordType({
-                        text: layer.name,
-                        value: record
-                    })
-
-                    noglob_liste = [rec.data.text, rec.data.value];
-                    layer_noglob_liste_WFS.push(noglob_liste);
-                }
-            });
-			return layer_noglob_liste_WFS;
-        };
-        noglob_addComboxFieldItemsWFS();
-        warningMsg_wms = {
-            border: false,
-            iconCls: 'grey_warn',
-            msg: 'Seuls les WMS déjà chargés avant la première ouverture de l\'addon seront utilisables.'
-        };
-
-        
-		tmpStore = new Ext.data.SimpleStore({
-                    fields: ['text', 'value'],
-                    data: layer_noglob_liste_WFS
-					//,storeId: 'myStore'
-                });
-        
-		// PART 2
-		for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
-            var name_inputs = openfluid.inputs.scrollwms.list[i];
-			openfluid.inputs.scrollwms[name_inputs].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
-                name: "wms",
-                fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
-                emptyText: openfluid.inputs.scrollwms[name_inputs].obj.abstract,
-                width: FIELD_WIDTH,
-                store: tmpStore,
-				listeners: {
-				}				
-            }, base));
-			openfluid.inputs.scrollwms.windowInput.push(openfluid.inputs.scrollwms[name_inputs].objForWindowInput);
-        }
-        
-        // ----------------------------------------------------------------------
         // Combobox inputs
         // ----------------------------------------------------------------------			 
 		openfluid.inputs.scroll.windowInput = [];
@@ -508,10 +453,10 @@ GEOR.Addons.openfluid_2.prototype = {
         // PART 1
 		openfluid.inputs.gml.windowInput = [];
 // Valable pour un seul GML en entrée !
-        if (openfluid.inputs.gml.list.length >= 1) {
+        if (openfluid.inputs.gml.list.length > 0) {
 
 //            for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
-    var name_inputs = openfluid.inputs.gml.list[0];
+            var name_inputs = openfluid.inputs.gml.list[0];
 //    console.log(name_inputs);
 //                toComptGMLInputs.IdGML[i] = name_inputs;
 //                openfluid.inputs.gml.windowInput.push(toComptGMLInputs);
@@ -605,7 +550,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 trigger: function(e) {
                     var lonlat = map.getLonLatFromPixel(e.xy);
                     clickbv.deactivate();
-					for (i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
+					for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
                         var name_inputs = openfluid.inputs.coordxy.list[i];
 							openfluid.inputs.coordxy[name_inputs].coordxyStore = lonlat.lat; 
 							alert("Input 1 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
@@ -622,7 +567,7 @@ GEOR.Addons.openfluid_2.prototype = {
         map.addControl(clickbv);
 
 		openfluid.inputs.coordxy.windowInput = [];
-		for (i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
+		for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
             var name_inputs = openfluid.inputs.coordxy.list[i];
             openfluid.inputs.coordxy[name_inputs].objForWindowInput = new Ext.Button({
                 iconCls: 'add_icon',
@@ -641,7 +586,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // Checkbox inputs
         // ----------------------------------------------------------------------
 		openfluid.inputs.checkbox.windowInput = [];
-		for (i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
+		for (var i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
             var name_inputs = openfluid.inputs.checkbox.list[i];
 			openfluid.inputs.checkbox[name_inputs].objForWindowInput = new Ext.form.Checkbox({ // flag
 					id: 'checkbox'+i,
@@ -783,7 +728,7 @@ GEOR.Addons.openfluid_2.prototype = {
         var onglet_coordxy = {
             closable: true,
             closeAction: 'hide', //FAIL noglob_myPanel.hide,
-			title: OpenLayers.i18n("Choix d'un mpoint sur la carte"),
+			title: OpenLayers.i18n("Choix d'un point sur la carte"),
             closable: false,
             activate: true,
             collapsible: true,
@@ -834,94 +779,135 @@ GEOR.Addons.openfluid_2.prototype = {
                 autoScroll: true,
                 bodyStyle: { maxHeight: '90px' },
         });
-
         // ----------------------------------------------------------------------
-        // Window : fields and buttons
+        // WMS inputs fields
+        // ----------------------------------------------------------------------		       
+        // PART 1
+		layer_noglob_liste_WFS = [];
+		openfluid.inputs.scrollwms.windowInput = [];
+        noglob_addComboxFieldItemsWFS = function() { // Fonctionne pour le WMS et WFS, sert a editer layer_noglob_liste_WFS
+            //var empty = true;
+            layerStore.each(function(record) {
+                var layer = record.get('layer');
+                var queryable = record.get('queryable');
+                var hasEquivalentWFS = record.hasEquivalentWFS();
+                if (queryable && hasEquivalentWFS) {
+                    //empty = false;
+
+                    var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
+                    var rec = new ObjectRecordType({
+                        text: layer.name,
+                        value: record
+                    })
+//console.log(rec.data.text);
+//console.log(rec.data.value);
+                    var liste = [rec.data.text, rec.data.value];
+                    layer_noglob_liste_WFS.push(liste);
+                }
+            });
+			return layer_noglob_liste_WFS;
+        };
+        noglob_addComboxFieldItemsWFS();
+        
+        WMSStore = new Ext.data.SimpleStore({
+                            fields: ['text', 'value'],
+                            data: layer_noglob_liste_WFS
+                        });
+        
+//        GEOR.util.infoDialog({
+//            msg: "Seuls les WMS déjà chargés avant la première ouverture de l\'addon seront utilisables."
+//        });
+        
+		// PART 2
+		for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwms.list[i];
+			openfluid.inputs.scrollwms[name_inputs].objForWindowInput =	new Ext.form.ComboBox(Ext.apply({
+                name: "wms",
+                fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
+                emptyText: openfluid.inputs.scrollwms[name_inputs].obj.abstract,
+                width: FIELD_WIDTH,
+                store: WMSStore,
+				listeners: {
+				}				
+            }, base));
+			openfluid.inputs.scrollwms.windowInput.push(openfluid.inputs.scrollwms[name_inputs].objForWindowInput);
+        }
+        // ----------------------------------------------------------------------
+        // Refresh WMS inputs fields
         // ----------------------------------------------------------------------
 		addRefresh = {};
-		var wmsbox = {};
-		if (openfluid.inputs.scrollwms.list.length > 0) {	
-			addRefresh = 	{ 
-					text : 'Rafraichir',
-					tooltip:'Rafraichir les couches chargees',
-					iconCls: 'arrow_refresh',//'add',
-					handler: 
-					//----------------------------------------------------------------------
-					//Refresh wmsLayers
-					//----------------------------------------------------------------------
-					
-						function() {
-							layer_noglob_liste_WFS = [];
-							noglob_addComboxFieldItemsWFS();					
-							// Create refresh wms inputs
-							for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
-                                var name_inputs = openfluid.inputs.scrollwms.list[i];
-                                openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput = new Ext.form.ComboBox({
-								name: "wms",
-								fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
-								emptyText: openfluid.inputs.scrollwms[name_inputs].obj.abstract,
-								width: FIELD_WIDTH,
-								store: new Ext.data.SimpleStore({
-									fields: ['text', 'value'],
-									data: layer_noglob_liste_WFS
-								}),
-								forceSelection: true,
-								editable: false,
-								allowBlank: true,
-								triggerAction: 'all',
-								mode: 'local',
-								valueField: 'value',
-								displayField: 'text',
-								labelWidth: 200				
-							});
-							}
+		var onglet_scrollwms = {};
+		if (openfluid.inputs.scrollwms.list.length > 0) {
+			addRefresh = {
+                text : 'Rafraichir',
+                tooltip:'Rafraichir les couches chargees',
+                iconCls: 'arrow_refresh',//'add',
+                handler: 
+                //----------------------------------------------------------------------
+                //Refresh wmsLayers
+                //----------------------------------------------------------------------
 
-							// Remove all WMS inputs in the window
-							for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
-                                console.log(Ext.getCmp('reportGraphArea'));
-								for (var key in Ext.getCmp('reportGraphArea').items.items) { // flag il reste bloque sur les selection scrollwms du premer pas des rafraichis
-									if (Ext.getCmp('reportGraphArea').items.items.hasOwnProperty(key)) {
-										if (Ext.getCmp('reportGraphArea').items.items[key].name == "wms") { // si en trouve un
-											Ext.getCmp('reportGraphArea').remove(Ext.getCmp('reportGraphArea').items.items[key],true); // le retire
-										}
-									}
-								}
-							}
-							// Add refresh wms inputs
-							for (i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
+                    function() {
+                        layer_noglob_liste_WFS = [];
+                        noglob_addComboxFieldItemsWFS();					
+                        // Create refresh wms inputs
+                        for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
+                            var name_inputs = openfluid.inputs.scrollwms.list[i];
+                            openfluid.inputs.scrollwms[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
+                                name: "wms",
+                                fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
+                                emptyText: openfluid.inputs.scrollwms[name_inputs].obj.abstract,
+                                width: FIELD_WIDTH,
+                                store: new Ext.data.SimpleStore({
+                                            fields: ['text', 'value'],
+                                            data: layer_noglob_liste_WFS
+                                        })			
+                            }, base));
+                            // Remove all WMS inputs in the window
+                            for (var key in Ext.getCmp('reportGraphArea').items.items) { // flag il reste bloque sur les selection scrollwms du premer pas des rafraichis
+
+                                if (Ext.getCmp('reportGraphArea').items.items.hasOwnProperty(key)) {
+                                    if (Ext.getCmp('reportGraphArea').items.items[key].name == "wms") { // si en trouve un
+                                        Ext.getCmp('reportGraphArea').remove(Ext.getCmp('reportGraphArea').items.items[key],true); // le retire
+                                    }
+                                }
+                            }
+                        }
+                // Add refresh wms inputs
+                for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
 var name_inputs = openfluid.inputs.scrollwms.list[i];
-										Ext.getCmp('reportGraphArea').add(openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput); // ajoute un nouveau
-										}
-
-							// Reload window
-							noglob_myPanel.hide();  
-							noglob_myPanel.show();						
-						}
-					}
-					//----------------------------------------------------------------------
-					wmsbox = {
-                        closable: true,
-                        closeAction: 'hide', //FAIL noglob_myPanel.hide,
-                        title: OpenLayers.i18n("Couches WMS"),
-                        closable: false,
-                        activate: true,
-                        collapsible: true,
-                        collapsed: v_collapsed0,
-                        plain: true,
-                        buttonAlign: 'right',
-                        autoScroll: true,
-                        bodyStyle: { maxHeight: '90px' },
-                        tbar:['->', addRefresh], // Pour aligner a droite: tbar:['->', {
-                        items: [{
-                            xtype: 'form',
-                            labelWidth: 200,
-                            bodyStyle: "padding:10px;",
-                            items: [
-                                openfluid.inputs.scrollwms.windowInput
-                            ]
-                        }],							
-					};
-				};
+                            Ext.getCmp('reportGraphArea').add(openfluid.inputs.scrollwms[name_inputs].objForWindowInput); // ajoute un nouveau
+                }
+                // Reload window
+                noglob_myPanel.hide();  
+                noglob_myPanel.show();						
+                }
+            }
+            //----------------------------------------------------------------------
+            onglet_scrollwms = {
+                closable: true,
+                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+                title: OpenLayers.i18n("Valeurs permises au choix"),
+                closable: false,
+                activate: true,
+                collapsible: true,
+                collapsed: v_collapsed0,
+                plain: true,
+                buttonAlign: 'right',
+                autoScroll: true,
+                bodyStyle: { maxHeight: '90px' },
+                items: [{
+                    xtype: 'form',
+                    id : 'reportGraphArea',
+                    labelWidth: 200,
+                    bodyStyle: "padding:10px;",
+                    items: [
+                        openfluid.inputs.scrollwms.windowInput
+                    ]
+                }],		
+                tbar:['->', addRefresh], // Pour aligner a droite: tbar:['->', {					
+            };
+        };
         
 		noglob_myPanel = new Ext.Window({
             // Config globale
@@ -937,11 +923,12 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
             autoScroll: true,
             items: [
                 onglet_scrollWS,
-                wmsbox,	
+                onglet_scrollwms,	
                 onglet_scroll,
                 onglet_checkbox,
                 onglet_param,
                 onglet_gml,
+                onglet_coordxy,
                 noglob_regionContent
                 ],
             // Creation/Ajout des boutons
@@ -967,11 +954,7 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
                 text: OpenLayers.i18n("Exécuter"),
                 handler: this.ExecuteWps,
                 scope: this
-            }],
-		   noglob_listeners:{
-				hide:this.destroy,
-				scope:this
-			},			
+            }],		
         });	
 		return noglob_myPanel;
 		
@@ -1007,28 +990,15 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
 		for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) { //openfluid.inputs.param['param'+i].objForWindowInput
 			// si pas de refresh l'objet est null
             var name_inputs = openfluid.inputs.scrollwms.list[i];
-			if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput === null) {
-				// si vide 
-				if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() == "") {
-					tmpValue = "null"
-				}
-				// si select
-				if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() != "") {
-					tmpValue = openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue().data.WFS_typeName;
-				}
-			}
-			//si refresh
-			else if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput !== null){
-				// si vide 
-				if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue() == "") {
-					//console.log('refresh - vide')
-					tmpValue = "null2";
-				}
-				// si select
-				if (openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue() != "") {
-					tmpValue = openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms[name_inputs].refreshedObjForWindowInput.getValue().data.WFS_typeName;
-				}
-			}	
+
+            if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() == "") {
+                tmpValue = "null"
+            }
+            // si select
+            if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() != "") {
+                tmpValue = openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue().data.WFS_URL + openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue().data.WFS_typeName;
+            }
+            
 			var tmpforXml = {
 				identifier: name_inputs,
 				data: {
@@ -1076,10 +1046,8 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
         // ----------------------------------------------------------------------
         // Inputs GML
         // ----------------------------------------------------------------------
-        if (openfluid.inputs.gml.list.length > 0) {
-            console.log(openfluid.inputs.gml.list.length);
+//        if (openfluid.inputs.gml.list.length > 0) {
 			for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
-                console.log(i);
                 var name_inputs = openfluid.inputs.gml.list[i];
 				var tmpGMLforXml = {
 					identifier: name_inputs,
@@ -1089,12 +1057,12 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
 						}
 					}
 				}
-                console.log(openfluid.inputs.gml[name_inputs]);
+//                console.log(openfluid.inputs.gml[name_inputs]);
 				if (typeof(openfluid.inputs.gml[name_inputs].gmlValue) == "string") {
 					openfluid.inputs.forXmlPost.push(tmpGMLforXml);
 				}
 			}
-        }
+//        }
         // ----------------------------------------------------------------------
         // Inputs Checkbox
         // ----------------------------------------------------------------------
@@ -1159,15 +1127,15 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
                 }
             });
 
-            if (noglob_execute_on_off == 0) {
-                noglob_execute_on_off = 1;
-                OpenLayers.Request.POST({
-                    url: WPS_URL, // var contenant l'adresse recuperee auparavant dans le manifest.json
-                    data: xmlString,
-                    success: this.onExecuted,
-                    failure: this.onError
-                });
-            }
+//            if (noglob_execute_on_off == 0) {
+//                noglob_execute_on_off = 1;
+            OpenLayers.Request.POST({
+                url: WPS_URL, // var contenant l'adresse recuperee auparavant dans le manifest.json
+                data: xmlString,
+                success: this.onExecuted,
+                failure: this.onError
+            });
+//            }
         }
 		else {
             mask_loader.hide();
@@ -1223,7 +1191,7 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
 					if (identifier == name_outputs) { // flag prob avec le i, peut etre en redondance car deja un i dans la boucle ??,
 						openfluid.outputs.param.addParam(name_outputs,literalData[0].firstChild.nodeValue);
 					}
-					noglob_execute_on_off = 0; // Limite le nombre de process wps a la fois
+//					noglob_execute_on_off = 0; // Limite le nombre de process wps a la fois
 				}
 			}	
         }
@@ -1241,12 +1209,11 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
         var c = [];
         var layerRecord = [];
         var clone_layer = [];
-        var mapforzoom = [];
-        var llbbox = [];
-
-        if (openfluid.outputs.wms.list.length >= 1) {
+        tester = true;
+        
+        if (openfluid.outputs.wms.list.length > 0) {
             // Add wms outputs layers dynamicly
-            for (i = 0; i < openfluid.outputs.wms.list.length; i++) {
+            for (var i = 0; i < openfluid.outputs.wms.list.length; i++) {
                 var name_outputs = openfluid.outputs.wms.list[i]; 
                     layerUrlparse[i] = openfluid.outputs.wms[name_outputs].wmsValue.substr(0, openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
                     layerNameparse[i] = openfluid.outputs.wms[name_outputs].wmsValue.substring(openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
@@ -1258,7 +1225,10 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
                 // PART 2 : Ajout du WMS	
                     wmsdyn[i] = new OpenLayers.Layer.WMS(name_outputs,
                             layerUrlparse[i], 
-                            {'layers': layerNameparse[i],transparent: true} //, transparent: true, format: 'image/gif'
+                            {'layers': layerNameparse[i],
+                             transparent: true,
+                             queryable: true}
+                            //, transparent: true, format: 'image/gif'
                             //,{isBaseLayer: true}
                             );
 
@@ -1270,11 +1240,12 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
                         type: "WMS"
                     });
 
-                    clone_layer[i] = layerRecord[i].clone(); 
+                    clone_layer[i] = layerRecord[i].clone();                 
                     clone_layer[i].get("layer").setName(layerNameparse[i]);
                     layerStore.addSorted(clone_layer[i]);
             }
-            // Zoom sur le premier wms charge
+                            
+            // Zoom to first output layer
 
             /**
              * Method: zoomToLayerRecordExtent from GEOR.managelayers
@@ -1333,15 +1304,19 @@ var name_inputs = openfluid.inputs.scrollwms.list[i];
         // Display all wps text outputs (L_output_param) on panel
         // ----------------------------------------------------------------------		
         var TextOut = [];
-        for (var i = 0; i < openfluid.outputs.param.list.length; i++) {
-            var name_outputs = openfluid.outputs.param.list[i]; 
-            var num = i+1;
-            var n = num.toString(); 
-			TextOut[i] = '<br>' + n +' - ' + openfluid.outputs.param[name_outputs].paramValue.replace(/(\r\n|\n|\r)/gm,"<br>") + '<br>';
-        }
+        if (openfluid.outputs.param.list.length > 0) {
+            console.log(openfluid.outputs.param.list);
+            for (var i = 0; i < openfluid.outputs.param.list.length; i++) {
+                var name_outputs = openfluid.outputs.param.list[i]; 
+                var num = i+1;
+                var n = num.toString(); 
+                TextOut[i] = '<br>' + n +' - ' + openfluid.outputs.param[name_outputs].paramValue.replace(/(\r\n|\n|\r)/gm,"<br>") + '<br>';
+            }
         noglob_regionContent.update(TextOut);
-        noglob_myPanel.show();
+        
+        }
         GEOR.waiter.hide();
+        noglob_myPanel.show();
         // ----------------------------------------------------------------------
         // WMC
         // ----------------------------------------------------------------------
