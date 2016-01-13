@@ -2,10 +2,51 @@ Ext.namespace("GEOR.Addons");
 
 var noglob_regionContent = "";
 var noglob_myPanel = "";
-var liste_WFS = [];
-var liste_WFS_WS = [];
+
 var WFSStore = {};
 var All_WFS_list = [];
+
+var WCSStore = {};
+var All_WCS_list = [];
+
+/**
+ * Method: zoomToLayerRecordExtent from GEOR.managelayers
+ *
+ * Parameters:
+ * r - {GeoExt.data.LayerRecord}
+ */
+var zoomToLayerRecordExtent = function (r) {
+    var map = r.get('layer').map,
+        mapSRS = map.getProjection(),
+        zoomed = false,
+        bb = r.get('bbox');
+
+    for (var key in bb) {
+        if (!bb.hasOwnProperty(key)) {
+            continue;
+        }
+        if (key === mapSRS) {
+            map.zoomToExtent(
+                OpenLayers.Bounds.fromArray(bb[key].bbox)
+            );
+            zoomed = true;
+            break;
+        }
+    }
+    if (!zoomed) {
+        // use llbbox
+        var llbbox = OpenLayers.Bounds.fromArray(
+            r.get('llbbox')
+        );
+        llbbox.transform(
+            new OpenLayers.Projection('EPSG:4326'),
+            map.getProjectionObject()
+        );
+        map.zoomToExtent(llbbox);
+    }
+};
+
+var layerStore = Ext.getCmp("mappanel").layers;
 
 var openfluid = {
     geoworkspace: {
@@ -13,95 +54,133 @@ var openfluid = {
         WSField: null,
         WSCapabilities: [],
         WSLayersObject: [],
-        GetWFSLayers: function (URL_geoserver, ws) {
+        GetWMSLayers: function (URL_geoserver, ws) {
+            noglob_myPanel.getEl().mask("Loading layers...", "x-mask-loading"); // mask window 
+
+            /**
+             * Property: observable
+             * {Ext.util.Obervable}
+             */
+            var observable = new Ext.util.Observable();
+            observable.addEvents(
+                /**
+                 * Event: selectstyle
+                 * Fires when a new wms layer style has been selected
+                 */
+                "selectstyle",
+                /**
+                 * Event: beforecontextcleared
+                 * Fired before all layers are removed from map
+                 */
+                "beforecontextcleared"
+            );
+            /**
+             * Method: removeAllLayers
+             *
+             * Parameters:
+             * map - {OpenLayers.Map}
+             */
+            var removeAllLayers = function (map) {
+                fakeLayers = [];
+                // warn other modules about what's goign on
+                // (gfi, selectfeature, querier, editor, styler)
+                // so that they can properly shutdown.
+                observable.fireEvent("beforecontextcleared");
+                // remove layers except the lowest index one
+                // (our fake base layer) and "our" layers (eg: measure, print, etc)
+                var re = /^(__georchestra|OpenLayers.Handler)/;
+                for (var i = map.layers.length - 1; i >= 1; i--) {
+                    var layer = map.layers[i];
+                    if (!re.test(layer.name)) {
+                        map.removeLayer(layer);
+                        //if (! layer.isBaseLayer){}
+                    }
+                }
+            };
+            removeAllLayers(layerStore.map);
+
             var UrlWs = URL_geoserver + ws + "/ows";
-            var wmsCapabilitiesFormat = new OpenLayers.Format.WFSCapabilities();
-            var onLayerLoadError = function () {
-                alert("!!!");
-            }
-
-            noglob_myPanel.getEl().mask("Loading...","x-mask-loading"); // mask window 
-            
-            OpenLayers.Request.GET({
-                url: UrlWs,
-                params: {
-                    SERVICE: 'WFS',
-                    VERSION: "1.0.0", // For example, '1.1.1'
-                    REQUEST: 'GetCapabilities'
+            var store = GEOR.ows.WMSCapabilities({
+                storeOptions: {
+                    url: UrlWs.replace(/\?$/, '')
                 },
-                success: function (r) {
-                    var doc = r.responseXML;
-                    if (!doc || !doc.documentElement) {
-                        doc = r.responseText;
+                success: function (store, records) {
+                    for (var i = 0; i < records.length; i++) {
+                        var record = records[i];
+                        var layer = record.get("layer");
+                        var data = record.data;
+                        var layerName = data.name;
+                        var index = store.find("name", layerName);
+                        if (index < 0) {
+                            noglob_myPanel.getEl().unmask(); // unmask window
+                            GEOR.util.errorDialog({
+                                msg: tr("layerfinder.layer.unavailable", {
+                                    'NAME': layerName
+                                })
+                            });
+                            return;
+                        }
+                        var r = records[index];
+                        var srs = layerStore.map.getProjection();
+                        if (!r.get('srs') || (r.get('srs')[srs] !== true)) {
+                            noglob_myPanel.getEl().unmask(); // unmask window
+                            GEOR.util.errorDialog({
+                                msg: tr("Layer projection is not compatible")
+                            });
+                            return;
+                        }
+                        // Set the copyright information to the "attribution" field
+                        if (data.rights && !r.get("attribution")) {
+                            r.set("attribution", {
+                                title: data.rights
+                            });
+                        }
+                        // If we have a metadataURL coming from the catalog,
+                        // we use it instead of the one we get from the capabilities
+                        // (as asked by Lydie - see http://applis-bretagne.fr/redmine/issues/1599#note-5)
+                        if (data.metadataURL) {
+                            r.set("metadataURLs", [data.metadataURL]);
+                        }
+                        layerStore.addSorted(r);
                     }
-
-                    var c = wmsCapabilitiesFormat.read(doc);
-//console.log(c)
-                    if (!c || !c.capability) {
-                        onLayerLoadError();
-                        return;
-                    }
-
-                    // Here is result, do whatever you want with it
-//                        var n_layers = c.capability.layers.length;
-                    var n_layers = c.featureTypeList.featureTypes.length;
-                    var Cap = c.capability;
-
-                    // Ajouter l'objet openlayer capabilities response to "openfluid.geoworkspace.WSCapabilities"
-//                        openfluid.geoworkspace.WSCapabilities.push(Cap);
-
-//                        console.log("Couches dans " + ws + " : ")
-
-                    liste_WFS_WS = []; // init liste
-                    for (var i = 0; i < n_layers; i++) {
-//                            var couche = c.capability.layers[i].name;
-//                            var couche = c.capability.layers[i].title;
-                        var url = c.service.onlineResource
-                        var namespace= c.featureTypeList.featureTypes[i].name
-                        var titre = c.featureTypeList.featureTypes[i].title
-
-                        var url_name = url+'?'+namespace
-
-                        var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-                        var rec = new ObjectRecordType({
-                                text: titre,
-                                value: url_name
-                            })
-
-                        var ArrayWFS = [rec.data.text, rec.data.value];
-//                            console.log(listeWFS);  
-
-                        liste_WFS_WS.push(ArrayWFS)
-                    }
-                    //All_WFS_list = liste_WFS.concat(liste_WFS_WS);
-//console.log(All_WFS_list);  
-                },
-                failure: function (r) {
-                    GEOR.util.errorDialog({
-                        msg: OpenLayers.i18n('Server unavailable')
-                    });
-                },
-                callback: function (success) {
-                    console.log("nombre de couches dans "+ws+" = "+openfluid.geoworkspace.WSLayersObject.length+1)
+                    // Zoom to the 2ed layer
+                    zoomToLayerRecordExtent(records[1])
                     noglob_myPanel.getEl().unmask(); // unmask window
                 },
+                failure: function () {
+                    noglob_myPanel.getEl().unmask(); // unmask window
+                    GEOR.util.errorDialog({
+                        msg: tr("Unreachable server or insufficient rights")
+                    });
+                }
             });
 
         },
-        
+
     },
     inputs: {
         list: [],
         forXmlPost: [],
-        scrollwms: {
+        scrollwfs: {
             list: [],
-            addScrollwms: function (Scrollwms, addObj) {
-                openfluid.inputs.scrollwms[Scrollwms] = {
+            addScrollwfs: function (Scrollwfs, addObj) {
+                openfluid.inputs.scrollwfs[Scrollwfs] = {
                     obj: null
                 }
-                openfluid.inputs.scrollwms[Scrollwms].obj = addObj;
-                openfluid.inputs.scrollwms[Scrollwms].objForWindowInput = null;
-                openfluid.inputs.scrollwms[Scrollwms].scrollwms = null;
+                openfluid.inputs.scrollwfs[Scrollwfs].obj = addObj;
+                openfluid.inputs.scrollwfs[Scrollwfs].objForWindowInput = null;
+                openfluid.inputs.scrollwfs[Scrollwfs].scrollwfs = null;
+            },
+        },
+        scrollwcs: {
+            list: [],
+            addScrollwcs: function (Scrollwcs, addObj) {
+                openfluid.inputs.scrollwcs[Scrollwcs] = {
+                    obj: null
+                }
+                openfluid.inputs.scrollwcs[Scrollwcs].obj = addObj;
+                openfluid.inputs.scrollwcs[Scrollwcs].objForWindowInput = null;
+                openfluid.inputs.scrollwcs[Scrollwcs].scrollwcs = null;
             },
         },
         scroll: {
@@ -184,8 +263,8 @@ var openfluid = {
     }
 }
 
-console.log("openfluid object :");
-console.log(openfluid);
+//console.log("openfluid object :");
+//console.log(openfluid);
 
 
 GEOR.Addons.openfluid_2 = function (map, options) {
@@ -200,7 +279,6 @@ GEOR.Addons.openfluid_2.prototype = {
     WPS_identifier: null,
     show_help: null,
     win_help: null,
-    layerStore: null,
     Help_URL: null,
     Metadata_URL: null,
     globalWidth: null,
@@ -215,7 +293,6 @@ GEOR.Addons.openfluid_2.prototype = {
         Help_URL = this.options.Help_URL;
         Metadata_URL = this.options.Metadata_URL;
         globalWidth = this.options.globalWidth;
-        layerStore = Ext.getCmp("mappanel").layers;
 
         if (this.wpsInitialized === false) {
             this.describeProcess(WPS_URL, WPS_identifier);
@@ -232,7 +309,6 @@ GEOR.Addons.openfluid_2.prototype = {
         });
         return this.item;
     },
-
 
     GetWorkspaces: function () {
 
@@ -274,7 +350,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 "IDENTIFIER": identifier // Identifier of the WPS (manifest.js)
             },
             success: function (response) {
-                var wpsProcess = new OpenLayers.Format.WPSDescribeProcess().read(response.responseText).processDescriptions[identifier]; // wpsProcess = [object Object] 
+                var wpsProcess = new OpenLayers.Format.WPSDescribeProcess().read(response.responseText).processDescriptions[identifier];
 
                 // ----------------------------------------------------------------------
                 // Course inputs
@@ -293,8 +369,11 @@ GEOR.Addons.openfluid_2.prototype = {
                         case (openfluid.inputs.list[i].slice(0, 13) == "L_input_param"):
                             openfluid.inputs.param.list.push(openfluid.inputs.list[i]);
                             break;
-                        case (openfluid.inputs.list[i].slice(0, 11) == "L_input_wms"):
-                            openfluid.inputs.scrollwms.list.push(openfluid.inputs.list[i]);
+                        case (openfluid.inputs.list[i].slice(0, 11) == "L_input_wfs"):
+                            openfluid.inputs.scrollwfs.list.push(openfluid.inputs.list[i]);
+                            break;
+                        case (openfluid.inputs.list[i].slice(0, 11) == "L_input_wcs"):
+                            openfluid.inputs.scrollwcs.list.push(openfluid.inputs.list[i]);
                             break;
                         case (openfluid.inputs.list[i].slice(0, 14) == "L_input_scroll"):
                             openfluid.inputs.scroll.list.push(openfluid.inputs.list[i]);
@@ -364,13 +443,22 @@ GEOR.Addons.openfluid_2.prototype = {
         }
 
         // ----------------------------------------------------------------------
-        // Data input WMS 	
+        // Data input WFS 	
         // ----------------------------------------------------------------------	
-        // Add the title of each WMS input WMS -- openfluid.inputs.scrollwms.list
-        for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
-            var name_inputs = openfluid.inputs.scrollwms.list[i];
-            openfluid.inputs.scrollwms.addScrollwms(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
-//console.log(openfluid.inputs.scrollwms[name_inputs].obj)
+        // Add the title of each WMS input WMS -- openfluid.inputs.scrollwfs.list
+        for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwfs.list[i];
+            openfluid.inputs.scrollwfs.addScrollwfs(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
+            //console.log(openfluid.inputs.scrollwfs[name_inputs].obj)
+        }
+        // ----------------------------------------------------------------------
+        // Data input WCS 	
+        // ----------------------------------------------------------------------	
+        // Add the title of each WMS input WMS -- openfluid.inputs.scrollwcs.list
+        for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwcs.list[i];
+            openfluid.inputs.scrollwcs.addScrollwcs(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
+            //console.log(openfluid.inputs.scrollwcs[name_inputs].obj)
         }
 
         // ----------------------------------------------------------------------
@@ -433,117 +521,205 @@ GEOR.Addons.openfluid_2.prototype = {
                 labelWidth: 200,
                 listWidth: 'auto' // dropdown list width
             };
+
+        baseOnglet = {
+            closable: true,
+            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            closable: false,
+            activate: true,
+            collapsible: true,
+            collapsed: false, //ouvert
+            plain: true,
+            buttonAlign: 'right',
+            autoScroll: true
+        };
         // ----------------------------------------------------------------------
-        // WMS inputs fields
+        // WorkSpaces field
         // ----------------------------------------------------------------------		       
         // PART 1
-        
-        openfluid.inputs.scrollwms.windowInput = [];
-        addComboboxItemsWFS = function () {
-            //liste_WFS = [];
+        openfluid.geoworkspace.WSField = new Ext.form.ComboBox(Ext.apply({
+            name: "WS",
+            editable: false,
+            fieldLabel: "Workspaces list",
+            emptyText: "Chose a workspace",
+            width: FIELD_WIDTH,
+            triggerAction: 'all',
+            store: openfluid.geoworkspace.list,
+            listeners: {
+                'select': function (records) { // select : quand a choisi un champ de la cbbox
+                    var ws = records.value;
+                    openfluid.geoworkspace.GetWMSLayers(URL_WS, ws);
+                },
+                scope: this
+            },
+        }, base));
+
+        // ----------------------------------------------------------------------
+        // Get WFS & WCS layers from layersStore
+        // ----------------------------------------------------------------------		             
+        openfluid.inputs.scrollwfs.windowInput = [];
+        openfluid.inputs.scrollwcs.windowInput = [];
+        addComboboxItemsWMS = function () {
             All_WFS_list = [];
-            var empty = true;
+            All_WCS_list = [];
             layerStore.each(function (record) {
-//                var layer = record.get('layer');
                 var queryable = record.get('queryable');
                 var hasEquivalentWFS = record.hasEquivalentWFS();
+                var hasEquivalentWCS = record.hasEquivalentWCS();
                 if (queryable && hasEquivalentWFS) {
-                    empty = false;
-                    var url = record.data.WFS_URL
-                    var namespace= record.data.name
-                    var titre = record.data.title
-                    var url_name = url + namespace
-                    
+                    var url = record.data.WFS_URL;
+                    var namespace = record.data.WFS_typeName;
+                    var titre = record.data.title;
+                    var url_name = url + namespace;
+
                     var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
                     var rec = new ObjectRecordType({
-                            text: titre,
-                            value: url_name
-                        })
-                        //console.log(rec.data.text);
-//console.log(rec.data.value);
+                        text: titre,
+                        value: url_name
+                    })
                     var liste = [rec.data.text, rec.data.value];
                     All_WFS_list.push(liste);
                 }
+                if (queryable && hasEquivalentWCS) {
+                    var url = record.data.WCS_URL;
+                    var namespace = record.data.WCS_typeName;
+                    var titre = record.data.title;
+                    var url_name = url + namespace;
+
+                    var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
+                    var rec = new ObjectRecordType({
+                        text: titre,
+                        value: url_name
+                    })
+                    var liste = [rec.data.text, rec.data.value];
+                    All_WCS_list.push(liste);
+                }
             });
-            if (liste_WFS_WS.length > 0){
-                All_WFS_list = liste_WFS_WS.concat(All_WFS_list)
-            }
-            if (All_WFS_list.length == 0 && liste_WFS_WS.length == 0)  {
+            if (All_WFS_list.length == 0) {
                 var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-                var rec = new ObjectRecordType({ text: "No based WFS layers !", value:"" })
+                var rec = new ObjectRecordType({
+                    text: "No based WFS layers !",
+                    value: ""
+                })
                 var liste = [rec.data.text, rec.data.value];
                 All_WFS_list.push(liste)
-                disabled: true
             }
-          
+            if (All_WCS_list.length == 0) {
+                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
+                var rec = new ObjectRecordType({
+                    text: "No based WCS layers !",
+                    value: ""
+                })
+                var liste = [rec.data.text, rec.data.value];
+                All_WCS_list.push(liste)
+            }
+
             WFSStore = new Ext.data.ArrayStore({
                 fields: ['text', 'value'],
                 data: All_WFS_list
             });
-        };
-        addComboboxItemsWFS();
-        
-        //        GEOR.util.infoDialog({
-        //            msg: "Seuls les WMS déjà chargés avant la première ouverture de l\'addon seront utilisables."
-        //        });
 
-        // PART 2
-        for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
-            var name_inputs = openfluid.inputs.scrollwms.list[i];
-            openfluid.inputs.scrollwms[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
-                name: "wms"+i,
-                fieldLabel: openfluid.inputs.scrollwms[name_inputs].obj.title,
-                emptyText: 'Scrollwms input',
+            WCSStore = new Ext.data.ArrayStore({
+                fields: ['text', 'value'],
+                data: All_WCS_list
+            });
+        };
+        addComboboxItemsWMS();
+
+        // PART 1 WFS
+        for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwfs.list[i];
+            openfluid.inputs.scrollwfs[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
+                name: "wfs" + i,
+                fieldLabel: openfluid.inputs.scrollwfs[name_inputs].obj.title,
+                emptyText: 'Scrollwfs input',
                 mode: 'local',
                 width: FIELD_WIDTH,
-                xtype:'combo',
-                displayField: 'text', 
-                valueField : 'value',
-                lazyRender:false,
-                lazyInit:false, 
+                xtype: 'combo',
+                displayField: 'text',
+                valueField: 'value',
+                lazyRender: false,
+                lazyInit: false,
                 triggerAction: 'all',
                 editable: false,
                 store: WFSStore,
-                listeners:
-                {
-                    beforequery:function() {
-                        addComboboxItemsWFS();
+                listeners: {
+                    beforequery: function () {
+                        addComboboxItemsWMS();
                         this.store.clearData();
                         this.store.loadData(All_WFS_list);
-//console.log(this.store);
                     }
                 }
             }, base));
-            openfluid.inputs.scrollwms.windowInput.push(openfluid.inputs.scrollwms[name_inputs].objForWindowInput);
+            openfluid.inputs.scrollwfs.windowInput.push(openfluid.inputs.scrollwfs[name_inputs].objForWindowInput);
         }
 
-        if (openfluid.inputs.scrollwms.list.length == 0) {
-            var onglet_scrollwms = {}; //fermé
+        if (openfluid.inputs.scrollwfs.list.length == 0) {
+            var onglet_scrollwfs = {}; // don't existe
         } else {
-            onglet_scrollwms = {
-                closable: true,
-                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            onglet_scrollwfs = Ext.apply({
                 title: OpenLayers.i18n("Couches vecteur en entrée"),
-                closable: false,
-                activate: true,
-                collapsible: true,
-                collapsed: false, //ouvert
-                plain: true,
-                buttonAlign: 'right',
-                autoScroll: true,
                 bodyStyle: {
                     maxHeight: '90px'
                 },
                 items: [{
                     xtype: 'form',
-                    id: 'reportGraphArea',
+                    id: 'comboWfs',
                     labelWidth: 200,
                     bodyStyle: "padding:10px;",
                     items: [
-                        openfluid.inputs.scrollwms.windowInput
+                        openfluid.inputs.scrollwfs.windowInput
                     ]
-                }],					
-            };
+                }],
+            }, baseOnglet);
+        }
+
+        // PART 2 WCS
+        for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwcs.list[i];
+            openfluid.inputs.scrollwcs[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
+                name: "wcs" + i,
+                fieldLabel: openfluid.inputs.scrollwcs[name_inputs].obj.title,
+                emptyText: 'Scrollwcs input',
+                mode: 'local',
+                width: FIELD_WIDTH,
+                xtype: 'combo',
+                displayField: 'text',
+                valueField: 'value',
+                lazyRender: false,
+                lazyInit: false,
+                triggerAction: 'all',
+                editable: false,
+                store: WCSStore,
+                listeners: {
+                    beforequery: function () {
+                        addComboboxItemsWMS();
+                        this.store.clearData();
+                        this.store.loadData(All_WCS_list);
+                    }
+                }
+            }, base));
+            openfluid.inputs.scrollwcs.windowInput.push(openfluid.inputs.scrollwcs[name_inputs].objForWindowInput);
+        }
+
+        if (openfluid.inputs.scrollwcs.list.length == 0) {
+            var onglet_scrollwcs = {}; //fermé
+        } else {
+            onglet_scrollwcs = Ext.apply({
+                title: OpenLayers.i18n("Couches raster en entrée"),
+                bodyStyle: {
+                    maxHeight: '90px'
+                },
+                items: [{
+                    xtype: 'form',
+                    id: 'comboWcs',
+                    labelWidth: 200,
+                    bodyStyle: "padding:10px;",
+                    items: [
+                        openfluid.inputs.scrollwcs.windowInput
+                    ]
+                }],
+            }, baseOnglet);
         }
 
         // ----------------------------------------------------------------------
@@ -564,27 +740,6 @@ GEOR.Addons.openfluid_2.prototype = {
             });
             openfluid.inputs.param.windowInput.push(openfluid.inputs.param[name_inputs].objForWindowInput);
         }
-
-        // ----------------------------------------------------------------------
-        // WorkSpaces field
-        // ----------------------------------------------------------------------		       
-        // PART 1
-        openfluid.geoworkspace.WSField = new Ext.form.ComboBox(Ext.apply({
-            name: "WS",
-            editable: false,
-            fieldLabel: "Workspaces list",
-            emptyText: "Chose a workspace",
-            width: FIELD_WIDTH,
-            triggerAction: 'all',
-            store: openfluid.geoworkspace.list,
-            listeners: {
-                'select': function (records) { // select : quand a choisi un champ de la cbbox
-                    var ws = records.value;
-                    openfluid.geoworkspace.GetWFSLayers(URL_WS, ws);
-                },
-                scope: this
-            },
-        }, base));
 
         // ----------------------------------------------------------------------
         // Combobox inputs
@@ -754,19 +909,10 @@ GEOR.Addons.openfluid_2.prototype = {
                 checked: true
             });
             openfluid.inputs.checkbox.windowInput.push(openfluid.inputs.checkbox[name_inputs].objForWindowInput);
-        }		
-        
-        var onglet_scrollWS = {
-            closable: true,
-            closeAction: 'hide', //FAIL noglob_myPanel.hide,
+        }
+
+        var onglet_scrollWS = Ext.apply({
             title: OpenLayers.i18n("Choix de l'espace de travail"),
-            closable: false,
-            activate: true,
-            collapsible: true,
-            collapsed: false, // ouvert
-            plain: true,
-            buttonAlign: 'right',
-            autoScroll: true,
             items: [{
                 xtype: 'form',
                 labelWidth: 200,
@@ -775,24 +921,15 @@ GEOR.Addons.openfluid_2.prototype = {
                     openfluid.geoworkspace.WSField,
                 ]
             }]
-        };
+        }, baseOnglet);
         // ----------------------------------------------------------------------
         // Dynamic show inputs panels
         // ----------------------------------------------------------------------        
         if (openfluid.inputs.scroll.list.length == 0) {
             var onglet_scroll = {};
         } else {
-            onglet_scroll = {
-                closable: true,
-                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            onglet_scroll = Ext.apply({
                 title: OpenLayers.i18n("Valeurs permises au choix"),
-                closable: false,
-                activate: true,
-                collapsible: true,
-                collapsed: false,
-                plain: true,
-                buttonAlign: 'right',
-                autoScroll: true,
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -804,24 +941,15 @@ GEOR.Addons.openfluid_2.prototype = {
                         openfluid.inputs.scroll.windowInput,
                     ]
                 }]
-            };
+            }, baseOnglet);
 
         }
 
         if (openfluid.inputs.checkbox.list.length == 0) {
-           var onglet_checkbox = {};
+            var onglet_checkbox = {};
         } else {
-            onglet_checkbox = {
-                closable: true,
-                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            onglet_checkbox = Ext.apply({
                 title: OpenLayers.i18n("Paramétrage 0/1"),
-                closable: false,
-                activate: true,
-                collapsible: true,
-                collapsed: false,
-                plain: true,
-                buttonAlign: 'right',
-                autoScroll: true,
                 bodyStyle: {
                     maxHeight: '120px'
                 },
@@ -833,23 +961,14 @@ GEOR.Addons.openfluid_2.prototype = {
                         openfluid.inputs.checkbox.windowInput,
                     ]
                 }]
-            };
+            }, baseOnglet);
         }
 
         if (openfluid.inputs.param.list.length == 0) {
             var onglet_param = {};
         } else {
-            onglet_param = {
-                closable: true,
-                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            onglet_param = Ext.apply({
                 title: OpenLayers.i18n("Paramétrage text en entrée"),
-                closable: false,
-                activate: true,
-                collapsible: true,
-                collapsed: false,
-                plain: true,
-                buttonAlign: 'right',
-                autoScroll: true,
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -861,22 +980,14 @@ GEOR.Addons.openfluid_2.prototype = {
                         openfluid.inputs.param.windowInput,
                     ]
                 }]
-            };
+            }, baseOnglet);
         }
 
         if (openfluid.inputs.coordxy.list.length == 0) {
             var onglet_coordxy = {};
         } else {
-            onglet_coordxy = {
-                closable: true,
-                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            onglet_coordxy = Ext.apply({
                 title: OpenLayers.i18n("Choix d'un point sur la carte"),
-                closable: false,
-                activate: true,
-                collapsible: true,
-                collapsed: false,
-                plain: true,
-                buttonAlign: 'right',
                 items: [{
                     xtype: 'form',
                     labelWidth: 200,
@@ -885,23 +996,14 @@ GEOR.Addons.openfluid_2.prototype = {
                         openfluid.inputs.coordxy.windowInput,
                     ]
                 }]
-            };
+            }, baseOnglet);
         }
 
         if (openfluid.inputs.gml.list.length == 0) {
             var onglet_gml = {};
         } else {
-            onglet_gml = {
-                closable: true,
-                closeAction: 'hide', //FAIL noglob_myPanel.hide,
+            onglet_gml = Ext.apply({
                 title: OpenLayers.i18n("Uploader un fichier GML"),
-                closable: false,
-                activate: true,
-                collapsible: true,
-                collapsed: false,
-                plain: true,
-                buttonAlign: 'right',
-                autoScroll: true,
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -913,7 +1015,7 @@ GEOR.Addons.openfluid_2.prototype = {
                         fileLoadForm
                     ]
                 }]
-            };
+            }, baseOnglet);
         }
 
         noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
@@ -933,24 +1035,25 @@ GEOR.Addons.openfluid_2.prototype = {
         });
 
         noglob_myPanel = new Ext.Window({
-            // Config globale
-            id: 'addonWin',
+            animateTarget: true,
+            //resizable: false,
             title: OpenLayers.i18n("addon_wpsmaker_title"),
             closable: true,
             closeAction: 'hide',
             width: globalWidth * 1.3, // auto provoque un bug de largeur sur Chrome
-            y: '30px',
+            y: '120px',
             x: '0%',
             iconCls: 'windo_icon',
             plain: true,
             buttonAlign: 'right',
             autoScroll: true,
             bodyStyle: {
-                    maxHeight: '720px' // hauteur max de window
-                },
+                maxHeight: '720px' // hauteur max de window
+            },
             items: [
                 onglet_scrollWS,
-                onglet_scrollwms,
+                onglet_scrollwfs,
+                onglet_scrollwcs,
                 onglet_scroll,
                 onglet_checkbox,
                 onglet_param,
@@ -979,10 +1082,10 @@ GEOR.Addons.openfluid_2.prototype = {
                },
                scope: this
            },*/
-            {
-                text: OpenLayers.i18n("Exécuter"),
-                handler: this.ExecuteWps,
-                scope: this
+                {
+                    text: OpenLayers.i18n("Exécuter"),
+                    handler: this.ExecuteWps,
+                    scope: this
             }],
         });
         return noglob_myPanel;
@@ -1014,17 +1117,41 @@ GEOR.Addons.openfluid_2.prototype = {
             }
         }
         // ----------------------------------------------------------------------
-        // Inputs WMS
+        // Inputs WFS
         // ----------------------------------------------------------------------
-        for (var i = 0; i < openfluid.inputs.scrollwms.list.length; i++) {
-            var name_inputs = openfluid.inputs.scrollwms.list[i];
+        for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwfs.list[i];
 
-            if (openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue() == "") {
+            if (openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue() == "") {
                 var tmpValue = "null"
             }
             // si select
             else {
-                tmpValue = openfluid.inputs.scrollwms[name_inputs].objForWindowInput.getValue();
+                tmpValue = openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue();
+            }
+
+            var tmpforXml = {
+                identifier: name_inputs,
+                data: {
+                    literalData: {
+                        value: tmpValue
+                    }
+                }
+            }
+            openfluid.inputs.forXmlPost.push(tmpforXml);
+        }
+        // ----------------------------------------------------------------------
+        // Inputs WCS
+        // ----------------------------------------------------------------------
+        for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
+            var name_inputs = openfluid.inputs.scrollwcs.list[i];
+
+            if (openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue() == "") {
+                var tmpValue = "null"
+            }
+            // si select
+            else {
+                tmpValue = openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue();
             }
 
             var tmpforXml = {
@@ -1237,100 +1364,73 @@ GEOR.Addons.openfluid_2.prototype = {
         // Dynamic variabls
         var layerUrlparse = [];
         var layerNameparse = [];
-        var wmsdyn = [];
-        var c = [];
-        var layerRecord = [];
-        var clone_layer = [];
-        /**
-         * Method: zoomToLayerRecordExtent from GEOR.managelayers
-         *
-         * Parameters:
-         * r - {GeoExt.data.LayerRecord}
-         */
-        var zoomToLayerRecordExtent = function (r) {
-            var map = r.get('layer').map,
-                mapSRS = map.getProjection(),
-                zoomed = false,
-                bb = r.get('bbox');
-
-            for (var key in bb) {
-                if (!bb.hasOwnProperty(key)) {
-                    continue;
-                }
-                if (key === mapSRS) {
-                    map.zoomToExtent(
-                        OpenLayers.Bounds.fromArray(bb[key].bbox)
-                    );
-                    zoomed = true;
-                    break;
-                }
-            }
-            if (!zoomed) {
-                // use llbbox
-                var llbbox = OpenLayers.Bounds.fromArray(
-                    r.get('llbbox')
-                );
-                llbbox.transform(
-                    new OpenLayers.Projection('EPSG:4326'),
-                    map.getProjectionObject()
-                );
-                map.zoomToExtent(llbbox);
-            }
-        };
+        var index = [];
 
         if (openfluid.outputs.wms.list.length > 0) {
+
+            noglob_myPanel.getEl().mask("Loading layers...", "x-mask-loading"); // mask window 
+
             // Add wms outputs layers dynamicly
             for (var i = 0; i < openfluid.outputs.wms.list.length; i++) {
                 var name_outputs = openfluid.outputs.wms.list[i];
                 layerUrlparse[i] = openfluid.outputs.wms[name_outputs].wmsValue.substr(0, openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?')); // Recupere l'url avant le ? : http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
                 layerNameparse[i] = openfluid.outputs.wms[name_outputs].wmsValue.substring(openfluid.outputs.wms[name_outputs].wmsValue.indexOf('?') + 1); // Recupere le nom situe derriere le ? : cseb:vue_d_ensemble2 
-
-                console.log("Une couche WMS a été ajoutée :");
-                console.log(" - URL : " + layerUrlparse[i]);
-                console.log(" - Nom : " + layerNameparse[i]); //console.log("    - Entrepot :"+entrepotName);		
-
-                // PART 2 : Ajout du WMS	
-                wmsdyn[i] = new OpenLayers.Layer.WMS(name_outputs,
-                    layerUrlparse[i], {
-                        'layers': layerNameparse[i],
-                        transparent: true,
-                        queryable: true
-                    }
-                    //, transparent: true, format: 'image/gif'
-                    //,{isBaseLayer: true}
-                );
-
-                c[i] = GEOR.util.createRecordType();
-
-                layerRecord[i] = new c[i]({
-                    layer: wmsdyn[i],
-                    name: layerNameparse[i],
-                    type: "WMS"
-                });
-
-                clone_layer[i] = layerRecord[i].clone();
-//                clone_layer[i].get("layer").setName(layerNameparse[i]);
-//                layerStore.addSorted(clone_layer[i]);
             }
 
-            // Zoom to first output layer
-            
+            // Add all outputs layers from WMS GetCapabilities
+            // All outputs layers need to have the same URL workspace
+            var store = GEOR.ows.WMSCapabilities({
+                storeOptions: {
+                    url: layerUrlparse[0].replace(/\?$/, '')
+                },
+                success: function (store, records) {
+                    for (var i = 0; i < layerNameparse.length; i++) {
+                        index[i] = store.find("name", layerNameparse[i]);
+                        var idx = index[i];
+                        if (idx < 0) {
+                            noglob_myPanel.getEl().unmask();
+                            GEOR.util.errorDialog({
+                                msg: tr("layerfinder.layer.unavailable", {
+                                    'NAME': layerName
+                                })
+                            });
+                            return;
+                        }
+                        var r = records[idx];
+                        var data = r.data;
+                        var srs = layerStore.map.getProjection();
+                        if (!r.get('srs') || (r.get('srs')[srs] !== true)) {
+                            noglob_myPanel.getEl().unmask(); // unmask window
+                            GEOR.util.errorDialog({
+                                msg: tr("Layer projection is not compatible")
+                            });
+                            return;
+                        }
+                        // Set the copyright information to the "attribution" field
+                        if (data.rights && !r.get("attribution")) {
+                            r.set("attribution", {
+                                title: data.rights
+                            });
+                        }
+                        // If we have a metadataURL coming from the catalog,
+                        // we use it instead of the one we get from the capabilities
+                        // (as asked by Lydie - see http://applis-bretagne.fr/redmine/issues/1599#note-5)
+                        if (data.metadataURL) {
+                            r.set("metadataURLs", [data.metadataURL]);
+                        }
+                        layerStore.addSorted(r);
+                    }
+                    noglob_myPanel.getEl().unmask(); // unmask window
 
-            var first_layer_r = clone_layer[0]
-
-            // Get it from the WMS GetCapabilities document
-            GEOR.ows.hydrateLayerRecord(first_layer_r, {
-                success: function () {
-                    first_layer_r.get("layer").setName(first_layer_r.get("title"));
-                    layerStore.addSorted(first_layer_r);
-                    zoomToLayerRecordExtent(first_layer_r);
+                    var firstLayerIndex = index[0]
+                    zoomToLayerRecordExtent(records[firstLayerIndex])
                 },
                 failure: function () {
+                    noglob_myPanel.getEl().unmask(); // unmask window
                     GEOR.util.errorDialog({
-                        msg: tr("Impossible to get layer extent")
+                        msg: tr("Unreachable server or insufficient rights")
                     });
-                },
-                scope: this
+                }
             });
         }
 
@@ -1365,7 +1465,7 @@ GEOR.Addons.openfluid_2.prototype = {
             // Create WMC
             var writeWMC = parserWMC.write(this.map);
 
-//console.log(writeWMC);
+            //console.log(writeWMC);
             // Set wms to queryable
             var writeWMCbis = writeWMC.replace('</Extension></Layer><Layer queryable="0"', '</Extension></Layer><Layer queryable="1"');
             var writeWMCbis1 = writeWMCbis.replace(/General.*General/, 'General><Window width="1293" height="765" /><BoundingBox minx="726842.041230160045" miny="6264001.34968379978" maxx="729930.574904300040" maxy="6265828.67239120044" SRS="EPSG:2154" /><Title /><Extension>  <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="-357823.236499999999" miny="5037008.69390000030" maxx="1313632.36280000000" maxy="7230727.37710000016" /></Extension></General');
@@ -1395,13 +1495,4 @@ GEOR.Addons.openfluid_2.prototype = {
         }
         this.win.show();
     },
-
-    /** -----------------------------------------------------------------------------
-        destroy -> hide window
-        ----------------------------------------------------------------------------- */
-    destroy: function () {
-        this.win.hide();
-        this.map = null;
-    },
-
 };
