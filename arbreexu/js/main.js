@@ -125,7 +125,7 @@ GEOR.Addons.arbreexu.prototype = {
         this.item = new Ext.menu.Item({
             text: record.get("title")[lang],
             qtip: record.get("description")[lang],
-            iconCls: 'process_time_icon',
+            iconCls: 'arbre_exu_icon',
             handler: this.showWindow,
             scope: this
         });
