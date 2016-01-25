@@ -321,7 +321,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 //Ext.MessageBox.alert('success', response.responseText);
                 var doc = response.responseXML;
                 var longeur = doc.activeElement.childElementCount;
-
+                // i = 1 : to ignore the 1st workspace ("geor_loc" in this case)
                 for (var i = 1; i < longeur; i++) {
                     var ws = doc.getElementsByTagName("name")[i].firstChild.nodeValue;
                     //console.log("ws "+i+" = "+ ws);
@@ -547,6 +547,16 @@ GEOR.Addons.openfluid_2.prototype = {
             store: openfluid.geoworkspace.list,
             listeners: {
                 'select': function (records) { // select : quand a choisi un champ de la cbbox
+                    // reset the wfs & wcs combobox to defaut
+                    for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
+                        var name_inputs = openfluid.inputs.scrollwfs.list[i];
+                        openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.reset();   
+                    }
+                    for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
+                        var name_inputs = openfluid.inputs.scrollwcs.list[i];
+                        openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.reset();   
+                    }
+                    // Run GetWMSLayers methode using the selected ws
                     var ws = records.value;
                     openfluid.geoworkspace.GetWMSLayers(URL_WS, ws);
                 },
@@ -595,25 +605,24 @@ GEOR.Addons.openfluid_2.prototype = {
                     All_WCS_list.push(liste);
                 }
             });
-            if (All_WFS_list.length == 0) {
-                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-                var rec = new ObjectRecordType({
-                    text: "No based WFS layers !",
-                    value: ""
-                })
-                var liste = [rec.data.text, rec.data.value];
-                All_WFS_list.push(liste)
-            }
-            if (All_WCS_list.length == 0) {
-                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-                var rec = new ObjectRecordType({
-                    text: "No based WCS layers !",
-                    value: ""
-                })
-                var liste = [rec.data.text, rec.data.value];
-                All_WCS_list.push(liste)
-            }
-
+//            if (All_WFS_list.length == 0) {
+//                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
+//                var rec = new ObjectRecordType({
+//                    text: "No based WFS layers !",
+//                    value: ""
+//                })
+//                var liste = [rec.data.text, rec.data.value];
+//                All_WFS_list.push(liste)
+//            }
+//            if (All_WCS_list.length == 0) {
+//                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
+//                var rec = new ObjectRecordType({
+//                    text: "No based WCS layers !",
+//                    value: ""
+//                })
+//                var liste = [rec.data.text, rec.data.value];
+//                All_WCS_list.push(liste)
+//            }
             WFSStore = new Ext.data.ArrayStore({
                 fields: ['text', 'value'],
                 data: All_WFS_list
@@ -626,7 +635,7 @@ GEOR.Addons.openfluid_2.prototype = {
         };
         addComboboxItemsWMS();
 
-        // PART 1 WFS
+        // PART 1 Get WFS
         for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
             var name_inputs = openfluid.inputs.scrollwfs.list[i];
             openfluid.inputs.scrollwfs[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
@@ -674,7 +683,7 @@ GEOR.Addons.openfluid_2.prototype = {
             }, baseOnglet);
         }
 
-        // PART 2 WCS
+        // PART 2 Get WCS
         for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
             var name_inputs = openfluid.inputs.scrollwcs.list[i];
             openfluid.inputs.scrollwcs[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
