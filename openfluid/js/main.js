@@ -675,6 +675,8 @@ GEOR.Addons.openfluid.prototype = {
 							// Remove all WMS inputs in the window
 							for (i = 1; i <= openfluid.inputs.scrollwms.list.length; i++) {
 								for (var key in Ext.getCmp('reportGraphArea').items.items) { // flag il reste bloque sur les selection scrollwms du premer pas des rafraichis
+                                                            
+console.log(Ext.getCmp('reportGraphArea'));
 									if (Ext.getCmp('reportGraphArea').items.items.hasOwnProperty(key)) {
 										if (Ext.getCmp('reportGraphArea').items.items[key].name == "wms") { // si en trouve un
 											Ext.getCmp('reportGraphArea').remove(Ext.getCmp('reportGraphArea').items.items[key],true); // le retire

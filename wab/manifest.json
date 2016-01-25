@@ -4,7 +4,7 @@
         "../../../lib/externals/openlayers/lib/OpenLayers/Format/OWSCommon/v1_1_0.js",
         "../../../lib/externals/openlayers/lib/OpenLayers/Format/WPSDescribeProcess.js",
         "../../../lib/externals/openlayers/lib/OpenLayers/Format/WKT.js",
-        "../../../lib/externals/ext/examples/ux/fileuploadfield/FileUploadField.js",
+        "js/FileUploadField.js",
         "js/WPSAxecute.js",
         "js/main.js"
         
@@ -13,7 +13,7 @@
         "css/main.css"
     ],
     "default_options": {
-        "WPS_URL": "http://91.121.171.75/cgi-bin/pywps.cgi",
+        "WPS_URL": "http://localhost/cgi-bin/mywps.cgi",
         "WPS_identifier": "wab",
 		"Help_URL": "http://www.openfluid-project.org/",
 		"Metadata_URL": "http://www.openfluid-project.org/",	
