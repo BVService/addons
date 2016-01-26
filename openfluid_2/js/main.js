@@ -1430,7 +1430,8 @@ GEOR.Addons.openfluid_2.prototype = {
                         layerStore.addSorted(r);
                     }
                     noglob_myPanel.getEl().unmask(); // unmask window
-
+                    
+                    // zoom to the first added layer
                     var firstLayerIndex = index[0]
                     zoomToLayerRecordExtent(records[firstLayerIndex])
                 },
