@@ -10,6 +10,12 @@ var WCSStore = {};
 var All_WCS_list = [];
 
 /**
+ * Property: tr
+ * {Function} an alias to OpenLayers.i18n
+ */
+var tr = OpenLayers.i18n;
+
+/**
  * Method: zoomToLayerRecordExtent from GEOR.managelayers
  *
  * Parameters:
@@ -55,7 +61,7 @@ var openfluid = {
         WSCapabilities: [],
         WSLayersObject: [],
         GetWMSLayers: function (URL_geoserver, ws) {
-            noglob_myPanel.getEl().mask("Loading layers...", "x-mask-loading"); // mask window 
+            noglob_myPanel.getEl().mask(tr("Loading layers..."), "x-mask-loading"); // mask window 
 
             /**
              * Property: observable
@@ -298,7 +304,7 @@ GEOR.Addons.openfluid_2.prototype = {
             this.describeProcess(WPS_URL, WPS_identifier);
         };
         mask_loader = new Ext.LoadMask(Ext.getBody(), {
-            msg: OpenLayers.i18n("Processing ..."),
+            msg: tr("Processing..."),
         });
         this.item = new Ext.menu.Item({
             text: record.get("title")[lang],
@@ -412,7 +418,7 @@ GEOR.Addons.openfluid_2.prototype = {
             },
             failure: function () {
                 GEOR.util.errorDialog({
-                    msg: OpenLayers.i18n('Server unavailable')
+                    msg: tr('Server unavailable')
                 });
             }
         });
@@ -515,7 +521,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 allowBlank: true,
                 triggerAction: 'all',
                 mode: 'local',
-                labelSeparator: OpenLayers.i18n("labelSeparator"),
+                labelSeparator: tr("labelSeparator"),
                 valueField: 'value',
                 displayField: 'text',
                 labelWidth: 200,
@@ -540,12 +546,18 @@ GEOR.Addons.openfluid_2.prototype = {
         openfluid.geoworkspace.WSField = new Ext.form.ComboBox(Ext.apply({
             name: "WS",
             editable: false,
-            fieldLabel: "Workspaces list",
-            emptyText: "Chose a workspace",
+            fieldLabel: tr("Workspaces list"),
+            emptyText: "Workspace",
             width: FIELD_WIDTH,
             triggerAction: 'all',
             store: openfluid.geoworkspace.list,
             listeners: {
+                render: function(c) {
+                  new Ext.ToolTip({
+                    target: c.getEl(),
+                    html: tr("Select a workspace")
+                  });
+                },
                 'select': function (records) { // select : quand a choisi un champ de la cbbox
                     // reset the wfs & wcs combobox to defaut
                     for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
@@ -653,6 +665,12 @@ GEOR.Addons.openfluid_2.prototype = {
                 editable: false,
                 store: WFSStore,
                 listeners: {
+                    render: function(c) {
+                      new Ext.ToolTip({
+                        target: c.getEl(),
+                        html: tr("Select your vector layer")
+                      });
+                    },
                     beforequery: function () {
                         addComboboxItemsWMS();
                         this.store.clearData();
@@ -667,7 +685,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_scrollwfs = {}; // don't existe
         } else {
             onglet_scrollwfs = Ext.apply({
-                title: OpenLayers.i18n("Couches vecteur en entrée"),
+                title: tr("Vector layer(s)"),
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -701,6 +719,12 @@ GEOR.Addons.openfluid_2.prototype = {
                 editable: false,
                 store: WCSStore,
                 listeners: {
+                    render: function(c) {
+                      new Ext.ToolTip({
+                        target: c.getEl(),
+                        html: tr("Select your raster layer")
+                      });
+                    },
                     beforequery: function () {
                         addComboboxItemsWMS();
                         this.store.clearData();
@@ -715,7 +739,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_scrollwcs = {}; //fermé
         } else {
             onglet_scrollwcs = Ext.apply({
-                title: OpenLayers.i18n("Couches raster en entrée"),
+                title: tr("Raster layer(s)"),
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -744,7 +768,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 name: "param" + i,
                 width: FIELD_WIDTH,
                 allowBlank: false,
-                labelSeparator: OpenLayers.i18n("labelSeparator"),
+                labelSeparator: tr("labelSeparator"),
                 allowDecimals: true
             });
             openfluid.inputs.param.windowInput.push(openfluid.inputs.param[name_inputs].objForWindowInput);
@@ -791,7 +815,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 fieldLabel: openfluid.inputs.gml[name_inputs].obj.title,
                 //                    fileUpload: true,
                 buttonText: '',
-                labelSeparator: OpenLayers.i18n("labelSeparator"),
+                labelSeparator: tr("labelSeparator"),
                 allowBlank: false,
                 listeners: {
                     //                        'beforerender': function() { // beforerender est juste au moment d ouvrir la fenetre avant qu elle saffiche
@@ -875,7 +899,7 @@ GEOR.Addons.openfluid_2.prototype = {
                     for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
                         var name_inputs = openfluid.inputs.coordxy.list[i];
                         openfluid.inputs.coordxy[name_inputs].coordxyStore = lonlat.lat;
-                        alert("Input 1 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
+                        //alert("Input 1 : Vous avez sélectionné les coordonnées " + lonlat.lat + " N, " + lonlat.lon + " E ");
                         log_coord = 0;
                     }
                 }
@@ -921,7 +945,7 @@ GEOR.Addons.openfluid_2.prototype = {
         }
 
         var onglet_scrollWS = Ext.apply({
-            title: OpenLayers.i18n("Choix de l'espace de travail"),
+            title: tr("Workspace definition"),
             items: [{
                 xtype: 'form',
                 labelWidth: 200,
@@ -938,7 +962,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_scroll = {};
         } else {
             onglet_scroll = Ext.apply({
-                title: OpenLayers.i18n("Valeurs permises au choix"),
+                title: tr("Allowed values"),
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -958,7 +982,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_checkbox = {};
         } else {
             onglet_checkbox = Ext.apply({
-                title: OpenLayers.i18n("Paramétrage 0/1"),
+                title: tr("Checkbox parameter(s) (0/1)"),
                 bodyStyle: {
                     maxHeight: '120px'
                 },
@@ -977,7 +1001,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_param = {};
         } else {
             onglet_param = Ext.apply({
-                title: OpenLayers.i18n("Paramétrage text en entrée"),
+                title: tr("Text parameter(s)"),
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -996,7 +1020,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_coordxy = {};
         } else {
             onglet_coordxy = Ext.apply({
-                title: OpenLayers.i18n("Choix d'un point sur la carte"),
+                title: tr("Point selection on the map"),
                 items: [{
                     xtype: 'form',
                     labelWidth: 200,
@@ -1012,7 +1036,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var onglet_gml = {};
         } else {
             onglet_gml = Ext.apply({
-                title: OpenLayers.i18n("Uploader un fichier GML"),
+                title: tr("GML file uploading"),
                 bodyStyle: {
                     maxHeight: '90px'
                 },
@@ -1028,7 +1052,7 @@ GEOR.Addons.openfluid_2.prototype = {
         }
 
         noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
-            title: OpenLayers.i18n("Résultats text"),
+            title: tr("Text output"),
             //frame: true, // TEST
             //closable: false,
             activate: true,
@@ -1046,7 +1070,7 @@ GEOR.Addons.openfluid_2.prototype = {
         noglob_myPanel = new Ext.Window({
             animateTarget: true,
             //resizable: false,
-            title: OpenLayers.i18n("addon_wpsmaker_title"),
+            title: tr("Processing settings"),
             closable: true,
             closeAction: 'hide',
             width: globalWidth * 1.3, // auto provoque un bug de largeur sur Chrome
@@ -1072,13 +1096,14 @@ GEOR.Addons.openfluid_2.prototype = {
                 ],
             // Creation/Ajout des boutons
             fbar: ['->', {
-                    text: OpenLayers.i18n("Fermer"),
+                    text: tr("Close"),
                     handler: function () {
                         this.win.hide();
+                        //this.win.destroy();
                     },
                     scope: this
             }, {
-                    text: OpenLayers.i18n("Aide"),
+                    text: tr("Help"),
                     handler: function () {
                         window.open(Help_URL);
                     },
@@ -1092,7 +1117,7 @@ GEOR.Addons.openfluid_2.prototype = {
                scope: this
            },*/
                 {
-                    text: OpenLayers.i18n("Exécuter"),
+                    text: tr("Execute"),
                     handler: this.ExecuteWps,
                     scope: this
             }],
@@ -1113,7 +1138,7 @@ GEOR.Addons.openfluid_2.prototype = {
         //noglob_tableList_input_forXml = [];
         for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
             var name_inputs = openfluid.inputs.param.list[i];
-            tmpForXml = {
+            var tmpForXml = {
                 identifier: name_inputs,
                 data: {
                     literalData: {
@@ -1132,7 +1157,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var name_inputs = openfluid.inputs.scrollwfs.list[i];
 
             if (openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue() == "") {
-                var tmpValue = "null"
+                var tmpValue = "null";
             }
             // si select
             else {
@@ -1156,7 +1181,7 @@ GEOR.Addons.openfluid_2.prototype = {
             var name_inputs = openfluid.inputs.scrollwcs.list[i];
 
             if (openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue() == "") {
-                var tmpValue = "null"
+                var tmpValue = "null";
             }
             // si select
             else {
@@ -1250,6 +1275,9 @@ GEOR.Addons.openfluid_2.prototype = {
 
         // Test if all fields are filled (except those by default)
         var champs_restant = openfluid.inputs.list.length - openfluid.inputs.forXmlPost.length;
+console.log(openfluid.inputs.list.length);
+console.log(openfluid.inputs.forXmlPost.length);
+console.log(champs_restant);
         if (openfluid.inputs.list.length == openfluid.inputs.forXmlPost.length) {
 
             // ----------------------------------------------------------------------
@@ -1295,16 +1323,13 @@ GEOR.Addons.openfluid_2.prototype = {
                     }
                 }
             });
-
-            //            if (noglob_execute_on_off == 0) {
-            //                noglob_execute_on_off = 1;
             OpenLayers.Request.POST({
                 url: WPS_URL, // var contenant l'adresse recuperee auparavant dans le manifest.json
                 data: xmlString,
                 success: this.onExecuted,
                 failure: this.onError
             });
-            //            }
+            
         } else {
             mask_loader.hide();
             GEOR.util.infoDialog({
@@ -1377,7 +1402,7 @@ GEOR.Addons.openfluid_2.prototype = {
 
         if (openfluid.outputs.wms.list.length > 0) {
 
-            noglob_myPanel.getEl().mask("Loading layers...", "x-mask-loading"); // mask window 
+            noglob_myPanel.getEl().mask(tr("Loading layers..."), "x-mask-loading"); // mask window 
 
             // Add wms outputs layers dynamicly
             for (var i = 0; i < openfluid.outputs.wms.list.length; i++) {
@@ -1492,7 +1517,7 @@ GEOR.Addons.openfluid_2.prototype = {
     onError: function (process) {
         mask_loader.hide();
         GEOR.util.infoDialog({
-            msg: "Echec dans l'execution du processus !<br>\n" + "Raison : " + process.exception.text
+            msg: "Echec de l'execution du processus !<br>\n" + "Raison : " + process.exception.text
         });
     },
 
