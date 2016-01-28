@@ -1,6 +1,6 @@
 Ext.namespace("GEOR.Addons");
 
-var noglob_regionContent = "";
+//var noglob_regionContent = "";
 var noglob_myPanel = "";
 
 var WFSStore = {};
@@ -1051,21 +1051,21 @@ GEOR.Addons.openfluid_2.prototype = {
             }, baseOnglet);
         }
 
-        noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
-            title: tr("Text output"),
-            //frame: true, // TEST
-            //closable: false,
-            activate: true,
-            region: 'south',
-            collapsible: true,
-            collapsed: false,
-            split: true,
-            plain: true,
-            autoScroll: true,
-            bodyStyle: {
-                maxHeight: '90px'
-            },
-        });
+//        noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
+//            title: tr("Text output"),
+//            //frame: true, // TEST
+//            //closable: false,
+//            activate: true,
+//            region: 'south',
+//            collapsible: true,
+//            collapsed: false,
+//            split: true,
+//            plain: true,
+//            autoScroll: true,
+//            bodyStyle: {
+//                maxHeight: '90px'
+//            },
+//        });
 
         noglob_myPanel = new Ext.Window({
             animateTarget: true,
@@ -1092,7 +1092,7 @@ GEOR.Addons.openfluid_2.prototype = {
                 onglet_param,
                 onglet_gml,
                 onglet_coordxy,
-                noglob_regionContent
+//                noglob_regionContent
                 ],
             // Creation/Ajout des boutons
             fbar: ['->', {
@@ -1329,14 +1329,13 @@ console.log(champs_restant);
                 success: this.onExecuted,
                 failure: this.onError
             });
-            
+            this.win.hide();
         } else {
             mask_loader.hide();
             GEOR.util.infoDialog({
                 msg: "Veuillez remplir tous les champs requis (il en reste " + champs_restant + ")."
             });
         }
-        this.win.hide();
     },
 
     /** -----------------------------------------------------------------------------
@@ -1477,15 +1476,17 @@ console.log(champs_restant);
             //console.log(openfluid.outputs.param.list);
             for (var i = 0; i < openfluid.outputs.param.list.length; i++) {
                 var name_outputs = openfluid.outputs.param.list[i];
-                var num = i + 1;
-                var n = num.toString();
-                TextOut[i] = '<br>' + n + ' - ' + openfluid.outputs.param[name_outputs].paramValue.replace(/(\r\n|\n|\r)/gm, "<br>") + '<br>';
+//                var num = i + 1;
+//                var n = num.toString();
+                TextOut[i] = ' - ' + openfluid.outputs.param[name_outputs].paramValue.replace(/(\r\n|\n|\r)/gm, "<br>") + '<br>';
             }
-            noglob_regionContent.update(TextOut);
-
+//            noglob_regionContent.update(TextOut);
+            GEOR.util.infoDialog({
+                        msg: TextOut
+                    });
         }
         GEOR.waiter.hide();
-        noglob_myPanel.show();
+//        noglob_myPanel.show();
         // ----------------------------------------------------------------------
         // WMC
         // ----------------------------------------------------------------------
