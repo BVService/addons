@@ -58,8 +58,6 @@ var openfluid = {
     geoworkspace: {
         list: [],
         WSField: null,
-        WSCapabilities: [],
-        WSLayersObject: [],
         GetWMSLayers: function (URL_geoserver, ws) {
             noglob_myPanel.getEl().mask(tr("Loading layers..."), "x-mask-loading"); // mask window 
 
@@ -167,6 +165,7 @@ var openfluid = {
     inputs: {
         list: [],
         forXmlPost: [],
+        workspace:[],
         scrollwfs: {
             list: [],
             addScrollwfs: function (Scrollwfs, addObj) {
@@ -270,7 +269,7 @@ var openfluid = {
 }
 
 //console.log("openfluid object :");
-//console.log(openfluid);
+console.log(openfluid);
 
 
 GEOR.Addons.openfluid_2 = function (map, options) {
@@ -372,6 +371,9 @@ GEOR.Addons.openfluid_2.prototype = {
                 } // Removing undefined values 
                 for (i = 0; i < openfluid.inputs.list.length; i++) {
                     switch (true) {
+                        case (openfluid.inputs.list[i].slice(0, 17) == "L_input_workspace"):
+                            openfluid.inputs.workspace.push(openfluid.inputs.list[i]);
+                            break;
                         case (openfluid.inputs.list[i].slice(0, 13) == "L_input_param"):
                             openfluid.inputs.param.list.push(openfluid.inputs.list[i]);
                             break;
@@ -806,7 +808,7 @@ GEOR.Addons.openfluid_2.prototype = {
             //    console.log(name_inputs);
             //                toComptGMLInputs.IdGML[i] = name_inputs;
             //                openfluid.inputs.gml.windowInput.push(toComptGMLInputs);
-            tmpwindowgml = {
+            var tmpwindowgml = {
                 width: 0,
                 id: name_inputs,
                 //                    xtype: 'textfield',
@@ -1075,6 +1077,7 @@ GEOR.Addons.openfluid_2.prototype = {
             closeAction: 'hide',
             width: globalWidth * 1.3, // auto provoque un bug de largeur sur Chrome
             y: '120px',
+            //y: '0%',
             x: '0%',
             iconCls: 'windo_icon',
             plain: true,
@@ -1130,211 +1133,237 @@ GEOR.Addons.openfluid_2.prototype = {
         ----------------------------------------------------------------------------- */
     // Send the input fields in the window
     ExecuteWps: function () {
-        mask_loader.show();
-        openfluid.inputs.forXmlPost = []; // reset sinon ne peut pas rechoisir
-        // ----------------------------------------------------------------------
-        // Inputs Param
-        // ----------------------------------------------------------------------
-        //noglob_tableList_input_forXml = [];
-        for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
-            var name_inputs = openfluid.inputs.param.list[i];
-            var tmpForXml = {
-                identifier: name_inputs,
-                data: {
-                    literalData: {
-                        value: openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
-                    }
-                }
-            }
-            if (openfluid.inputs.param[name_inputs].objForWindowInput.getValue() != "") {
-                openfluid.inputs.forXmlPost.push(tmpForXml);
-            }
-        }
-        // ----------------------------------------------------------------------
-        // Inputs WFS
-        // ----------------------------------------------------------------------
-        for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
-            var name_inputs = openfluid.inputs.scrollwfs.list[i];
+        if (openfluid.geoworkspace.WSField.getValue() == ""){
+            GEOR.util.errorDialog({
+                    msg: tr("Please select your workspace !")
+                });
+        }else{
+            mask_loader.show();
+            openfluid.inputs.forXmlPost = []; // reset sinon ne peut pas rechoisir
 
-            if (openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue() == "") {
-                var tmpValue = "null";
-            }
-            // si select
-            else {
-                tmpValue = openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue();
-            }
 
+            // ----------------------------------------------------------------------
+            // Inputs workspace
+            // ----------------------------------------------------------------------
+            var WS = openfluid.geoworkspace.WSField.getValue()
             var tmpforXml = {
-                identifier: name_inputs,
-                data: {
-                    literalData: {
-                        value: tmpValue
-                    }
-                }
-            }
-            openfluid.inputs.forXmlPost.push(tmpforXml);
-        }
-        // ----------------------------------------------------------------------
-        // Inputs WCS
-        // ----------------------------------------------------------------------
-        for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
-            var name_inputs = openfluid.inputs.scrollwcs.list[i];
-
-            if (openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue() == "") {
-                var tmpValue = "null";
-            }
-            // si select
-            else {
-                tmpValue = openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue();
-            }
-
-            var tmpforXml = {
-                identifier: name_inputs,
-                data: {
-                    literalData: {
-                        value: tmpValue
-                    }
-                }
-            }
-            openfluid.inputs.forXmlPost.push(tmpforXml);
-        }
-        // ----------------------------------------------------------------------
-        // Inputs Combobox
-        // ----------------------------------------------------------------------
-        if (openfluid.inputs.scroll.list.length > 0) {
-            for (var i = 0; i < openfluid.inputs.scroll.list.length; i++) {
-                var name_inputs = openfluid.inputs.scroll.list[i];
-                openfluid.inputs.scroll[name_inputs].objForXml = {
-                    identifier: name_inputs,
+                    identifier: openfluid.inputs.workspace[0],
                     data: {
                         literalData: {
-                            value: openfluid.inputs.scroll[name_inputs].objForWindowInput.getValue()
+                            value: WS
                         }
                     }
                 }
-                openfluid.inputs.forXmlPost.push(openfluid.inputs.scroll[name_inputs].objForXml);
+
+            if (openfluid.geoworkspace.WSField.getValue() != ""){
+                openfluid.inputs.forXmlPost.push(tmpforXml);
             }
-        }
-        // ----------------------------------------------------------------------
-        // Inputs Coordinates
-        // ----------------------------------------------------------------------
-        if (openfluid.inputs.coordxy.list.length > 0) {
-            for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
-                var name_inputs = openfluid.inputs.coordxy.list[i];
-                openfluid.inputs.coordxy[name_inputs].objForXml = {
-                    identifier: name_inputs,
-                    data: {
-                        literalData: {
-                            value: openfluid.inputs.coordxy[name_inputs].coordxyStore
-                        }
-                    }
-                }
-                if (openfluid.inputs.coordxy[name_inputs].coordxyStore != null) {
-                    openfluid.inputs.forXmlPost.push(openfluid.inputs.coordxy[name_inputs].objForXml);
-                }
-            }
-        }
-        // ----------------------------------------------------------------------
-        // Inputs GML
-        // ----------------------------------------------------------------------
-        if (openfluid.inputs.gml.list.length > 0) {
-            for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
-                var name_inputs = openfluid.inputs.gml.list[i];
-                var tmpGMLforXml = {
-                        identifier: name_inputs,
-                        data: {
-                            complexData: {
-                                value: openfluid.inputs.gml[name_inputs].gmlValue //gmlValue1
-                            }
-                        }
-                    }
-                    //                console.log(openfluid.inputs.gml[name_inputs]);
-                if (typeof (openfluid.inputs.gml[name_inputs].gmlValue) == "string") {
-                    openfluid.inputs.forXmlPost.push(tmpGMLforXml);
-                }
-            }
-        }
-        // ----------------------------------------------------------------------
-        // Inputs Checkbox
-        // ----------------------------------------------------------------------
-        if (openfluid.inputs.checkbox.list.length > 0) {
-            for (var i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
-                var name_inputs = openfluid.inputs.checkbox.list[i];
+
+
+            // ----------------------------------------------------------------------
+            // Inputs Param
+            // ----------------------------------------------------------------------
+            //noglob_tableList_input_forXml = [];
+            for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
+                var name_inputs = openfluid.inputs.param.list[i];
                 var tmpForXml = {
                     identifier: name_inputs,
                     data: {
                         literalData: {
-                            value: openfluid.inputs.checkbox[name_inputs].objForWindowInput.getValue()
+                            value: openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
                         }
                     }
                 }
-                openfluid.inputs.forXmlPost.push(tmpForXml);
-            }
-        }
-
-
-        // Test if all fields are filled (except those by default)
-        var champs_restant = openfluid.inputs.list.length - openfluid.inputs.forXmlPost.length;
-console.log(openfluid.inputs.list.length);
-console.log(openfluid.inputs.forXmlPost.length);
-console.log(champs_restant);
-        if (openfluid.inputs.list.length == openfluid.inputs.forXmlPost.length) {
-
-            // ----------------------------------------------------------------------
-            // Outputs WMS
-            // ----------------------------------------------------------------------
-            tableList_output_forXml = [];
-            for (var i = 0; i < openfluid.outputs.wms.list.length; i++) {
-                var name_outputs = openfluid.outputs.wms.list[i];
-                L_output_wms_forXml = {
-                    asReference: false,
-                    identifier: name_outputs
-                };
-                openfluid.outputs.forXmlResponse.push(L_output_wms_forXml);
-            }
-
-            // ----------------------------------------------------------------------
-            // Outputs Param
-            // ----------------------------------------------------------------------
-            for (var i = 0; i < openfluid.outputs.param.list.length; i++) {
-                var name_outputs = openfluid.outputs.param.list[i];
-                L_output_param_forXml = {
-                    asReference: false,
-                    identifier: name_outputs
-                };
-                openfluid.outputs.forXmlResponse.push(L_output_param_forXml);
+                if (openfluid.inputs.param[name_inputs].objForWindowInput.getValue() != "") {
+                    openfluid.inputs.forXmlPost.push(tmpForXml);
+                }
             }
             // ----------------------------------------------------------------------
-            // Sends the query
+            // Inputs WFS
             // ----------------------------------------------------------------------
-            console.log("Une requête XML a été envoyée : ");
+            for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
+                var name_inputs = openfluid.inputs.scrollwfs.list[i];
 
-            var wpsFormat = new OpenLayers.Format.WPSExecute();
-            // Creation de la requete XML
-            var xmlString = wpsFormat.write({
-                identifier: WPS_identifier,
-                dataInputs: openfluid.inputs.forXmlPost, //noglob_tableList_input_forXml,
-                responseForm: {
-                    responseDocument: {
-                        storeExecuteResponse: true,
-                        lineage: false,
-                        status: false,
-                        outputs: openfluid.outputs.forXmlResponse
+                if (openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue() == "") {
+                    var tmpValue = "null";
+                }
+                // si select
+                else {
+                    tmpValue = openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue();
+                }
+
+                var tmpforXml = {
+                    identifier: name_inputs,
+                    data: {
+                        literalData: {
+                            value: tmpValue
+                        }
                     }
                 }
-            });
-            OpenLayers.Request.POST({
-                url: WPS_URL, // var contenant l'adresse recuperee auparavant dans le manifest.json
-                data: xmlString,
-                success: this.onExecuted,
-                failure: this.onError
-            });
-            this.win.hide();
-        } else {
-            mask_loader.hide();
-            GEOR.util.infoDialog({
-                msg: "Veuillez remplir tous les champs requis (il en reste " + champs_restant + ")."
-            });
+                openfluid.inputs.forXmlPost.push(tmpforXml);
+            }
+            // ----------------------------------------------------------------------
+            // Inputs WCS
+            // ----------------------------------------------------------------------
+            for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
+                var name_inputs = openfluid.inputs.scrollwcs.list[i];
+
+                if (openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue() == "") {
+                    var tmpValue = "null";
+                }
+                // si select
+                else {
+                    tmpValue = openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue();
+                }
+
+                var tmpforXml = {
+                    identifier: name_inputs,
+                    data: {
+                        literalData: {
+                            value: tmpValue
+                        }
+                    }
+                }
+                openfluid.inputs.forXmlPost.push(tmpforXml);
+            }
+            // ----------------------------------------------------------------------
+            // Inputs Combobox
+            // ----------------------------------------------------------------------
+            if (openfluid.inputs.scroll.list.length > 0) {
+                for (var i = 0; i < openfluid.inputs.scroll.list.length; i++) {
+                    var name_inputs = openfluid.inputs.scroll.list[i];
+                    openfluid.inputs.scroll[name_inputs].objForXml = {
+                        identifier: name_inputs,
+                        data: {
+                            literalData: {
+                                value: openfluid.inputs.scroll[name_inputs].objForWindowInput.getValue()
+                            }
+                        }
+                    }
+                    openfluid.inputs.forXmlPost.push(openfluid.inputs.scroll[name_inputs].objForXml);
+                }
+            }
+            // ----------------------------------------------------------------------
+            // Inputs Coordinates
+            // ----------------------------------------------------------------------
+            if (openfluid.inputs.coordxy.list.length > 0) {
+                for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
+                    var name_inputs = openfluid.inputs.coordxy.list[i];
+                    openfluid.inputs.coordxy[name_inputs].objForXml = {
+                        identifier: name_inputs,
+                        data: {
+                            literalData: {
+                                value: openfluid.inputs.coordxy[name_inputs].coordxyStore
+                            }
+                        }
+                    }
+                    if (openfluid.inputs.coordxy[name_inputs].coordxyStore != null) {
+                        openfluid.inputs.forXmlPost.push(openfluid.inputs.coordxy[name_inputs].objForXml);
+                    }
+                }
+            }
+            // ----------------------------------------------------------------------
+            // Inputs GML
+            // ----------------------------------------------------------------------
+            if (openfluid.inputs.gml.list.length > 0) {
+                for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
+                    var name_inputs = openfluid.inputs.gml.list[i];
+                    var tmpGMLforXml = {
+                            identifier: name_inputs,
+                            data: {
+                                complexData: {
+                                    value: openfluid.inputs.gml[name_inputs].gmlValue //gmlValue1
+                                }
+                            }
+                        }
+                        //                console.log(openfluid.inputs.gml[name_inputs]);
+                    if (typeof (openfluid.inputs.gml[name_inputs].gmlValue) == "string") {
+                        openfluid.inputs.forXmlPost.push(tmpGMLforXml);
+                    }
+                }
+            }
+            // ----------------------------------------------------------------------
+            // Inputs Checkbox
+            // ----------------------------------------------------------------------
+            if (openfluid.inputs.checkbox.list.length > 0) {
+                for (var i = 0; i < openfluid.inputs.checkbox.list.length; i++) {
+                    var name_inputs = openfluid.inputs.checkbox.list[i];
+                    var tmpForXml = {
+                        identifier: name_inputs,
+                        data: {
+                            literalData: {
+                                value: openfluid.inputs.checkbox[name_inputs].objForWindowInput.getValue()
+                            }
+                        }
+                    }
+                    openfluid.inputs.forXmlPost.push(tmpForXml);
+                }
+            }
+
+
+            // Test if all fields are filled (except those by default)
+            var champs_restant = openfluid.inputs.list.length - openfluid.inputs.forXmlPost.length;
+//    console.log(openfluid.inputs.list.length);
+//    console.log(openfluid.inputs.forXmlPost.length);
+//    console.log(champs_restant);
+            if (openfluid.inputs.list.length == openfluid.inputs.forXmlPost.length) {
+
+                // ----------------------------------------------------------------------
+                // Outputs WMS
+                // ----------------------------------------------------------------------
+                tableList_output_forXml = [];
+                for (var i = 0; i < openfluid.outputs.wms.list.length; i++) {
+                    var name_outputs = openfluid.outputs.wms.list[i];
+                    L_output_wms_forXml = {
+                        asReference: false,
+                        identifier: name_outputs
+                    };
+                    openfluid.outputs.forXmlResponse.push(L_output_wms_forXml);
+                }
+
+                // ----------------------------------------------------------------------
+                // Outputs Param
+                // ----------------------------------------------------------------------
+                for (var i = 0; i < openfluid.outputs.param.list.length; i++) {
+                    var name_outputs = openfluid.outputs.param.list[i];
+                    L_output_param_forXml = {
+                        asReference: false,
+                        identifier: name_outputs
+                    };
+                    openfluid.outputs.forXmlResponse.push(L_output_param_forXml);
+                }
+                // ----------------------------------------------------------------------
+                // Sends the query
+                // ----------------------------------------------------------------------
+                console.log("Une requête XML a été envoyée : ");
+
+                var wpsFormat = new OpenLayers.Format.WPSExecute();
+                // Creation de la requete XML
+                var xmlString = wpsFormat.write({
+                    identifier: WPS_identifier,
+                    dataInputs: openfluid.inputs.forXmlPost, //noglob_tableList_input_forXml,
+                    responseForm: {
+                        responseDocument: {
+                            storeExecuteResponse: true,
+                            lineage: false,
+                            status: false,
+                            outputs: openfluid.outputs.forXmlResponse
+                        }
+                    }
+                });
+                OpenLayers.Request.POST({
+                    url: WPS_URL, // var contenant l'adresse recuperee auparavant dans le manifest.json
+                    data: xmlString,
+                    success: this.onExecuted,
+                    failure: this.onError
+                });
+                this.win.hide();
+            } else {
+                mask_loader.hide();
+                GEOR.util.infoDialog({
+                    msg: "Veuillez remplir tous les champs requis (il en reste " + champs_restant + ")."
+                });
+            }
         }
     },
 
