@@ -164,8 +164,9 @@ var openfluid = {
     },
     inputs: {
         list: [],
+        minOccurs:[],
         forXmlPost: [],
-        workspace:[],
+        workspace: [],
         scrollwfs: {
             list: [],
             addScrollwfs: function (Scrollwfs, addObj) {
@@ -453,7 +454,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data input WFS 	
         // ----------------------------------------------------------------------	
-        // Add the title of each WMS input WMS -- openfluid.inputs.scrollwfs.list
+        // Add the title of each WFS input WFS -- openfluid.inputs.scrollwfs.list
         for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
             var name_inputs = openfluid.inputs.scrollwfs.list[i];
             openfluid.inputs.scrollwfs.addScrollwfs(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
@@ -462,7 +463,7 @@ GEOR.Addons.openfluid_2.prototype = {
         // ----------------------------------------------------------------------
         // Data input WCS 	
         // ----------------------------------------------------------------------	
-        // Add the title of each WMS input WMS -- openfluid.inputs.scrollwcs.list
+        // Add the title of each WCS input WCS -- openfluid.inputs.scrollwcs.list
         for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
             var name_inputs = openfluid.inputs.scrollwcs.list[i];
             openfluid.inputs.scrollwcs.addScrollwcs(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
@@ -475,7 +476,7 @@ GEOR.Addons.openfluid_2.prototype = {
         for (var i = 0; i < openfluid.inputs.scroll.list.length; i++) {
             var name_inputs = openfluid.inputs.scroll.list[i];
             openfluid.inputs.scroll.addScroll(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
-            trashArray = [];
+            var trashArray = [];
             for (var k in openfluid.inputs.scroll[name_inputs].obj.literalData.allowedValues) {
                 trashArray.push(k);
             }
@@ -554,21 +555,21 @@ GEOR.Addons.openfluid_2.prototype = {
             triggerAction: 'all',
             store: openfluid.geoworkspace.list,
             listeners: {
-                render: function(c) {
-                  new Ext.ToolTip({
-                    target: c.getEl(),
-                    html: tr("Select a workspace")
-                  });
+                render: function (c) {
+                    new Ext.ToolTip({
+                        target: c.getEl(),
+                        html: tr("Select a workspace")
+                    });
                 },
                 'select': function (records) { // select : quand a choisi un champ de la cbbox
                     // reset the wfs & wcs combobox to defaut
                     for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
                         var name_inputs = openfluid.inputs.scrollwfs.list[i];
-                        openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.reset();   
+                        openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.reset();
                     }
                     for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
                         var name_inputs = openfluid.inputs.scrollwcs.list[i];
-                        openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.reset();   
+                        openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.reset();
                     }
                     // Run GetWMSLayers methode using the selected ws
                     var ws = records.value;
@@ -619,24 +620,7 @@ GEOR.Addons.openfluid_2.prototype = {
                     All_WCS_list.push(liste);
                 }
             });
-//            if (All_WFS_list.length == 0) {
-//                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-//                var rec = new ObjectRecordType({
-//                    text: "No based WFS layers !",
-//                    value: ""
-//                })
-//                var liste = [rec.data.text, rec.data.value];
-//                All_WFS_list.push(liste)
-//            }
-//            if (All_WCS_list.length == 0) {
-//                var ObjectRecordType = Ext.data.Record.create(['text', 'value']);
-//                var rec = new ObjectRecordType({
-//                    text: "No based WCS layers !",
-//                    value: ""
-//                })
-//                var liste = [rec.data.text, rec.data.value];
-//                All_WCS_list.push(liste)
-//            }
+
             WFSStore = new Ext.data.ArrayStore({
                 fields: ['text', 'value'],
                 data: All_WFS_list
@@ -667,11 +651,11 @@ GEOR.Addons.openfluid_2.prototype = {
                 editable: false,
                 store: WFSStore,
                 listeners: {
-                    render: function(c) {
-                      new Ext.ToolTip({
-                        target: c.getEl(),
-                        html: tr("Select your vector layer")
-                      });
+                    render: function (c) {
+                        new Ext.ToolTip({
+                            target: c.getEl(),
+                            html: tr("Select your vector layer")
+                        });
                     },
                     beforequery: function () {
                         addComboboxItemsWMS();
@@ -721,11 +705,11 @@ GEOR.Addons.openfluid_2.prototype = {
                 editable: false,
                 store: WCSStore,
                 listeners: {
-                    render: function(c) {
-                      new Ext.ToolTip({
-                        target: c.getEl(),
-                        html: tr("Select your raster layer")
-                      });
+                    render: function (c) {
+                        new Ext.ToolTip({
+                            target: c.getEl(),
+                            html: tr("Select your raster layer")
+                        });
                     },
                     beforequery: function () {
                         addComboboxItemsWMS();
@@ -1053,21 +1037,21 @@ GEOR.Addons.openfluid_2.prototype = {
             }, baseOnglet);
         }
 
-//        noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
-//            title: tr("Text output"),
-//            //frame: true, // TEST
-//            //closable: false,
-//            activate: true,
-//            region: 'south',
-//            collapsible: true,
-//            collapsed: false,
-//            split: true,
-//            plain: true,
-//            autoScroll: true,
-//            bodyStyle: {
-//                maxHeight: '90px'
-//            },
-//        });
+        //        noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
+        //            title: tr("Text output"),
+        //            //frame: true, // TEST
+        //            //closable: false,
+        //            activate: true,
+        //            region: 'south',
+        //            collapsible: true,
+        //            collapsed: false,
+        //            split: true,
+        //            plain: true,
+        //            autoScroll: true,
+        //            bodyStyle: {
+        //                maxHeight: '90px'
+        //            },
+        //        });
 
         noglob_myPanel = new Ext.Window({
             animateTarget: true,
@@ -1133,12 +1117,12 @@ GEOR.Addons.openfluid_2.prototype = {
         ----------------------------------------------------------------------------- */
     // Send the input fields in the window
     ExecuteWps: function () {
-        if (openfluid.geoworkspace.WSField.getValue() == ""){
+        if (openfluid.geoworkspace.WSField.getValue() == "") {
             GEOR.util.errorDialog({
-                    msg: tr("Please select your workspace !")
-                });
-        }else{
-            mask_loader.show();
+                msg: tr("Please select your workspace !")
+            });
+        } else {
+            
             openfluid.inputs.forXmlPost = []; // reset sinon ne peut pas rechoisir
 
 
@@ -1147,18 +1131,14 @@ GEOR.Addons.openfluid_2.prototype = {
             // ----------------------------------------------------------------------
             var WS = openfluid.geoworkspace.WSField.getValue()
             var tmpforXml = {
-                    identifier: openfluid.inputs.workspace[0],
-                    data: {
-                        literalData: {
-                            value: WS
-                        }
+                identifier: openfluid.inputs.workspace[0],
+                data: {
+                    literalData: {
+                        value: WS
                     }
                 }
-
-            if (openfluid.geoworkspace.WSField.getValue() != ""){
-                openfluid.inputs.forXmlPost.push(tmpforXml);
             }
-
+            openfluid.inputs.forXmlPost.push(tmpforXml);
 
             // ----------------------------------------------------------------------
             // Inputs Param
@@ -1166,16 +1146,30 @@ GEOR.Addons.openfluid_2.prototype = {
             //noglob_tableList_input_forXml = [];
             for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
                 var name_inputs = openfluid.inputs.param.list[i];
-                var tmpForXml = {
-                    identifier: name_inputs,
-                    data: {
-                        literalData: {
-                            value: openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
-                        }
+                var tmpValue = openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
+                if (tmpValue == "" && openfluid.inputs.param[name_inputs].obj.minOccurs == 1) {
+                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                    mask_loader.hide();
+                    GEOR.util.errorDialog({
+                        msg: tr("The field - ") + openfluid.inputs.param[name_inputs].obj.title + tr(" - is required !")
+                    });
+                    break
+                } else {
+                    var j = openfluid.inputs.minOccurs.length;
+                    while (j--) {
+                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
                     }
-                }
-                if (openfluid.inputs.param[name_inputs].objForWindowInput.getValue() != "") {
-                    openfluid.inputs.forXmlPost.push(tmpForXml);
+                    if (tmpValue != "") {
+                        var tmpforXml = {
+                            identifier: name_inputs,
+                            data: {
+                                literalData: {
+                                    value: tmpValue
+                                }
+                            }
+                        }
+                        openfluid.inputs.forXmlPost.push(tmpforXml);
+                    }
                 }
             }
             // ----------------------------------------------------------------------
@@ -1183,48 +1177,62 @@ GEOR.Addons.openfluid_2.prototype = {
             // ----------------------------------------------------------------------
             for (var i = 0; i < openfluid.inputs.scrollwfs.list.length; i++) {
                 var name_inputs = openfluid.inputs.scrollwfs.list[i];
-
-                if (openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue() == "") {
-                    var tmpValue = "null";
-                }
-                // si select
-                else {
-                    tmpValue = openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue();
-                }
-
-                var tmpforXml = {
-                    identifier: name_inputs,
-                    data: {
-                        literalData: {
-                            value: tmpValue
+                var tmpValue = openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue();
+                if (tmpValue == "" && openfluid.inputs.scrollwfs[name_inputs].obj.minOccurs == 1) {
+                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                    mask_loader.hide();
+                    GEOR.util.errorDialog({
+                        msg: tr("The field - ") + openfluid.inputs.scrollwfs[name_inputs].obj.title + tr(" - is required !")
+                    });
+                    break
+                } else {
+                    var j = openfluid.inputs.minOccurs.length;
+                    while (j--) {
+                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                    }
+                    if (tmpValue != "") {
+                        var tmpforXml = {
+                            identifier: name_inputs,
+                            data: {
+                                literalData: {
+                                    value: tmpValue
+                                }
+                            }
                         }
+                        openfluid.inputs.forXmlPost.push(tmpforXml);
                     }
                 }
-                openfluid.inputs.forXmlPost.push(tmpforXml);
             }
             // ----------------------------------------------------------------------
             // Inputs WCS
             // ----------------------------------------------------------------------
             for (var i = 0; i < openfluid.inputs.scrollwcs.list.length; i++) {
                 var name_inputs = openfluid.inputs.scrollwcs.list[i];
-
-                if (openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue() == "") {
-                    var tmpValue = "null";
-                }
-                // si select
-                else {
-                    tmpValue = openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue();
-                }
-
-                var tmpforXml = {
-                    identifier: name_inputs,
-                    data: {
-                        literalData: {
-                            value: tmpValue
+                var tmpValue = openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue();
+                if (tmpValue == "" && openfluid.inputs.scrollwcs[name_inputs].obj.minOccurs == 1) {
+                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                    mask_loader.hide();
+                    GEOR.util.errorDialog({
+                        msg: tr("The field - ") + openfluid.inputs.scrollwcs[name_inputs].obj.title + tr(" - is required !")
+                    });
+                    break
+                } else {
+                    var j = openfluid.inputs.minOccurs.length;
+                    while (j--) {
+                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                    }
+                    if (tmpValue != "") {
+                        var tmpforXml = {
+                            identifier: name_inputs,
+                            data: {
+                                literalData: {
+                                    value: tmpValue
+                                }
+                            }
                         }
+                        openfluid.inputs.forXmlPost.push(tmpforXml);
                     }
                 }
-                openfluid.inputs.forXmlPost.push(tmpforXml);
             }
             // ----------------------------------------------------------------------
             // Inputs Combobox
@@ -1232,15 +1240,31 @@ GEOR.Addons.openfluid_2.prototype = {
             if (openfluid.inputs.scroll.list.length > 0) {
                 for (var i = 0; i < openfluid.inputs.scroll.list.length; i++) {
                     var name_inputs = openfluid.inputs.scroll.list[i];
-                    openfluid.inputs.scroll[name_inputs].objForXml = {
-                        identifier: name_inputs,
-                        data: {
-                            literalData: {
-                                value: openfluid.inputs.scroll[name_inputs].objForWindowInput.getValue()
+                    var tmpValue = openfluid.inputs.scroll[name_inputs].objForWindowInput.getValue();
+                    if (tmpValue == "" && openfluid.inputs.scroll[name_inputs].obj.minOccurs == 1) {
+                        openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                        mask_loader.hide();
+                        GEOR.util.errorDialog({
+                            msg: tr("The field - ") + openfluid.inputs.scroll[name_inputs].obj.title + tr(" - is required !")
+                        });
+                        break
+                    } else {
+                        var j = openfluid.inputs.minOccurs.length;
+                        while (j--) {
+                            openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                        }
+                        if (tmpValue != "") {
+                            var tmpforXml = {
+                                identifier: name_inputs,
+                                data: {
+                                    literalData: {
+                                        value: tmpValue
+                                    }
+                                }
                             }
+                            openfluid.inputs.forXmlPost.push(tmpforXml);
                         }
                     }
-                    openfluid.inputs.forXmlPost.push(openfluid.inputs.scroll[name_inputs].objForXml);
                 }
             }
             // ----------------------------------------------------------------------
@@ -1249,16 +1273,30 @@ GEOR.Addons.openfluid_2.prototype = {
             if (openfluid.inputs.coordxy.list.length > 0) {
                 for (var i = 0; i < openfluid.inputs.coordxy.list.length; i++) {
                     var name_inputs = openfluid.inputs.coordxy.list[i];
-                    openfluid.inputs.coordxy[name_inputs].objForXml = {
-                        identifier: name_inputs,
-                        data: {
-                            literalData: {
-                                value: openfluid.inputs.coordxy[name_inputs].coordxyStore
-                            }
+                    var tmpValue = openfluid.inputs.coordxy[name_inputs].objForWindowInput.getValue();
+                    if (tmpValue == "" && openfluid.inputs.coordxy[name_inputs].obj.minOccurs == 1) {
+                        openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                        mask_loader.hide();
+                        GEOR.util.errorDialog({
+                            msg: tr("The field - ") + openfluid.inputs.coordxy[name_inputs].obj.title + tr(" - is required !")
+                        });
+                        break
+                    } else {
+                        var j = openfluid.inputs.minOccurs.length;
+                        while (j--) {
+                            openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
                         }
-                    }
-                    if (openfluid.inputs.coordxy[name_inputs].coordxyStore != null) {
-                        openfluid.inputs.forXmlPost.push(openfluid.inputs.coordxy[name_inputs].objForXml);
+                        if (tmpValue != "") {
+                            var tmpforXml = {
+                                identifier: name_inputs,
+                                data: {
+                                    literalData: {
+                                        value: tmpValue
+                                    }
+                                }
+                            }
+                            openfluid.inputs.forXmlPost.push(tmpforXml);
+                        }
                     }
                 }
             }
@@ -1268,17 +1306,30 @@ GEOR.Addons.openfluid_2.prototype = {
             if (openfluid.inputs.gml.list.length > 0) {
                 for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
                     var name_inputs = openfluid.inputs.gml.list[i];
-                    var tmpGMLforXml = {
-                            identifier: name_inputs,
-                            data: {
-                                complexData: {
-                                    value: openfluid.inputs.gml[name_inputs].gmlValue //gmlValue1
+                    var tmpValue = openfluid.inputs.gml[name_inputs].objForWindowInput.getValue();
+                    if (tmpValue == "" && openfluid.inputs.gml[name_inputs].obj.minOccurs == 1) {
+                        openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                        mask_loader.hide();
+                        GEOR.util.errorDialog({
+                            msg: tr("The field - ") + openfluid.inputs.gml[name_inputs].obj.title + tr(" - is required !")
+                        });
+                        break
+                    } else {
+                        var j = openfluid.inputs.minOccurs.length;
+                        while (j--) {
+                            openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                        }
+                        if (tmpValue != "") {
+                            var tmpforXml = {
+                                identifier: name_inputs,
+                                data: {
+                                    literalData: {
+                                        value: tmpValue
+                                    }
                                 }
                             }
+                            openfluid.inputs.forXmlPost.push(tmpforXml);
                         }
-                        //                console.log(openfluid.inputs.gml[name_inputs]);
-                    if (typeof (openfluid.inputs.gml[name_inputs].gmlValue) == "string") {
-                        openfluid.inputs.forXmlPost.push(tmpGMLforXml);
                     }
                 }
             }
@@ -1299,19 +1350,12 @@ GEOR.Addons.openfluid_2.prototype = {
                     openfluid.inputs.forXmlPost.push(tmpForXml);
                 }
             }
-
-
-            // Test if all fields are filled (except those by default)
-            var champs_restant = openfluid.inputs.list.length - openfluid.inputs.forXmlPost.length;
-//    console.log(openfluid.inputs.list.length);
-//    console.log(openfluid.inputs.forXmlPost.length);
-//    console.log(champs_restant);
-            if (openfluid.inputs.list.length == openfluid.inputs.forXmlPost.length) {
-
+            // Test if all minOccurs "1" fields are filled 
+            if (openfluid.inputs.minOccurs.length == 0) {
+                mask_loader.show();
                 // ----------------------------------------------------------------------
                 // Outputs WMS
                 // ----------------------------------------------------------------------
-                tableList_output_forXml = [];
                 for (var i = 0; i < openfluid.outputs.wms.list.length; i++) {
                     var name_outputs = openfluid.outputs.wms.list[i];
                     L_output_wms_forXml = {
@@ -1358,11 +1402,6 @@ GEOR.Addons.openfluid_2.prototype = {
                     failure: this.onError
                 });
                 this.win.hide();
-            } else {
-                mask_loader.hide();
-                GEOR.util.infoDialog({
-                    msg: "Veuillez remplir tous les champs requis (il en reste " + champs_restant + ")."
-                });
             }
         }
     },
@@ -1483,7 +1522,7 @@ GEOR.Addons.openfluid_2.prototype = {
                         layerStore.addSorted(r);
                     }
                     noglob_myPanel.getEl().unmask(); // unmask window
-                    
+
                     // zoom to the first added layer
                     var firstLayerIndex = index[0]
                     zoomToLayerRecordExtent(records[firstLayerIndex])
@@ -1505,17 +1544,17 @@ GEOR.Addons.openfluid_2.prototype = {
             //console.log(openfluid.outputs.param.list);
             for (var i = 0; i < openfluid.outputs.param.list.length; i++) {
                 var name_outputs = openfluid.outputs.param.list[i];
-//                var num = i + 1;
-//                var n = num.toString();
+                //                var num = i + 1;
+                //                var n = num.toString();
                 TextOut[i] = ' - ' + openfluid.outputs.param[name_outputs].paramValue.replace(/(\r\n|\n|\r)/gm, "<br>") + '<br>';
             }
-//            noglob_regionContent.update(TextOut);
+            //            noglob_regionContent.update(TextOut);
             GEOR.util.infoDialog({
-                        msg: TextOut
-                    });
+                msg: TextOut
+            });
         }
         GEOR.waiter.hide();
-//        noglob_myPanel.show();
+        //        noglob_myPanel.show();
         // ----------------------------------------------------------------------
         // WMC
         // ----------------------------------------------------------------------

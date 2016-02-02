@@ -19,7 +19,7 @@
         },
         "WPS_URL": "http://bvservice.fr/wps?",
         "WPS_identifier": "mhydasopenfluid_sync",
-        "URL_cgi": "http://bvservice.fr/cgi-bin/GetWSList.cgi",
+        "URL_cgi": "http://localhost/cgi-bin/GetWSList.cgi",
         "URL_WS": "http://bvservice.fr/geoserver/",
 		"Help_URL": "http://www.openfluid-project.org/",
 		"Metadata_URL": "http://www.openfluid-project.org/",	
@@ -50,7 +50,9 @@
             "Point selection on the map": "Choix d'un point sur la carte",
             "GML file uploading": "Uploader un fichier GML",
             "Text output": "Résultat text en sortie",
-            "Please select your workspace !": "Veuillez séléctionnez votre espace de travail !"
+            "Please select your workspace !": "Veuillez séléctionnez votre espace de travail !",
+            "The field - ": "Le champ - ",
+            " - is required !": " - est obligatoire !"
         },
         "es": {
 
