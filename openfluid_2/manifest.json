@@ -19,7 +19,7 @@
         },
         "WPS_URL": "http://bvservice.fr/wps?",
         "WPS_identifier": "mhydasopenfluid_sync",
-        "URL_cgi": "http://localhost/cgi-bin/GetWSList.cgi",
+        "URL_cgi": "http://bvservice.fr/cgi-bin/GetWSList.cgi",
         "URL_WS": "http://bvservice.fr/geoserver/",
 		"Help_URL": "http://www.openfluid-project.org/",
 		"Metadata_URL": "http://www.openfluid-project.org/",	
