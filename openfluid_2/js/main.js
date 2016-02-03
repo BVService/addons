@@ -1,7 +1,7 @@
 Ext.namespace("GEOR.Addons");
 
 //var noglob_regionContent = "";
-var noglob_myPanel = "";
+var noglob_myPanel = null;
 
 var WFSStore = {};
 var All_WFS_list = [];
@@ -281,12 +281,13 @@ var openfluid = {
 console.log(openfluid);
 
 
-GEOR.Addons.openfluid_2 = function (map, options) {
-    this.map = map;
-    this.options = options;
-};
+GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
+//GEOR.Addons.openfluid_2 = function (map, options) {
+//    this.map = map;
+//    this.options = options;
+//};
 
-GEOR.Addons.openfluid_2.prototype = {
+//GEOR.Addons.openfluid_2.prototype = {
     win: null,
     item: null,
     WPS_URL: null,
@@ -299,6 +300,8 @@ GEOR.Addons.openfluid_2.prototype = {
     wpsInitialized: false,
 
     init: function (record) {
+//        this.map = map;
+//        this.options = options;
         var lang = OpenLayers.Lang.getCode();
         URL_WS = this.options.URL_WS;
         URL_cgi = this.options.URL_cgi;
@@ -1156,15 +1159,17 @@ GEOR.Addons.openfluid_2.prototype = {
 //                    while (j--) {
 //                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
 //                    }
-                var tmpforXml = {
-                    identifier: name_inputs,
-                    data: {
-                        literalData: {
-                            value: tmpValue
+//                    if (tmpValue != "") {
+                        var tmpforXml = {
+                            identifier: name_inputs,
+                            data: {
+                                literalData: {
+                                    value: tmpValue
+                                }
+                            }
                         }
-                    }
-                }
-                openfluid.inputs.forXmlPost.push(tmpforXml);
+                        openfluid.inputs.forXmlPost.push(tmpforXml);
+//                    }
 //                }
             }
             // ----------------------------------------------------------------------
@@ -1620,4 +1625,14 @@ GEOR.Addons.openfluid_2.prototype = {
         }
         this.win.show();
     },
-};
+    /**
+     * Method: destroy
+     * Called by GEOR_tools when deselecting this addon
+     */
+    destroy: function() {
+        openfluid = {};
+        noglob_myPanel.destroy();
+        noglob_myPanel = null;
+        GEOR.Addons.Base.prototype.destroy.call(this);
+    }
+});
