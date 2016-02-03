@@ -164,7 +164,7 @@ var openfluid = {
     },
     inputs: {
         list: [],
-        minOccurs:[],
+        minOccurs: [],
         forXmlPost: [],
         workspace: {
             list: [],
@@ -277,17 +277,9 @@ var openfluid = {
     }
 }
 
-//console.log("openfluid object :");
 console.log(openfluid);
 
-
-GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
-//GEOR.Addons.openfluid_2 = function (map, options) {
-//    this.map = map;
-//    this.options = options;
-//};
-
-//GEOR.Addons.openfluid_2.prototype = {
+GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
     win: null,
     item: null,
     WPS_URL: null,
@@ -300,8 +292,6 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
     wpsInitialized: false,
 
     init: function (record) {
-//        this.map = map;
-//        this.options = options;
         var lang = OpenLayers.Lang.getCode();
         URL_WS = this.options.URL_WS;
         URL_cgi = this.options.URL_cgi;
@@ -337,13 +327,13 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
             success: function (response, request) {
                 // Ext.MessageBox.alert('success', response.responseText);
                 var doc = response.responseXML;
-                var longeur = doc.getElementsByTagName("name").length; ;
+                var longeur = doc.getElementsByTagName("name").length;;
                 // i = 1 : to ignore the 1st workspace ("geor_loc" in this case)
                 for (var i = 1; i < longeur; i++) {
                     var ws = doc.getElementsByTagName("name")[i].firstChild.nodeValue;
                     openfluid.geoworkspace.list[i - 1] = ws;
                 }
-            //console.log(openfluid.geoworkspace.list);
+                //console.log(openfluid.geoworkspace.list);
             },
             failure: function (response, request) {
                 Ext.MessageBox.alert('failure', response.responseText);
@@ -452,7 +442,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
             }
             return datainput;
         };
-        
+
         // ----------------------------------------------------------------------
         // Data inputs workspace	
         // ----------------------------------------------------------------------
@@ -460,7 +450,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
             var name_inputs = openfluid.inputs.workspace.list[i];
             openfluid.inputs.workspace.addWorkspace(name_inputs, findDataInputsByIdentifier(process.dataInputs, name_inputs));
         }
-        
+
         // ----------------------------------------------------------------------
         // Data inputs param 		
         // ----------------------------------------------------------------------
@@ -1136,7 +1126,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
     // Send the input fields in the window
     ExecuteWps: function () {
         openfluid.inputs.forXmlPost = []; // reset sinon ne peut pas rechoisir
-        
+
         if (openfluid.inputs.workspace.list.length > 0 && openfluid.geoworkspace.WSField.getValue() == "") {
             GEOR.util.errorDialog({
                 msg: tr("Please select your workspace !")
@@ -1148,29 +1138,29 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
             for (var i = 0; i < openfluid.inputs.workspace.list.length; i++) {
                 var name_inputs = openfluid.inputs.workspace.list[i];
                 var tmpValue = openfluid.geoworkspace.WSField.getValue()
-//                if (tmpValue == "" && openfluid.inputs.workspace[name_inputs].obj.minOccurs == 1) {
-//                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
-//                    GEOR.util.errorDialog({
-//                        msg: tr("The field - ") + openfluid.inputs.workspace[name_inputs].obj.title + tr(" - is required !")
-//                    });
-//                    break
-//                } else {
-//                    var j = openfluid.inputs.minOccurs.length;
-//                    while (j--) {
-//                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
-//                    }
-//                    if (tmpValue != "") {
-                        var tmpforXml = {
-                            identifier: name_inputs,
-                            data: {
-                                literalData: {
-                                    value: tmpValue
-                                }
-                            }
+                    //                if (tmpValue == "" && openfluid.inputs.workspace[name_inputs].obj.minOccurs == 1) {
+                    //                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                    //                    GEOR.util.errorDialog({
+                    //                        msg: tr("The field - ") + openfluid.inputs.workspace[name_inputs].obj.title + tr(" - is required !")
+                    //                    });
+                    //                    break
+                    //                } else {
+                    //                    var j = openfluid.inputs.minOccurs.length;
+                    //                    while (j--) {
+                    //                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                    //                    }
+                    //                    if (tmpValue != "") {
+                var tmpforXml = {
+                    identifier: name_inputs,
+                    data: {
+                        literalData: {
+                            value: tmpValue
                         }
-                        openfluid.inputs.forXmlPost.push(tmpforXml);
-//                    }
-//                }
+                    }
+                }
+                openfluid.inputs.forXmlPost.push(tmpforXml);
+                //                    }
+                //                }
             }
             // ----------------------------------------------------------------------
             // Inputs Param
@@ -1180,7 +1170,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                 var name_inputs = openfluid.inputs.param.list[i];
                 var tmpValue = openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
                 if (tmpValue == "" && openfluid.inputs.param[name_inputs].obj.minOccurs == 1) {
-                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                    openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                     GEOR.util.errorDialog({
                         msg: tr("The field - ") + openfluid.inputs.param[name_inputs].obj.title + tr(" - is required !")
                     });
@@ -1188,7 +1178,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                 } else {
                     var j = openfluid.inputs.minOccurs.length;
                     while (j--) {
-                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                        openfluid.inputs.minOccurs.remove(name_inputs + 'minOccurs')
                     }
                     if (tmpValue != "") {
                         var tmpforXml = {
@@ -1210,7 +1200,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                 var name_inputs = openfluid.inputs.scrollwfs.list[i];
                 var tmpValue = openfluid.inputs.scrollwfs[name_inputs].objForWindowInput.getValue();
                 if (tmpValue == "" && openfluid.inputs.scrollwfs[name_inputs].obj.minOccurs == 1) {
-                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                    openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                     GEOR.util.errorDialog({
                         msg: tr("The field - ") + openfluid.inputs.scrollwfs[name_inputs].obj.title + tr(" - is required !")
                     });
@@ -1218,7 +1208,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                 } else {
                     var j = openfluid.inputs.minOccurs.length;
                     while (j--) {
-                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                        openfluid.inputs.minOccurs.remove(name_inputs + 'minOccurs')
                     }
                     if (tmpValue != "") {
                         var tmpforXml = {
@@ -1240,7 +1230,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                 var name_inputs = openfluid.inputs.scrollwcs.list[i];
                 var tmpValue = openfluid.inputs.scrollwcs[name_inputs].objForWindowInput.getValue();
                 if (tmpValue == "" && openfluid.inputs.scrollwcs[name_inputs].obj.minOccurs == 1) {
-                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                    openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                     GEOR.util.errorDialog({
                         msg: tr("The field - ") + openfluid.inputs.scrollwcs[name_inputs].obj.title + tr(" - is required !")
                     });
@@ -1248,7 +1238,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                 } else {
                     var j = openfluid.inputs.minOccurs.length;
                     while (j--) {
-                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                        openfluid.inputs.minOccurs.remove(name_inputs + 'minOccurs')
                     }
                     if (tmpValue != "") {
                         var tmpforXml = {
@@ -1271,7 +1261,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                     var name_inputs = openfluid.inputs.scroll.list[i];
                     var tmpValue = openfluid.inputs.scroll[name_inputs].objForWindowInput.getValue();
                     if (tmpValue == "" && openfluid.inputs.scroll[name_inputs].obj.minOccurs == 1) {
-                        openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                        openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                         GEOR.util.errorDialog({
                             msg: tr("The field - ") + openfluid.inputs.scroll[name_inputs].obj.title + tr(" - is required !")
                         });
@@ -1279,7 +1269,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                     } else {
                         var j = openfluid.inputs.minOccurs.length;
                         while (j--) {
-                            openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                            openfluid.inputs.minOccurs.remove(name_inputs + 'minOccurs')
                         }
                         if (tmpValue != "") {
                             var tmpforXml = {
@@ -1303,7 +1293,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                     var name_inputs = openfluid.inputs.coordxy.list[i];
                     var tmpValue = openfluid.inputs.coordxy[name_inputs].objForWindowInput.getValue();
                     if (tmpValue == "" && openfluid.inputs.coordxy[name_inputs].obj.minOccurs == 1) {
-                        openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                        openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                         GEOR.util.errorDialog({
                             msg: tr("The field - ") + openfluid.inputs.coordxy[name_inputs].obj.title + tr(" - is required !")
                         });
@@ -1311,7 +1301,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                     } else {
                         var j = openfluid.inputs.minOccurs.length;
                         while (j--) {
-                            openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                            openfluid.inputs.minOccurs.remove(name_inputs + 'minOccurs')
                         }
                         if (tmpValue != "") {
                             var tmpforXml = {
@@ -1335,7 +1325,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                     var name_inputs = openfluid.inputs.gml.list[i];
                     var tmpValue = openfluid.inputs.gml[name_inputs].objForWindowInput.getValue();
                     if (tmpValue == "" && openfluid.inputs.gml[name_inputs].obj.minOccurs == 1) {
-                        openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+                        openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                         GEOR.util.errorDialog({
                             msg: tr("The field - ") + openfluid.inputs.gml[name_inputs].obj.title + tr(" - is required !")
                         });
@@ -1343,7 +1333,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
                     } else {
                         var j = openfluid.inputs.minOccurs.length;
                         while (j--) {
-                            openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+                            openfluid.inputs.minOccurs.remove(name_inputs + 'minOccurs')
                         }
                         if (tmpValue != "") {
                             var tmpforXml = {
@@ -1629,7 +1619,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base,{
      * Method: destroy
      * Called by GEOR_tools when deselecting this addon
      */
-    destroy: function() {
+    destroy: function () {
         openfluid = {};
         noglob_myPanel.destroy();
         noglob_myPanel = null;
