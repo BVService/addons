@@ -332,16 +332,15 @@ GEOR.Addons.openfluid_2.prototype = {
             scope: this,
             url: URL_cgi,
             success: function (response, request) {
-                //Ext.MessageBox.alert('success', response.responseText);
+                // Ext.MessageBox.alert('success', response.responseText);
                 var doc = response.responseXML;
-                var longeur = doc.activeElement.childElementCount;
+                var longeur = doc.getElementsByTagName("name").length; ;
                 // i = 1 : to ignore the 1st workspace ("geor_loc" in this case)
                 for (var i = 1; i < longeur; i++) {
                     var ws = doc.getElementsByTagName("name")[i].firstChild.nodeValue;
-                    //console.log("ws "+i+" = "+ ws);
                     openfluid.geoworkspace.list[i - 1] = ws;
                 }
-                //                console.log(openfluid.geoworkspace.list);
+            //console.log(openfluid.geoworkspace.list);
             },
             failure: function (response, request) {
                 Ext.MessageBox.alert('failure', response.responseText);
@@ -1133,39 +1132,40 @@ GEOR.Addons.openfluid_2.prototype = {
         ----------------------------------------------------------------------------- */
     // Send the input fields in the window
     ExecuteWps: function () {
+        openfluid.inputs.forXmlPost = []; // reset sinon ne peut pas rechoisir
+        
         if (openfluid.inputs.workspace.list.length > 0 && openfluid.geoworkspace.WSField.getValue() == "") {
             GEOR.util.errorDialog({
                 msg: tr("Please select your workspace !")
             });
         } else {
-            openfluid.inputs.forXmlPost = []; // reset sinon ne peut pas rechoisir
             // ----------------------------------------------------------------------
             // Inputs workspace
             // ----------------------------------------------------------------------
             for (var i = 0; i < openfluid.inputs.workspace.list.length; i++) {
                 var name_inputs = openfluid.inputs.workspace.list[i];
                 var tmpValue = openfluid.geoworkspace.WSField.getValue()
-                if (tmpValue == "" && openfluid.inputs.workspace.obj.minOccurs == 1) {
-                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
-                    GEOR.util.errorDialog({
-                        msg: tr("The field - ") + openfluid.inputs.workspace[name_inputs].obj.title + tr(" - is required !")
-                    });
-                    break
-                } else {
-                    var j = openfluid.inputs.minOccurs.length;
-                    while (j--) {
-                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
-                    }
-                    var tmpforXml = {
-                        identifier: name_inputs,
-                        data: {
-                            literalData: {
-                                value: tmpValue
-                            }
+//                if (tmpValue == "" && openfluid.inputs.workspace[name_inputs].obj.minOccurs == 1) {
+//                    openfluid.inputs.minOccurs.push(name_inputs+'minOccurs')
+//                    GEOR.util.errorDialog({
+//                        msg: tr("The field - ") + openfluid.inputs.workspace[name_inputs].obj.title + tr(" - is required !")
+//                    });
+//                    break
+//                } else {
+//                    var j = openfluid.inputs.minOccurs.length;
+//                    while (j--) {
+//                        openfluid.inputs.minOccurs.remove(name_inputs+'minOccurs')
+//                    }
+                var tmpforXml = {
+                    identifier: name_inputs,
+                    data: {
+                        literalData: {
+                            value: tmpValue
                         }
                     }
-                    openfluid.inputs.forXmlPost.push(tmpforXml);
                 }
+                openfluid.inputs.forXmlPost.push(tmpforXml);
+//                }
             }
             // ----------------------------------------------------------------------
             // Inputs Param
