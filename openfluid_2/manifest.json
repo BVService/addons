@@ -17,7 +17,7 @@
             "tab1": [],
             "tab2": ["ROLE_SV_ADMIN"]
         },
-        "WPS_URL": "http://bvservice2.agrocampus-ouest.fr/cgi-bin/bvservice.cgi?",
+        "WPS_URL": "http://localhost/cgi-bin/mywps.cgi",
         "WPS_identifier": "mhydasopenfluid_sync",
         "URL_cgi": "http://bvservice.fr/cgi-bin/GetWSList.cgi",
         "URL_WS": "http://bvservice.fr/geoserver/",

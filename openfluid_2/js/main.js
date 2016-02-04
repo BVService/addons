@@ -1,7 +1,7 @@
 Ext.namespace("GEOR.Addons");
 
 //var noglob_regionContent = "";
-var noglob_myPanel = null;
+var noglob_myPanel = "";
 
 var WFSStore = {};
 var All_WFS_list = [];
@@ -277,7 +277,7 @@ var openfluid = {
     }
 }
 
-console.log(openfluid);
+//console.log(openfluid);
 
 GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
     win: null,
@@ -536,6 +536,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
                 valueField: 'value',
                 displayField: 'text',
                 labelWidth: 200,
+                //minListWidth: 70,
                 listWidth: 'auto' // dropdown list width
             };
 
@@ -1621,8 +1622,9 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
      */
     destroy: function () {
         openfluid = {};
-        noglob_myPanel.destroy();
-        noglob_myPanel = null;
+        if (noglob_myPanel != ""){
+            noglob_myPanel.destroy();
+        }
         GEOR.Addons.Base.prototype.destroy.call(this);
     }
 });
