@@ -6,7 +6,7 @@ author: @Vanhouteghem
 
 Typical configuration to include in your GEOR_custom.js file:
 
-{
+    {
         "id": "wpsmaker",
         "name": "wpsmaker",
         "preloaded": false,

@@ -88,12 +88,7 @@ var noglob_regionContent = "";
 var noglob_myPanel = "";
 var noglob_liste = "";
 
-GEOR.Addons.arbreexu = function(map, options) {
-    this.map = map;
-    this.options = options;
-};
-
-GEOR.Addons.arbreexu.prototype = {
+GEOR.Addons.arbreexu = Ext.extend(GEOR.Addons.Base, {
     win: null,
     item: null,
     WPS_URL: null,
@@ -125,7 +120,7 @@ GEOR.Addons.arbreexu.prototype = {
         this.item = new Ext.menu.Item({
             text: record.get("title")[lang],
             qtip: record.get("description")[lang],
-            iconCls: 'arbre_exu_icon',
+            iconCls: 'process_time_icon',
             handler: this.showWindow,
             scope: this
         });
@@ -160,7 +155,7 @@ GEOR.Addons.arbreexu.prototype = {
                 if (index > -1) {
                     arbreexu.inputs.list.splice(index, 1);
                 } // Removing undefined values 
-                for (i = 0; i < arbreexu.inputs.list.length; i++) {
+                for (var i = 0; i < arbreexu.inputs.list.length; i++) {
                     switch (true) {
                         case (arbreexu.inputs.list[i].slice(0, 13) == "L_input_param"):
 							arbreexu.inputs.param.list.push(arbreexu.inputs.list[i]);
@@ -195,13 +190,13 @@ GEOR.Addons.arbreexu.prototype = {
                 // Course outputs
                 // ----------------------------------------------------------------------
                 // List the outputs included in the DescribeProcess query and store them in the noglob_table "noglob_tableOutputs"
-                for (i in wpsProcess.processOutputs) {
+                for (var i in wpsProcess.processOutputs) {
 					arbreexu.outputs.list.push(wpsProcess.processOutputs[i].identifier);
                 }
                 if (arbreexu.outputs.list.indexOf(undefined) > -1) {
                     arbreexu.outputs.list.splice(arbreexu.outputs.list.indexOf(undefined), 1);
                 }
-                for (i = 0; i < arbreexu.outputs.list.length; i++) {
+                for (var i = 0; i < arbreexu.outputs.list.length; i++) {
                     if (arbreexu.outputs.list[i].slice(0, 12) == "L_output_wms") {
 						arbreexu.outputs.wms.list.push(arbreexu.outputs.list[i]);
                     } 
@@ -243,7 +238,7 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs param 		
         // ----------------------------------------------------------------------
-	    for (i = 1; i <= arbreexu.inputs.param.list.length; i++) {	 
+	    for (var i = 1; i <= arbreexu.inputs.param.list.length; i++) {	 
 			arbreexu.inputs.param.addParam(i,findDataInputsByIdentifier(process.dataInputs, "L_input_param"+i));
 		}
 		
@@ -251,14 +246,14 @@ GEOR.Addons.arbreexu.prototype = {
         // Data input WMS 	
         // ----------------------------------------------------------------------	
         // Add the title of each WMS input WMS -- arbreexu.inputs.scrollwms.list
-		for (i = 1; i <= arbreexu.inputs.scrollwms.list.length; i++) {
+		for (var i = 1; i <= arbreexu.inputs.scrollwms.list.length; i++) {
             arbreexu.inputs.scrollwms.addScrollwms(i,findDataInputsByIdentifier(process.dataInputs, "L_input_wms"+i));
 		}
 
         // ----------------------------------------------------------------------
         // Data inputs Combobox
         // ----------------------------------------------------------------------		
-        for (i = 1; i <= arbreexu.inputs.scroll.list.length; i++) {
+        for (var i = 1; i <= arbreexu.inputs.scroll.list.length; i++) {
 			arbreexu.inputs.scroll.addScroll(i,findDataInputsByIdentifier(process.dataInputs, "L_input_scroll"+i));
 			trashArray = [];
             for (var k in arbreexu.inputs.scroll["scroll"+i].obj.literalData.allowedValues) {
@@ -271,21 +266,21 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // Data inputs Coordinates
         // ----------------------------------------------------------------------
-		for (i = 1; i <= arbreexu.inputs.coordxy.list.length; i++) {
+		for (var i = 1; i <= arbreexu.inputs.coordxy.list.length; i++) {
             arbreexu.inputs.coordxy.addCoordxy(i,findDataInputsByIdentifier(process.dataInputs, "L_input_coordxy"+i));
 		}
 		
         // ----------------------------------------------------------------------
         // Data inputs Checkbox 
         // ----------------------------------------------------------------------		
-	    for (i = 1; i <= arbreexu.inputs.checkbox.list.length; i++) {	 
+	    for (var i = 1; i <= arbreexu.inputs.checkbox.list.length; i++) {	 
 			arbreexu.inputs.checkbox.addCheckbox(i,findDataInputsByIdentifier(process.dataInputs, "L_input_checkbox"+i));
 		}
 		
         // ----------------------------------------------------------------------
         // Data inputs GML 
         // ----------------------------------------------------------------------		
-	    for (i = 1; i <= arbreexu.inputs.gml.list.length; i++) {	 
+	    for (var i = 1; i <= arbreexu.inputs.gml.list.length; i++) {	 
 			arbreexu.inputs.gml.addGml(i,findDataInputsByIdentifier(process.dataInputs, "C_input_gml"+i));
 		}
 		
@@ -358,7 +353,7 @@ GEOR.Addons.arbreexu.prototype = {
 					//,storeId: 'myStore'
                 });
 		// PART 2
-		for (i = 1; i <= arbreexu.inputs.scrollwms.list.length; i++) {
+		for (var i = 1; i <= arbreexu.inputs.scrollwms.list.length; i++) {
         //if (arbreexu.inputs.scrollwms.list.length >= 1) {
             FIELD_WIDTH = 60, 
                 base = {
@@ -398,7 +393,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Combobox inputs
         // ----------------------------------------------------------------------			 
 		arbreexu.inputs.scroll.windowInput = [];
-		for (i = 1; i <= arbreexu.inputs.scroll.list.length; i++) {
+		for (var i = 1; i <= arbreexu.inputs.scroll.list.length; i++) {
             base = {
                 forceSelection: true,
                 editable: true,
@@ -521,7 +516,7 @@ GEOR.Addons.arbreexu.prototype = {
         map.addControl(clickbv);
 
 		arbreexu.inputs.coordxy.windowInput = [];
-		for (i = 1; i <= arbreexu.inputs.coordxy.list.length; i++) {
+		for (var i = 1; i <= arbreexu.inputs.coordxy.list.length; i++) {
             arbreexu.inputs.coordxy['coordxy'+i].objForWindowInput = new Ext.Button({
                 iconCls: 'add_icon',
                 text: arbreexu.inputs.coordxy['coordxy'+i].obj.title, //OpenLayers.i18n(noglob_coordxyTitle[0]),
@@ -539,7 +534,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Checkbox inputs
         // ----------------------------------------------------------------------
 		arbreexu.inputs.checkbox.windowInput = [];
-		for (i = 1; i <= arbreexu.inputs.checkbox.list.length; i++) {
+		for (var i = 1; i <= arbreexu.inputs.checkbox.list.length; i++) {
 			arbreexu.inputs.checkbox['checkbox'+i].objForWindowInput = new Ext.form.Checkbox({ // flag
 					//boxLabel: noglob_checkboxTitle[i-1],
 					id: 'checkbox'+i,
@@ -771,7 +766,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Inputs Param
         // ----------------------------------------------------------------------
 		//noglob_tableList_input_forXml = [];
-        for (i = 1; i <= arbreexu.inputs.param.list.length; i++) { 
+        for (var i = 1; i <= arbreexu.inputs.param.list.length; i++) { 
             tmpForXml = {
                 identifier: "L_input_param"+i,
                 data: {
@@ -789,7 +784,7 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // Inputs WMS
         // ----------------------------------------------------------------------
-		for (i = 1; i <= arbreexu.inputs.scrollwms.list.length; i++) { //arbreexu.inputs.param['param'+i].objForWindowInput
+		for (var i = 1; i <= arbreexu.inputs.scrollwms.list.length; i++) { //arbreexu.inputs.param['param'+i].objForWindowInput
 			// si pas de refresh l'objet est null
 			if (arbreexu.inputs.scrollwms["scrollwms"+i].refreshedObjForWindowInput === null) {
 				// si vide 
@@ -829,7 +824,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Inputs Combobox
         // ----------------------------------------------------------------------
         if (arbreexu.inputs.scroll.list.length >= 0) {
-			for (i = 1; i <= arbreexu.inputs.scroll.list.length; i++) {
+			for (var i = 1; i <= arbreexu.inputs.scroll.list.length; i++) {
                  arbreexu.inputs.scroll['scroll'+i].objForXml = {
                     identifier: "L_input_scroll"+i,
                     data: {
@@ -845,7 +840,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Inputs Coordinates
         // ----------------------------------------------------------------------
         if (arbreexu.inputs.coordxy.list.length >= 0) {
-			for (i = 1; i <= arbreexu.inputs.coordxy.list.length; i++) {
+			for (var i = 1; i <= arbreexu.inputs.coordxy.list.length; i++) {
 				arbreexu.inputs.coordxy['coordxy'+i].objForXml = {
 					identifier: "L_input_coordxy"+i,
 					data: {
@@ -863,7 +858,7 @@ GEOR.Addons.arbreexu.prototype = {
         // Inputs GML
         // ----------------------------------------------------------------------
         if (arbreexu.inputs.gml.list.length >= 1) {
-			for (i = 1; i <= arbreexu.inputs.gml.list.length; i++) {
+			for (var i = 1; i <= arbreexu.inputs.gml.list.length; i++) {
 				//console.log(gmlValue1);
 				var tmpGMLforXml = {
 					identifier: "C_input_gml"+i,
@@ -881,7 +876,7 @@ GEOR.Addons.arbreexu.prototype = {
         // ----------------------------------------------------------------------
         // Inputs Checkbox
         // ----------------------------------------------------------------------
-        for (i = 1; i <= arbreexu.inputs.checkbox.list.length; i++) {
+        for (var i = 1; i <= arbreexu.inputs.checkbox.list.length; i++) {
             tmpForXml = {
                 identifier: "L_input_checkbox"+i,
                 data: {
@@ -901,7 +896,7 @@ GEOR.Addons.arbreexu.prototype = {
             // Outputs WMS
             // ----------------------------------------------------------------------
             tableList_output_forXml = [];
-            for (i = 1; i <= arbreexu.outputs.wms.list.length; i++) {
+            for (var i = 1; i <= arbreexu.outputs.wms.list.length; i++) {
                 L_output_wms_forXml = {
                     asReference: false,
                     identifier: "L_output_wms"+i
@@ -912,7 +907,7 @@ GEOR.Addons.arbreexu.prototype = {
             // ----------------------------------------------------------------------
             // Outputs Param
             // ----------------------------------------------------------------------
-			for (i = 1; i <= arbreexu.outputs.param.list.length; i++) {
+			for (var i = 1; i <= arbreexu.outputs.param.list.length; i++) {
                 L_output_param1_forXml = {
                     asReference: false,
                     identifier: "L_output_param"+i
@@ -991,7 +986,7 @@ GEOR.Addons.arbreexu.prototype = {
                 // ----------------------------------------------------------------------
                 // Outputs WMS 
                 // ----------------------------------------------------------------------
-				for (outputKeyWms = 1; outputKeyWms <= arbreexu.outputs.wms.list.length; outputKeyWms++) {
+				for (var outputKeyWms = 1; outputKeyWms <= arbreexu.outputs.wms.list.length; outputKeyWms++) {
                 // Recover data from the output sent by the PyWPS server
 					if (identifier == "L_output_wms"+outputKeyWms) {
 						arbreexu.outputs.wms.addWms(outputKeyWms,literalData[0].firstChild.nodeValue);
@@ -1001,7 +996,7 @@ GEOR.Addons.arbreexu.prototype = {
                 // ----------------------------------------------------------------------
                 // Outputs Param 
                 // ----------------------------------------------------------------------
-                for (outputKeyParam = 1; outputKeyParam <= arbreexu.outputs.param.list.length; outputKeyParam++) {
+                for (var outputKeyParam = 1; outputKeyParam <= arbreexu.outputs.param.list.length; outputKeyParam++) {
 					if (identifier == "L_output_param"+outputKeyParam) { // flag prob avec le i, peut etre en redondance car deja un i dans la boucle ??,
 						client_L_output_param1 = literalData[0].firstChild.nodeValue;
 					}
@@ -1207,7 +1202,15 @@ GEOR.Addons.arbreexu.prototype = {
         this.map = null;
 		console.log('hide');
     },
-
-};
-
-console.log(GEOR.Addons.arbreexu.prototype);
+    /**
+     * Method: destroy
+     * Called by GEOR_tools when deselecting this addon
+     */
+    destroy: function () {
+        arbreexu = {};
+        if (noglob_myPanel != ""){
+            noglob_myPanel.destroy();
+        }
+        GEOR.Addons.Base.prototype.destroy.call(this);
+    }
+});
