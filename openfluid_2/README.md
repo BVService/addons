@@ -16,9 +16,9 @@ Typical configuration to include in your GEOR_custom.js file:
             "fr": "Bvservice Openfluid"
         },
         "description": {
-            "en": "Bvservice Openfluid est un addon (client WPS) pour l'IDS gOrchestra",
-            "es": "Bvservice Openfluid is an addon (WPS client) for gOorchestra DSI",
-            "fr": "Bvservice Openfluid is an addon (WPS client) for gOorchestra DSI"
+            "fr": "Bvservice Openfluid est un addon (client WPS) pour l'IDS gOrchestra",
+            "en": "Bvservice Openfluid is an addon (WPS client) for gOorchestra DSI",
+            "es": "Bvservice Openfluid is an addon (WPS client) for gOorchestra DSI"
         },
         "options": {
 

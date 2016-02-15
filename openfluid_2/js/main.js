@@ -242,11 +242,11 @@ var openfluid = {
             list: [],
             addGml: function (Gml, addObj) {
                 openfluid.inputs.gml[Gml] = {
-                    obj: null
+                    obj: ""
                 }
                 openfluid.inputs.gml[Gml].obj = addObj;
-                openfluid.inputs.gml[Gml].objForWindowInput = null;
-                openfluid.inputs.gml[Gml].gmlValue = null;
+                openfluid.inputs.gml[Gml].objForWindowInput = "";
+                openfluid.inputs.gml[Gml].gmlValue = "";
             }
         }
     },
@@ -277,7 +277,7 @@ var openfluid = {
     }
 }
 
-//console.log(openfluid);
+console.log(openfluid);
 
 GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
     win: null,
@@ -648,7 +648,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             openfluid.inputs.scrollwfs[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
                 name: "wfs" + i,
                 fieldLabel: openfluid.inputs.scrollwfs[name_inputs].obj.title,
-                emptyText: 'Scrollwfs input',
+                emptyText: 'Vector layer input',
                 mode: 'local',
                 width: FIELD_WIDTH,
                 xtype: 'combo',
@@ -702,7 +702,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             openfluid.inputs.scrollwcs[name_inputs].objForWindowInput = new Ext.form.ComboBox(Ext.apply({
                 name: "wcs" + i,
                 fieldLabel: openfluid.inputs.scrollwcs[name_inputs].obj.title,
-                emptyText: 'Scrollwcs input',
+                emptyText: 'Raster layer input',
                 mode: 'local',
                 width: FIELD_WIDTH,
                 xtype: 'combo',
@@ -754,8 +754,6 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
         // Parameter inputs
         // ----------------------------------------------------------------------
         openfluid.inputs.param.windowInput = [];
-        //var noglob_table_input_param_splitPanel1 = [];
-        //var noglob_table_input_param_splitPanel2 = [];
         for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
             var name_inputs = openfluid.inputs.param.list[i];
             openfluid.inputs.param[name_inputs].objForWindowInput = new Ext.form.TextField({ //this.champ_pour_input_param1 = new Ext.form.TextField({
@@ -794,9 +792,8 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
         // PART 1
         openfluid.inputs.gml.windowInput = [];
         // Valable pour un seul GML en entrée !
-        if (openfluid.inputs.gml.list.length > 0) {
-
-            //            for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
+        for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
+            // work only for one GML input
             var name_inputs = openfluid.inputs.gml.list[0];
             //    console.log(name_inputs);
             //                toComptGMLInputs.IdGML[i] = name_inputs;
@@ -804,11 +801,12 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             var tmpwindowgml = {
                 width: 0,
                 id: name_inputs,
-                //                    xtype: 'textfield',
+//                xtype: 'textfield',
                 xtype: 'fileuploadfield',
-                //                    inputType: 'file',
+//                buttonOnly: true,
+//                inputType: 'file',
                 fieldLabel: openfluid.inputs.gml[name_inputs].obj.title,
-                //                    fileUpload: true,
+                fileUpload: true,
                 buttonText: '',
                 labelSeparator: tr("labelSeparator"),
                 allowBlank: false,
@@ -822,8 +820,8 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
                         var reader = new FileReader();
                         reader.onload = function (e) {
                             //                                console.log(e.target.result);
-                            console.log('ajout gml ' + i);
-                            openfluid.inputs.gml[tmpwindowgml.id].gmlValue = e.target.result; // flag : i undefined
+                            console.log('ajout gml ' + i+1);
+                            openfluid.inputs.gml[name_inputs].gmlValue = e.target.result; // flag : i undefined
                             if (myfilename.search('.gml') != -1) {
 
                             } else {
@@ -834,19 +832,18 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
                             }
                         };
                         reader.readAsText(file, "UTF-8");
-                        console.log(openfluid.inputs.gml[tmpwindowgml.id].gmlValue);
+                        console.log(openfluid.inputs.gml[name_inputs].gmlValue);
                     }
                 }
             }
             openfluid.inputs.gml.windowInput.push(tmpwindowgml);
-            //            }
         }
 
         // PART 2 GML Window
         var fileLoadForm = new Ext.FormPanel({
             frame: false,
             border: false,
-            autoWidth: true,
+            autoWidth: false,
             //            labelWidth: 150, // xtype: 'filefield',
             labelWidth: 0, // for xtype: 'fileuploadfield',
             bodyStyle: 'padding: 9px 10px 0 0px;',
@@ -857,7 +854,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
 
         var fileWindow = new Ext.Window({
             closable: true,
-            width: 320,
+            width: 0,
             title: "Parcourir",
             border: false,
             plain: true,
@@ -931,7 +928,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             var name_inputs = openfluid.inputs.checkbox.list[i];
             openfluid.inputs.checkbox[name_inputs].objForWindowInput = new Ext.form.Checkbox({ // flag
                 id: 'checkbox' + i,
-                width: 5,
+                //width: 5,
                 xtype: 'checkbox',
                 fieldLabel: openfluid.inputs.checkbox[name_inputs].obj.title,
                 checked: true
@@ -979,11 +976,11 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             onglet_checkbox = Ext.apply({
                 title: tr("Checkbox parameter(s) (0/1)"),
                 bodyStyle: {
-                    maxHeight: '120px'
+                    maxHeight: '110px'
                 },
                 items: [{
                     xtype: 'form',
-                    labelWidth: 300,
+                    labelWidth: 320,
                     bodyStyle: "padding:10px;",
                     items: [
                         openfluid.inputs.checkbox.windowInput,
@@ -1095,7 +1092,6 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
                     text: tr("Close"),
                     handler: function () {
                         this.win.hide();
-                        //this.win.destroy();
                     },
                     scope: this
             }, {
@@ -1119,7 +1115,6 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             }],
         });
         return noglob_myPanel;
-
     },
     /** -----------------------------------------------------------------------------
         ExecuteWps
@@ -1166,7 +1161,6 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             // ----------------------------------------------------------------------
             // Inputs Param
             // ----------------------------------------------------------------------
-            //noglob_tableList_input_forXml = [];
             for (var i = 0; i < openfluid.inputs.param.list.length; i++) {
                 var name_inputs = openfluid.inputs.param.list[i];
                 var tmpValue = openfluid.inputs.param[name_inputs].objForWindowInput.getValue()
@@ -1324,7 +1318,7 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             if (openfluid.inputs.gml.list.length > 0) {
                 for (var i = 0; i < openfluid.inputs.gml.list.length; i++) {
                     var name_inputs = openfluid.inputs.gml.list[i];
-                    var tmpValue = openfluid.inputs.gml[name_inputs].objForWindowInput.getValue();
+                    var tmpValue = openfluid.inputs.gml[name_inputs].gmlValue;
                     if (tmpValue == "" && openfluid.inputs.gml[name_inputs].obj.minOccurs == 1) {
                         openfluid.inputs.minOccurs.push(name_inputs + 'minOccurs')
                         GEOR.util.errorDialog({
@@ -1571,7 +1565,6 @@ GEOR.Addons.openfluid_2 = Ext.extend(GEOR.Addons.Base, {
             });
         }
         GEOR.waiter.hide();
-        //        noglob_myPanel.show();
         // ----------------------------------------------------------------------
         // WMC
         // ----------------------------------------------------------------------
