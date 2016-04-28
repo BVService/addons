@@ -1,5 +1,9 @@
 {
     "js": [
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/WCSGetCoverage.js",
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/OWSCommon/v1_1_0.js",
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/WPSDescribeProcess.js",
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/WKT.js",
         "js/FileUploadField.js",
         "js/WPSAxecute.js",
         "js/main.js"
