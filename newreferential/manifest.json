@@ -1,11 +1,15 @@
 {
     "js": [
+        "js/FileUploadField.js",
+        "js/WPSAxecute.js",
         "js/main.js"
     ],
     "css": [
         "css/main.css"
     ],
     "default_options": {
+        "WPS_URL": "http://bvservice.fr/wps/?",
+        "WPS_identifier": "extractdem",
         "serviceURL": "http://bvservice.fr/wps",
         "srsData": [
             ["EPSG:4326", "WGS84 (EPSG:4326)"],

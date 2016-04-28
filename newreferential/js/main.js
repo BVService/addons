@@ -28,7 +28,7 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
     init: function(record) {
         this.jsonFormat = new OpenLayers.Format.JSON();
         var style = {
-            externalGraphic: GEOR.config.PATHNAME + "/app/addons/extractor/img/shading.png",
+            externalGraphic: GEOR.config.PATHNAME + "/app/addons/newreferential/img/shading.png",
             graphicWidth: 16,
             graphicHeight: 16,
             graphicOpacity: 1,
