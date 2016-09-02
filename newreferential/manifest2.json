@@ -13,44 +13,61 @@
     ],
     "default_options": {
         "WPS_URL": "http://bvservice.fr/wps/?",
-        "WPS_identifier": "extractor",
+        "WPS_identifier": "extractdem",
         "serviceURL": "http://bvservice.fr/wps",
+        "defaultSRS": "EPSG:4326",
+        "methodresampling": [
+            ["bilinear"],
+            ["bicubic"],
+            ["nearest neighbor"]
+        ],
+        "defaultmethod": "bilinear",
+        "defaultRasterResolution": 10,
         "defaultWorkspace": "default_workspace",
-        "defaultproject": "bvservice"
+        "defaultproject": "geoxxx",
+        "defaultadress": "default",
+        "defaultlayer": "default"
     },
     "i18n": {
         "en": {
-            "addon_extractor_popup_title": "New referentiel",
-            "rapport_extraction": "Extraction report",
-            "param_extract" : "Extraction parameters" 
+            "addon_extractor_popup_title": "Extraction parameters"
         },
         "es": {
-            "addon_extractor_popup_title": "New referentiel",
+            "addon_extractor_popup_title": "Extraction parameters",
             "Close": "Close",
             "Extract": "Extract",
             "The extraction request succeeded, check your email.": "The extraction request succeeded, check your email.",
             "The extraction request failed.": "El pedido de extracción falló.",
+            "SRS": "SRS",
+            "Method of Resampling": "Method of Resampling",
             "Project": "Project",
+            "Resolution for rasters (cm)": "Resolution for rasters (cm)",
             "Workspace": "Workspace"
         },
         "fr": {
-            "addon_extractor_popup_title": "Nouveau référentiel",
-            "rapport_extraction": "Rapport d'extraction",
-            "param_extract" : "Parameters d'extraction",
+            "addon_extractor_popup_title": "Paramètres d'extraction",
             "Close": "Fermer",
             "Extract": "Extraire",
             "The extraction request succeeded, check your email.": "La demande d'extraction a été prise en compte. Surveillez votre courriel.",
             "The extraction request failed.": "La demande d'extraction a échoué.",
+            "SRS": "Projection de sortie",
+            "Method of Resampling": "Méthode de réechantillonange",
             "Project": "Projet",
-            "Workspace": "Espace de travail"
+            "Workspace": "Espace de travail",
+            "Feed Adress": "Adresse de flux",
+            "Layer Name": "Nom de la couche",        
+            "Resolution for MNT (m)": "Résolution du MNT (m)"
         },
          "de": {
-            "addon_extractor_popup_title": "New referentiel",
+            "addon_extractor_popup_title": "Extraktions-parameter",
             "Close": "Schließen",
             "Extract": "extrahieren",
             "The extraction request succeeded, check your email.": "erfolgreiche Extraktion. E-mail folgt.",
             "The extraction request failed.": "extraktion nicht erfolgt.",
+            "Method of Resampling": "Method of Resampling",
             "Project": "Project",
+            "SRS": "SRS",
+            "Resolution for rasters (cm)": "Layer auflösung in cm",
             "Workspace": "Workspace"
         }
     }

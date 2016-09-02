@@ -8,21 +8,19 @@ Ext.namespace("GEOR.Addons");
  * - modifyFeature control improved: non symetrical mode when OpenLayers.Control.ModifyFeature.RESIZE
  */
 var enableprojet = [] ;
+var enablemethod = [] ;
 
 GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
     win: null,
     jsonFormat: null,
     layer: null,
     modifyControl: null,
+    resField: null,
     item: null,
     wps_Config: null,
     WPS_URL: null,
     WPS_identifier: null,
     wpsInitialized: false,
-    layerStore: null,
-    map : null,
-    extentzoom : null ,
-    checkshow : null ,
 
     /**
      * Method: init
@@ -85,8 +83,12 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
         var projet = findDataInputsByIdentifier(process.dataInputs,"projet");
         var Workspace = findDataInputsByIdentifier(process.dataInputs,"Workspace");
         var bbox = findDataInputsByIdentifier(process.dataInputs,"bbox");
-    
+        var layer = findDataInputsByIdentifier(process.dataInputs,"layer");
+        var inputdem = findDataInputsByIdentifier(process.dataInputs,"inputdem");
+        var resolution = findDataInputsByIdentifier(process.dataInputs,"resolution");
+        var methodresampling = findDataInputsByIdentifier(process.dataInputs,"methodresampling");      
         var dataprojet = [];
+        var datamethod = [];
         
         for (var obj in projet.literalData.allowedValues) {
             if (projet.literalData.allowedValues.hasOwnProperty(obj)) {
@@ -96,10 +98,18 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
             }
         }
         
+        
+        for (var obj in methodresampling.literalData.allowedValues) {
+            if (methodresampling.literalData.allowedValues.hasOwnProperty(obj)) {
+                if (enablemethod.length < 1 || enablemethod.indexOf(obj) > -1) { // enableDEM defined in GEOR_custom.js or not
+                    datamethod.push([obj]);
+                }
+            }
+        }
         wps_Config = {
      
             projet: {
-                value: "bvservice",
+                value: "geoxxx",
                 title: projet.title,
                 allowedValues: dataprojet
             },
@@ -111,14 +121,32 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
             bbox: {
                 value: (bbox.literalData.defaultValue)?bbox.literalData.defaultValue:'',
                 title: bbox.title
+            },
+             inputdem: {
+                value: (inputdem.literalData.defaultValue)?inputdem.literalData.defaultValue:'default',
+                title: inputdem.title
+            },
+            
+             layer: {
+                value: (layer.literalData.defaultValue)?layer.literalData.defaultValue:'default',
+                title: layer.title
+            },
+             resolution: {
+                value: (resolution.literalData.defaultValue)?resolution.literalData.defaultValue:'10',
+                title: resolution.title
+            },
+              methodresampling: {
+                value: "bilinear",
+                title: methodresampling.title,
+                allowedValues: datamethod
             }
+            
         };
         this.wpsInitialized = true;
     },
  
     init: function(record) {
         this.jsonFormat = new OpenLayers.Format.JSON();
-        layerStore = Ext.getCmp("mappanel").layers;
         var style = {
             externalGraphic: GEOR.config.PATHNAME + "/app/addons/newreferential/img/shading.png",
             graphicWidth: 16,
@@ -127,7 +155,7 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
             graphicXOffset: -8,
             graphicYOffset: -8,
             graphicZIndex: 10000,
-            strokeColor: "red",
+            strokeColor: "blue",
             strokeWidth: 2,
             fillOpacity: 0,
             cursor: "pointer"
@@ -201,6 +229,15 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
                 data: wps_Config.projet.allowedValues
             });
             
+                var methodStore = new Ext.data.SimpleStore({
+                fields: [{
+                    name: 'value',
+                    mapping: 0
+                }],
+                data: wps_Config.methodresampling.allowedValues
+            });
+            
+            
          
          this.projectField  = new Ext.form.ComboBox({
                 name: 'project',
@@ -223,34 +260,60 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
             labelSeparator: OpenLayers.i18n("labelSeparator"),
             value: this.options.defaultWorkspace
         });
+        this.resField = new Ext.form.NumberField({
+            fieldLabel: OpenLayers.i18n("Resolution for MNT (m)"),
+            name: "resolution",
+            width: FIELD_WIDTH,
+            labelSeparator: OpenLayers.i18n("labelSeparator"),
+            value: this.options.defaultRasterResolution,
+            decimalPrecision: 0
+        });
+        this.methodField = new Ext.form.ComboBox(Ext.apply({
+            name: "methodresampling",
+            fieldLabel: OpenLayers.i18n("Method of Resampling"),
+            value: this.options.defaultmethod,
+            store: new Ext.data.SimpleStore({
+                fields: ['text'],
+                data: this.options.methodresampling
+            })
+        }, base));
         
-        this.contextshow = new Ext.form.Checkbox({ 
-					id: 'checkbox',
-					width: FIELD_WIDTH,
-					xtype: 'checkbox',
-					fieldLabel: "Afficher les couches générées",
-					checked: true
+        this.methodField  = new Ext.form.ComboBox({
+                name: 'methodresampling',
+                fieldLabel: tr ("methodresampling"),
+                store: methodStore,
+                valueField: 'value',
+                value: wps_Config.methodresampling.value,
+                displayField: 'value',
+                editable: false,
+                mode: 'local',
+                triggerAction: 'all',
+                width: FIELD_WIDTH
             });
             
-        checkshow=this.contextshow;
-        
-            noglob_regionContent = new Ext.Panel({ //new Ext.form.Panel({ is not a constructor
-            title: OpenLayers.i18n("rapport_extraction"),
-            activate: true,
-            region: 'south',
-            collapsible: true,
-            collapsed: false,
-            split: true,
-    });
-    
-    
-    var onglet2 = {
+        this.adressField = new Ext.form.TextField({
+            fieldLabel: OpenLayers.i18n("Feed Adress"),
+            name: "adress",
+            width: FIELD_WIDTH,
+            labelSeparator: OpenLayers.i18n("labelSeparator"),
+            value: this.options.defaultadress
+        });
+        this.layerField = new Ext.form.TextField({
+            fieldLabel: OpenLayers.i18n("Layer Name"),
+            name: "layer",
+            width: FIELD_WIDTH,
+            labelSeparator: OpenLayers.i18n("labelSeparator"),
+            value: this.options.defaultlayer
+        });
+        return new Ext.Window({
             closable: true,
-            closeAction: 'hide', //FAIL noglob_myPanel.hide,
-			title: OpenLayers.i18n("param_extract"),
-            plain: true,
-            buttonAlign: 'right',
-            autoScroll: true, 
+            closeAction: 'hide',
+            width: 330,
+            height: 300,
+            title: OpenLayers.i18n("addon_extractor_popup_title"),
+            border: false,
+            buttonAlign: 'left',
+            layout: 'fit',
             items: [{
                 xtype: 'form',
                 labelWidth: 120,
@@ -258,28 +321,13 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
                 items: [
                     this.projectField,
                     this.workspaceField,
-                    this.contextshow
+                    this.resField,                
+                    this.methodField,
+                    this.adressField,
+                    this.layerField
 
                 ]
-            }]
-        };
-
-
-        return new Ext.Window({
-            title: OpenLayers.i18n("addon_extractor_popup_title"),
-            closable: true,
-            closeAction: 'hide', 
-            width: 330, // auto provoque un bug de largeur sur Chrome
-			height:Ext.getBody().getViewSize().height - 121,//62,
-			y: '90px',//'31px', 
-			x: '0%',
-            plain: true,
-            buttonAlign: 'right',
-            autoScroll: true,
-            items: [
-            onglet2,
-            noglob_regionContent
-            ],
+            }],
             fbar: ['->', {
                 text: OpenLayers.i18n("Close"),
                 handler: function() {
@@ -293,20 +341,17 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
             }],
             listeners: {
                 "show": function() {
-                    map = this.map ;
                     if (!this.layer.features.length) {
                         this.layer.addFeatures([
                             new OpenLayers.Feature.Vector(
-                                this.map.getExtent().scale(0.3).toGeometry()
+                                this.map.getExtent().scale(0.83).toGeometry()
                             )
                         ]);
                     }
                     this.map.addLayer(this.layer);
-                   /*
                     this.map.zoomToExtent(
-                        this.layer.features[0].geometry.getBounds().scale(1)
+                        this.layer.features[0].geometry.getBounds().scale(1.2)
                     );
-                    */ 
                     this.map.addControl(this.modifyControl);
                     this.modifyControl.selectFeature(this.layer.features[0]);
                 },
@@ -335,7 +380,7 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
 
     doExtract: function(okLayers) {
         var bboxs = String(this.layer.features[0].geometry.getBounds());
-        extentzoom=bboxs.split(",");
+        var reso = String(parseInt(this.resField.getValue()));
         var inputs;
         var projet = {
             identifier: "projet",
@@ -349,9 +394,24 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
             identifier: "bbox",
             data: {literalData: {value: bboxs}}
         };
+        var inputdem = {
+            identifier: "inputdem",
+            data: {literalData: {value: this.adressField.getValue()}}
+        };
+        var layer = {
+            identifier: "layer",
+            data: {literalData: {value: this.layerField.getValue()}}
+        };
+        var methodresampling = {
+            identifier: "methodresampling",
+            data: {literalData: {value: this.methodField.getValue()}}
+        };
+        var resolution = {
+            identifier: "resolution",
+            data: {literalData: {value: String(parseInt(this.resField.getValue()))}}
+        };
 
-
-        inputs = [projet,Workspace,bbox] ;
+        inputs = [projet,Workspace,bbox,inputdem,layer,methodresampling,resolution] ;
 
         var wpsFormat = new OpenLayers.Format.WPSExecute();
         var xmlString = wpsFormat.write({
@@ -361,12 +421,14 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
                 responseDocument: {
                     storeExecuteResponse: true,
                     lineage: false,
-                    status: false,
+                    status: false/*,
                     outputs: [{
                         asReference: false,
-                        identifier: "output"
-                    }
-                    ]
+                        identifier: "url"
+                    },{
+                        asReference: false,
+                        identifier: "layer"
+                    }]*/
                 }
             }
         });
@@ -383,74 +445,6 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
 	                        GEOR.util.infoDialog({
                         msg: OpenLayers.i18n('The extraction request succeeded')
                     });
-        someText=resp.responseText.split("||");
-        rapport=someText[1].replace(/(\r\n|\n|\r)/gm,"<br>");
-        noglob_regionContent.update("<br>"+rapport);
-        if(checkshow.checked == true)
-                {
-        lignes=someText[1].split(/(\r\n|\n|\r)/gm);
-        
-        var listnamelayer = [];
-        var adressewms = ""
-        var nomcouche = "";
-        for (var i=0; i<lignes.length; i++)
-        {
-            positionlink = lignes[i].indexOf('http');
-            positionnamelayer = lignes[i].indexOf('Avec le nom de la couche');
-            
-            if (positionnamelayer > -1)
-            {
-                nomcouche=lignes[i].split(":");
-                listnamelayer.push(nomcouche[1]+":"+nomcouche[2]);    
-            }
-            else if (positionlink > -1 && adressewms == "" )
-            {
-              adressewms = lignes[i];
-            }
-            
-        };
-        
-        
-        for (var j=0; j<listnamelayer.length; j++)
-        {
-         //   var layerNameparse3 = listnamelayer[j].replace(' ',''); // 
-            //var layerUrlparse3 = adressewms; // http://geoxxx.agrocampus-ouest.fr:80/geoserverwps/wfs
-
-        // PART 2 : Ajout du WMS	
-            var wmsname = "wms"+String(j)
-			var wmsdyn3 = new OpenLayers.Layer.WMS(wmsname,
-					adressewms, 
-					{'layers': listnamelayer[j].replace(' ',''),transparent: true} //, transparent: true, format: 'image/gif'
-					//,{isBaseLayer: true}
-				);
-            var c3 = GEOR.util.createRecordType();
-            var layerRecord3 = new c3({
-                layer: wmsdyn3,
-                name: listnamelayer[j].replace(' ',''), 
-                type: "WMS"
-            });
-            eval(
-            'var clone'+String(j)+' = layerRecord3.clone();'
-           +' GEOR.ows.hydrateLayerRecord(clone'+String(j)+', {'
-                +'success: function() {'
-                   +' clone'+String(j)+'.get("layer").setName(clone'+String(j)+'.get("title"));'
-                    +'layerStore.addSorted(clone'+String(j)+');'
-                +'},'
-                +'failure: function() {'
-                   +' GEOR.util.errorDialog({'
-                       +' msg: "Impossible d obtenir les informations de la couche !"'
-
-                    +'});'
-                    +'GEOR.waiter.hide();'
-                +'},'
-              +'  scope: this'
-           +' });')
-
-     }
-     var mapforzoom = clone0.get('layer').map ; 
-                    var llbbox = OpenLayers.Bounds.fromArray(extentzoom); 
-					map.zoomToExtent(llbbox);	
- }
     },	   
     
     onError: function (resp) {
@@ -461,16 +455,16 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
     },
     	 
     extract: function() {
+
         var okLayers = [], nokLayers = [], count = this.map.layers.length;
         Ext.each(this.map.layers, function(layer) {
             if (!layer.getVisibility() || !layer.url) {
                 count--;
                 return;
             }
-            
+            GEOR.waiter.show();
             GEOR.ows.WMSDescribeLayer(layer, {
                 success: function(store, records) {
-                    GEOR.waiter.show();
                     count--;
                     var r, match = null;
                     for (var i=0, len = records.length; i<len; i++) {
@@ -495,10 +489,8 @@ GEOR.Addons.Newreferential = Ext.extend(GEOR.Addons.Base, {
                     if (count === 0) {
                         this.doExtract(okLayers);
                     }
-                   GEOR.waiter.hide(); 
                 },
                 failure: function() {
-                    GEOR.waiter.show();
                     count--;
                     nokLayers.push(layer);
                     if (count === 0) {
