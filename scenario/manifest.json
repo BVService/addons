@@ -1,0 +1,62 @@
+{
+    "js": [
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/WCSGetCoverage.js",
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/OWSCommon/v1_1_0.js",
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/WPSDescribeProcess.js",
+        "../../../lib/externals/openlayers/lib/OpenLayers/Format/WKT.js",
+        "js/FileUploadField.js",
+        "js/WPSAxecute.js",
+        "js/main.js"
+        
+    ],
+    "css": [
+        "css/main.css"
+    ],
+    "default_options": {
+        "roles": "ROLE_SV_ADMIN",
+        "WPS_URL": "http://bvservice2.agrocampus-ouest.fr/cgi-bin/bvservice.cgi?",
+        "WPS_identifier2": "scenario",
+        "URL_cgi": "http://bvservice.fr/cgi-bin/GetWSList.cgi",
+        "URL_WS": "http://bvservice.fr/geoserver/",
+		"Help_URL": "http://www.openfluid-project.org/",
+		"Metadata_URL": "http://www.openfluid-project.org/",	
+		"globalWidth": "320"
+    },
+    "i18n": {
+        "en": {
+            
+        },
+        "fr": {
+            "Processing settings6": "BV Service - Scénario",
+            "Help": "Aide",
+            "Close": "Fermer",
+            "Execute": "Exécuter",
+            "Processing...": "Traitement en cours...",
+            "Processing time (s)": "Temps de traitement (s)",
+            "Loading layers...": "Chargement des couches...",
+            "Workspaces list": "Liste des espaces de travail",
+            "Select a workspace": "Séléctionner un espace de travail",
+            "Select your vector layer": "Séléctionner votre couche vecteur",
+            "Select your raster layer": "Séléctionner votre couche raster",
+            "Vector layer(s)":"Couche(s) vecteur en entrée",
+            "Raster layer(s)":"Données spatiales en entrée",
+            "Workspace definition":"Choix de la zone d'étude",
+            "Allowed values": "Valeurs au choix",
+            "Checkbox parameter(s) (0/1)": "Paramètres de checkbox (0/1)",
+            "Text parameter(s)":"Options de sortie",
+            "Point selection on the map": "Choix d'un point sur la carte",
+            "GML file uploading": "Uploader un fichier GML",
+            "Text output": "Résultat text en sortie",
+            "Please select your workspace !": "Veuillez séléctionnez votre espace de travail !",
+            "The field - ": "Le champ - ",
+            " - is required !": " - est obligatoire !",
+            "output_text": "Rapport du Traitement"
+        },
+        "es": {
+
+        },
+         "de": {
+
+        }
+    }
+}

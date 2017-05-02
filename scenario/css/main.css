@@ -1,0 +1,21 @@
+.process_time_icon11 {
+	background-image: url(../img/icon11.png) !important;
+	height:20px !important;
+    width:20px !important;
+}
+
+.windo_icon11{
+	background-image: url(../img/icon11.png)!important;
+}
+
+.help_icon{
+	background-image: url(../img/Help.png)!important;
+}
+
+.add_icon{
+	background-image: url(../img/add.png)!important;
+}
+
+.arrow_refresh{
+	background-image: url(../img/arrow_refresh.png)!important;
+}
